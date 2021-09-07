@@ -50,7 +50,7 @@
                             <td>{{ $loan->client->client_no }}</td>
                             <td>{{ $loan->client->name }}</td>
                             <td>{{ $loan->loan_amount }}</td>
-                            <td>{{ $loan->monthly_payback }}</td>
+                            <td>{{ round($loan->monthly_payback,1) }}</td>
                             <td>
                                 {{ date('M Y', strtotime($loan->disbursement_date)) }} - {{ date('M Y', strtotime($loan->loan_duration)) }}
                             </td>
@@ -66,7 +66,7 @@
                                         <button class="btn btn-light view-tenure" type="button" 
                                             data-bs-toggle="modal" 
                                             data-loanid="{{ $loan->id }}"
-                                            data-payback="{{ !is_null($loan->monthly_payback) ? '#'.$loan->monthly_payback : 'Not Available' }}"
+                                            data-payback="{{ !is_null(round($loan->monthly_payback,1)) ? '#'.round($loan->monthly_payback,1) : 'Not Available' }}"
                                             data-profit=" {{ !is_null($loan->expected_profit) ? '#'.$loan->expected_profit : 'Not Available' }}"
                                             data-duration="{{ date('M Y', strtotime($loan->disbursement_date)) }} - {{ date('M Y', strtotime($loan->loan_duration)) }}"
                                             data-clientno="{{ $loan->client->client_no }}"

@@ -80,6 +80,9 @@
                                     @if ($loan->status == 2)
                                     <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div>
                                     @endif
+                                    @if ($loan->status == 3)
+                                    <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
+                                    @endif
                                 @endforeach
                             </td>
                             <td>

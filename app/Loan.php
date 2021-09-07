@@ -21,6 +21,10 @@ class Loan extends Model
                'monthly_payback',
                'expected_profit',
                'actual_profit',
+               'purpose',
+                'admin_incharge',
+                'admin_who_disburse',
+                'sum_of_allpayback',
     ];
     public function client (){
         return $this->belongsTo(Client::class);

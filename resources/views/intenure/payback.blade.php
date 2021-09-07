@@ -58,11 +58,11 @@
                     </div>
                 </div>
                 <div class="row m-t-20 text-center">
-                    <div class="col-lg-3 col-sm-12 text-center">
+                    <div class="col-lg-2 col-sm-12 text-center">
                         <p class="f-14 text-warning" style="margin-bottom: 0rem">Total Payback</p>
                         <h3 class="f-14 f-w-600"><span># {{ $loan->total_payback }}</span></h3>
                     </div>
-                    <div class="col-lg-3 col-sm-12 text-center">
+                    <div class="col-lg-2 col-sm-12 text-center">
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Expect Pay This Month</p>
                         <h3 class="f-14 f-w-600"><span>
                             @foreach ($loan->payment as $payment)
@@ -73,7 +73,7 @@
                             @endforeach
                         </span></h3>
                     </div>
-                    <div class="col-lg-3 col-sm-12 text-center">
+                    <div class="col-lg-2 col-sm-12 text-center">
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Outstanding</p>
                         <h3 class="f-14 f-w-600">
                             <span>
@@ -82,6 +82,14 @@
                                 {{ $payment->outstanding_payment }}
                             @endif
                             @endforeach    
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="col-lg-3 col-sm-12 text-center">
+                        <p class="f-14 text-success" style="margin-bottom: 0rem">Payback Per Month</p>
+                        <h3 class="f-14 f-w-600">
+                            <span>
+                                {{ round($loan->monthly_payback,1) }}   
                             </span>
                         </h3>
                     </div>

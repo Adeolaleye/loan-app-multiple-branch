@@ -35,7 +35,7 @@
                 </div>
               </div>
               <div class="card-body">
-                  @include('includes.alerts');
+                  @include('includes.alerts')
                 <div class="table-responsive">
                     <table class="display" id="advance-1">
                       <thead>
@@ -85,13 +85,19 @@
                                 @if ($loan->status == 1)
                                 <div class="span badge rounded-pill pill-badge-secondary">Disbursed</div>
                                 @endif
+                                @if ($loan->status == 2)
+                                <div class="span badge rounded-pill pill-badge-success">Payment Completed</div>
+                                @endif
+                                @if ($loan->status == 3)
+                                <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
+                                @endif
                             </td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
                                         <button class="btn btn-light view-loan" type="button" 
                                             data-bs-toggle="modal" 
                                             data-loanid="{{ $loan->id }}"
-                                            data-payback="{{ !is_null($loan->monthly_payback) ? '#'.$loan->monthly_payback : 'Not Available' }}"
+                                            data-payback="{{ !is_null(round($loan->monthly_payback,1)) ? '#'.round($loan->monthly_payback,1) : 'Not Available' }}"
                                             data-profit=" {{ !is_null($loan->expected_profit) ? '#'.$loan->expected_profit : 'Not Available' }}"
                                             
                                             data-clientno="{{ $loan->client->client_no }}"
@@ -108,6 +114,12 @@
                                             </div>
                                             @elseif ($loan->status == 1)
                                             <div class="span badge rounded-pill pill-badge-secondary">Disbursed</div>
+                                            @endif
+                                            @if ($loan->status == 2)
+                                            <div class="span badge rounded-pill pill-badge-success">Payment Completed</div>
+                                            @endif
+                                            @if ($loan->status == 3)
+                                            <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
                                             @endif'
                                             data-picture = 
                                             '@if($loan->client->profile_picture)

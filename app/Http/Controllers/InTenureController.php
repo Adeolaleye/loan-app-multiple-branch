@@ -17,7 +17,7 @@ class InTenureController extends Controller
      */
     public function index()
     {
-        $loans = Loan::with('client','payment')->where('status', 1)->Orderby('created_at','desc')->get();
+        $loans = Loan::with('client','payment')->where('status','=', 1 && 3)->Orderby('created_at','desc')->get();
         $counter =$loans->count();
         return view('intenure.index', [
             'loans' => $loans,
@@ -80,26 +80,78 @@ class InTenureController extends Controller
     public function paynow(Request $request, $id)
     {
         $request->validate([
-            'amount_paid' => 'required|int',
+            'amount_paid' => 'required|int|min:0',
         ]);
-        $payment = Payment::with('client','loan')->where('loan_id',$id)->first();
-        $expectpay = $payment->loan->monthly_payback;
-        $payment->amount_paid= $request->amount_paid;
-        $payment->date_paid = Carbon::now();
-        $payment->payment_status = 1;
-        $payment->save();
-        $bb_forward = $expectpay - $request->amount_paid;
+        $paymentdetails = Payment::with('client','loan')->where('loan_id',$id)->where('payment_status',0);
+        $paymentdetail = Payment::with('client','loan')->where('loan_id',$id);
+        $payment = $paymentdetails->first();
+        $payments = $paymentdetails->get();
+        $paymentcount = $paymentdetail->count();      
+        $bb_forward = $payment->expect_pay - $request->amount_paid;
+       // dd($paymentdetail->sum('amount_paid') + $request->amount_paid);
+        if(($paymentdetail->sum('amount_paid') + $request->amount_paid) > $payment->loan->total_payback){
+            return redirect(route('clientsintenure'))->with('error', 'Client cannot pay above expected amount');
+        }
 
-        Payment::create([
-            'client_id' => $request->client_id,
-            'loan_id' => $id,
-            'next_due_date' => Carbon::now()->addDay(30),
-            'outstanding_payment' => $payment->outstanding_payment - $request->amount_paid,
-            'expect_pay' => $payment->loan->monthly_payback + $bb_forward,
-            'bb_forward' => $bb_forward,
-            'payment_status' => 0,
-        ]);
-        return redirect(route('clientsintenure'))->with('message', 'Payment Made Successfully');
+        if($payment->loan->tenure == $paymentcount && ($paymentdetail->sum('amount_paid') + $request->amount_paid < $payment->loan->total_payback)){
+            $payment->amount_paid= $request->amount_paid;
+            $payment->date_paid = Carbon::now();
+            $payment->payment_purpose = 'loan payback';
+            $payment->payment_status = 1;
+            $payment->admin_incharge = Auth()->user()->name;
+            $payment->loan->status = 3;
+            $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
+            $payment->save();
+            $payment->loan->save();
+
+            Payment::create([
+                'client_id' => $request->client_id,
+                'loan_id' => $id,
+                'next_due_date' => Carbon::now()->addDay(30),
+                'outstanding_payment' => $payment->outstanding_payment - $request->amount_paid,
+                'expect_pay' => $bb_forward,
+                'bb_forward' => $bb_forward,
+                'payback_permonth' => $payment->payback_permonth,
+                'payment_status' => 0,
+            ]);
+            return redirect(route('clientsintenure'))->with('message', 'Payment Made Successfully, But Payback not completed, Tenure Extended!');
+        }
+        if($paymentdetail->sum('amount_paid') + $request->amount_paid < $payment->loan->total_payback){
+            $payment->amount_paid= $request->amount_paid;
+            $payment->date_paid = Carbon::now();
+            $payment->payment_purpose = 'loan payback';
+            $payment->payment_status = 1;
+            $payment->admin_incharge = Auth()->user()->name;
+            $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
+            $payment->save();
+            $payment->loan->save();
+    
+            Payment::create([
+                'client_id' => $request->client_id,
+                'loan_id' => $id,
+                'next_due_date' => Carbon::now()->addDay(30),
+                'outstanding_payment' => $payment->outstanding_payment - $request->amount_paid,
+                'expect_pay' => $payment->loan->monthly_payback + $bb_forward,
+                'bb_forward' => $bb_forward,
+                'payback_permonth' => $payment->payback_permonth,
+                'payment_status' => 0,
+            ]);
+            return redirect(route('clientsintenure'))->with('message', 'Payment Made Successfully');
+        }
+        if($paymentdetail->sum('amount_paid') + $request->amount_paid == $payment->loan->total_payback){
+            $payment->amount_paid= $request->amount_paid;
+            $payment->date_paid = Carbon::now();
+            $payment->payment_purpose = 'loan payback';
+            $payment->payment_status = 1;
+            $payment->admin_incharge = Auth()->user()->name;
+            $payment->loan->status = 2;
+            $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
+            $payment->save();
+            $payment->loan->save();
+
+            return redirect(route('clientsintenure'))->with('message', 'Payback Completed, Congratulations!');
+        }
+        
     }
     
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Loan;
 use App\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Intervention\Image\Facades\Image as Image;
 
@@ -43,7 +44,7 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'client_no' => 'required|string|max:20',
+            'client_no' => 'required|string|max:20|min:0',
             'name' => 'required|string|max:100',
             'phone' => 'required|string|min:5',
             'dob' => 'required|string|max:100',
@@ -87,7 +88,9 @@ class ClientController extends Controller
             'g_phone'=>$request->g_phone,
             'g_address'=>$request->g_address,
             'g_relationship'=>$request->g_relationship,
-            'profile_picture' => isset($imgName) ? 'profile_pictures/'.$imgName: NULL,  
+            'profile_picture' => isset($imgName) ? 'profile_pictures/'.$imgName: NULL,
+            'admin_incharge' => Auth()->user()->name,
+
         ]);
         return redirect(route('addclient'))->with('message', 'Client Added Successfully');
     }

@@ -42,8 +42,8 @@ class LoanController extends Controller
     {
         $request->validate([
             'client_id' => 'required|int|max:255',
-            'loan_amount' => 'required|int|min:10',
-            'tenure' => 'required|string|max:5',
+            'loan_amount' => 'required|int|min:0',
+            'tenure' => 'required|string|min:1',
         ]
         
         );
@@ -61,9 +61,11 @@ class LoanController extends Controller
             'loan_amount' => $request->loan_amount,
             'tenure'=>$request->tenure,
             'intrest'=> $intrest,
+            'monthly_payback' => $monthly_payback,
             'total_payback'=> $total_payback,
             'fp_amount'=>$fp_amount,
             'fp_status'=>'Not paid',
+            'admin_incharge' => Auth()->user()->name,
 
         ]);
         $client = Client::whereId($request->client_id)->first();
@@ -91,7 +93,7 @@ class LoanController extends Controller
         // ];
         // Mail::to(Auth()->user()->email)->send(new AgapeEmail($data));
 
-        return redirect(route('requestloan'))->with('message', 'Loan Request Sent');
+        return redirect(route('loan'))->with('message', 'Loan Request Sent');
     
     
         }
@@ -138,6 +140,7 @@ class LoanController extends Controller
         $loan->expected_profit = $loan->intrest + $loan->fp_amount;
         $loan->status= 1;
         $loan->client->status= 'in tenure';
+        $loan->admin_who_disburse = Auth()->user()->name;
         $loan->save();
         $loan->client->save();
         
@@ -148,6 +151,7 @@ class LoanController extends Controller
             'outstanding_payment' => $loan->total_payback,
             'expect_pay' => $loan->total_payback / $loan->tenure,
             'bb_forward' => 0.00,
+            'payback_permonth' => $loan->total_payback / $loan->tenure,
             'payment_status' => 0,
         ]);
         }
@@ -166,7 +170,7 @@ class LoanController extends Controller
         $request->validate([
             'client_id' => 'required|int|max:255',
             'loan_amount' => 'required|int|min:10',
-            'tenure' => 'required|string|max:5',
+            'tenure' => 'required|string|max:10',
         ]);
         {
         $loan_amount = $request->loan_amount;
@@ -181,6 +185,7 @@ class LoanController extends Controller
         $loan->loan_amount=$request->loan_amount;
         $loan->tenure=$request->tenure;
         $loan->intrest=$intrest;
+        $loan->monthly_payback=$monthly_payback;
         $loan->total_payback=$total_payback;
         $loan->fp_amount=$fp_amount;
         $loan->save();
@@ -206,7 +211,7 @@ class LoanController extends Controller
         // ];
         // Mail::to(Auth()->user()->email)->send(new AgapeEmail($data));
 
-        return redirect(route('requestloan'))->with('message', 'Loan Request Updated');
+        return redirect(route('loan'))->with('message', 'Loan Request Updated');
     
     
         }

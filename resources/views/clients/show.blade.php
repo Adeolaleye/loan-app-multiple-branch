@@ -72,6 +72,9 @@
                                 @if ($loan->status == 2)
                                 <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div>
                                 @endif
+                                @if ($loan->status == 3)
+                                <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
+                                @endif
                             @endforeach
                         </a>
                         {{-- <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div> --}}
@@ -166,9 +169,9 @@
                           <th>Date of Disbursement</th>
                           <th>Tenure</th>
                           <th>Duration</th>
-                          <th>Intrest</th>
-                          <th>Forward Payment</th>
-                          <th>Date Applied</th>
+                          <th>Intrest (#)</th>
+                          <th>Forward Payment (#)</th>
+                          <th>Total Amount Paid (#)</th>
                           <th>Status</th>
                           <th>Action</th>
                         </tr>
@@ -191,9 +194,21 @@
                                 <span class="font-success f-12">{{ $loan->fp_status }}</span>
                                 @endif
                             </td>
-                            <td>{{ $loan->created_at->format('M ,d Y') }}</td>
+                            <td>{{ $loan->sum_of_allpayback }}</td>
                             <td>
+                                @if ($loan->status == 0)
+                                <div class="span badge rounded-pill pill-badge-warning">In Review
+                                </div>
+                                @endif
+                                @if ($loan->status == 1)
                                 <div class="span badge rounded-pill pill-badge-success">In Tenure</div>
+                                @endif
+                                @if ($loan->status == 2)
+                                <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div>
+                                @endif
+                                @if ($loan->status == 3)
+                                <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
+                                @endif
                             </td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">

@@ -27,6 +27,7 @@ class Client extends Model
         'g_relationship',
         'status',
         'client_no',
+        'admin_incharge',
     ];
     public function loan (){
         return $this->hasMany(Loan::class,'client_id');
