@@ -7,6 +7,7 @@ use App\Client;
 use App\Payment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Null_;
 
 class InTenureController extends Controller
 {
@@ -56,8 +57,14 @@ class InTenureController extends Controller
     {
         //dd($id);
         $loan = Loan::with('client','payment')->where('id', $id)->first();
-        
-        return view('intenure.payback', compact('loan'));
+        // $payment = $loan->payment->payment_status->first();
+        $paymentimes = Payment::where('loan_id',$id)->where('payment_status',1)->count();
+        $unpaiddetails = Payment::where('loan_id',$id)->where('payment_status',0)->first(); 
+        return view('intenure.payback', [
+            'loan' => $loan,
+            'paymentimes' => $paymentimes,
+            'unpaiddetails' => $unpaiddetails,
+        ]);
     }
     /**
      * Show the form for editing the specified resource.
@@ -90,7 +97,7 @@ class InTenureController extends Controller
         $bb_forward = $payment->expect_pay - $request->amount_paid;
        // dd($paymentdetail->sum('amount_paid') + $request->amount_paid);
         if(($paymentdetail->sum('amount_paid') + $request->amount_paid) > $payment->loan->total_payback){
-            return redirect(route('clientsintenure'))->with('error', 'Client cannot pay above expected amount');
+            return back()->with('error', 'Client cannot pay above expected amount');
         }
 
         if($payment->loan->tenure == $paymentcount && ($paymentdetail->sum('amount_paid') + $request->amount_paid < $payment->loan->total_payback)){
@@ -100,6 +107,9 @@ class InTenureController extends Controller
             $payment->payment_status = 1;
             $payment->admin_incharge = Auth()->user()->name;
             $payment->loan->status = 3;
+            $intrest_permonth = $payment->loan->intrest / $payment->loan->tenure;
+            $last_intrest = $payment->loan->actual_profit + $intrest_permonth;
+            $payment->loan->actual_profit = $last_intrest;
             $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
             $payment->save();
             $payment->loan->save();
@@ -114,7 +124,7 @@ class InTenureController extends Controller
                 'payback_permonth' => $payment->payback_permonth,
                 'payment_status' => 0,
             ]);
-            return redirect(route('clientsintenure'))->with('message', 'Payment Made Successfully, But Payback not completed, Tenure Extended!');
+            return back()->with('message', 'Payment Made Successfully, But Payback not completed, Tenure Extended!');
         }
         if($paymentdetail->sum('amount_paid') + $request->amount_paid < $payment->loan->total_payback){
             $payment->amount_paid= $request->amount_paid;
@@ -123,6 +133,9 @@ class InTenureController extends Controller
             $payment->payment_status = 1;
             $payment->admin_incharge = Auth()->user()->name;
             $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
+            $intrest_permonth = $payment->loan->intrest / $payment->loan->tenure;
+            $last_intrest = $payment->loan->actual_profit + $intrest_permonth;
+            $payment->loan->actual_profit = $last_intrest;
             $payment->save();
             $payment->loan->save();
     
@@ -136,20 +149,26 @@ class InTenureController extends Controller
                 'payback_permonth' => $payment->payback_permonth,
                 'payment_status' => 0,
             ]);
-            return redirect(route('clientsintenure'))->with('message', 'Payment Made Successfully');
+            return back()->with('message', 'Payment Made Successfully');
         }
         if($paymentdetail->sum('amount_paid') + $request->amount_paid == $payment->loan->total_payback){
+             
             $payment->amount_paid= $request->amount_paid;
             $payment->date_paid = Carbon::now();
             $payment->payment_purpose = 'loan payback';
             $payment->payment_status = 1;
             $payment->admin_incharge = Auth()->user()->name;
             $payment->loan->status = 2;
+            $intrest_permonth = $payment->loan->intrest / $payment->loan->tenure;
+            $last_intrest = $payment->loan->actual_profit + $intrest_permonth;
+            $payment->loan->actual_profit = $last_intrest;
             $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
+            $payment->client->status = Null;
             $payment->save();
             $payment->loan->save();
+            $payment->client->save();
 
-            return redirect(route('clientsintenure'))->with('message', 'Payback Completed, Congratulations!');
+            return back()->with('message', 'Payback Completed, Congratulations!');
         }
         
     }

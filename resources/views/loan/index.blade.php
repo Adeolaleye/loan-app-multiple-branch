@@ -5,7 +5,7 @@
     <div class="page-title">
         <div class="row">
             <div class="col-6">
-                <h3>Loan History</h3>
+                <h3>Loan History <br> <span class="f-14 font-bold text-warning"> {{ $counter }} total Loans</span></h3>
             </div>
             <div class="col-6">
                 <ol class="breadcrumb">

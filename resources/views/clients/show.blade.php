@@ -97,22 +97,22 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-sm-6 col-lg-3 order-sm-0 order-xl-0">
+                    <div class="col-6 col-lg-3 order-sm-1 order-xl-2">
                         <div class="ttl-info text-start text-center">
                             <h6>Residence</h6><span>{{ $client->residential_address }}</span>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 order-sm-1 order-xl-1">
+                    <div class="col-6 col-lg-3 order-sm-3 order-xl-1">
                         <div class="ttl-info text-start text-center">
                             <h6>Office Address</h6><span>{{ $client->office_address }}</span>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 order-sm-2 order-xl-2">
+                    <div class="col-6 col-lg-3 order-sm-0 order-xl-0">
                         <div class="ttl-info text-start text-center">
                             <h6>Means Of ID</h6><span>{{ $client->means_of_id }}</span>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 order-sm-3 order-xl-3">
+                    <div class="col-6 col-lg-3 order-sm-2 order-xl-3">
                         <div class="ttl-info text-start text-center">
                             <h6>Qualification</h6><span>{{ $client->qualification }}</span>
                         </div>
@@ -121,22 +121,22 @@
                 <hr>
                     <h4>Guarantor Details</h4>
                 <div class="row">
-                    <div class="col-sm-6 col-lg-3 order-sm-0 order-xl-0">
+                    <div class="col-6 col-lg-3 order-sm-0 order-xl-0">
                         <div class="ttl-info text-start text-center">
                             <h6>Name</h6><span>{{ $client->g_name }}</span>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 order-sm-1 order-xl-1">
+                    <div class="col-6 col-lg-3 order-sm-1 order-xl-1">
                         <div class="ttl-info text-start text-center">
                             <h6>Residential Address</h6><span>{{ $client->g_address }}</span>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 order-sm-2 order-xl-2">
+                    <div class="col-6 col-lg-3 order-sm-2 order-xl-2">
                         <div class="ttl-info text-start text-center">
                             <h6>Mobile No</h6><span>{{ $client->g_phone }}</span>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3 order-sm-3 order-xl-3">
+                    <div class="col-6 col-lg-3 order-sm-3 order-xl-3">
                         <div class="ttl-info text-start text-center">
                             <h6>Relationship</h6><span>{{ $client->g_relationship }}</span>
                         </div>
@@ -165,13 +165,13 @@
                     <table class="display" id="basic-2">
                       <thead>
                         <tr>
-                          <th>Loan Amount (#)</th>
+                          <th>Loan Amount(#)</th>
                           <th>Date of Disbursement</th>
                           <th>Tenure</th>
                           <th>Duration</th>
-                          <th>Intrest (#)</th>
-                          <th>Forward Payment (#)</th>
-                          <th>Total Amount Paid (#)</th>
+                          <th>Intrest(#)</th>
+                          {{-- <th>Forward Payment (#)</th> --}}
+                          <th>Total Amount Paid(#)</th>
                           <th>Status</th>
                           <th>Action</th>
                         </tr>
@@ -185,7 +185,7 @@
                             <td>{{ date('M Y', strtotime($loan->disbursement_date)) }} - {{ date('M Y', strtotime($loan->loan_duration)) }}</td>
                             <td>{{ $loan->intrest }}<br>
                                 <span class="font-success f-12">5% per month</span></td>
-                            <td>
+                            {{-- <td>
                                 {{ $loan->fp_amount }}<br>
                                 @if ($loan->fp_status == 'Not paid')
                                 <span class="font-secondary f-12">{{ $loan->fp_status }}</span>
@@ -193,7 +193,7 @@
                                 @if ($loan->fp_status == 'Paid')
                                 <span class="font-success f-12">{{ $loan->fp_status }}</span>
                                 @endif
-                            </td>
+                            </td> --}}
                             <td>{{ $loan->sum_of_allpayback }}</td>
                             <td>
                                 @if ($loan->status == 0)
@@ -212,7 +212,19 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <button class="btn btn-light" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg" data-bs-toggle="tooltip" title="View Payment Hostory"><i class="fas fa-eye text-warning"></i></button>
+                                    <button class="btn btn-light" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg" data-bs-toggle="tooltip" title="View Payment Hostory">
+                                        <i class="fas fa-eye text-warning"></i>
+                                    </button>
+                                    @if (!is_null($loan->payment) && $loan->payment->sum('amount_paid') < $loan->total_payback)
+                                        <form action="{{ route('makepayment', $loan->id) }}">
+                                            <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
+                                        </form> 
+                                    @endif
+                                    @if (!is_null($loan->payment) && $loan->payment->sum('amount_paid') == $loan->total_payback)
+                                        <form action="{{ route('makepayment', $loan->id) }}">
+                                            <button class="btn btn-light text-secondary" type="submit">View More</button>
+                                        </form> 
+                                    @endif
                                 </div>
                             </td>
                         </tr>

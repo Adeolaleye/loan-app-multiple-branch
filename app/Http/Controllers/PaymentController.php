@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Loan;
+use App\Client;
+use App\Payment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -13,7 +17,16 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        return view('payment.index');
+       $payments = Payment::with('client','loan')->where('payment_status',1)->get();
+       $loans = Loan::where('fp_status','Paid')->get();
+       $payment_counter = $payments->count();
+       $loans_counter = $loans->count();
+       $counter = $payment_counter + $loans_counter;
+       return view('payment.index', [
+        'payments' => $payments,
+        'loans' => $loans,
+        'counter' => $counter,
+        ]);
     }
 
     /**
@@ -23,7 +36,13 @@ class PaymentController extends Controller
      */
     public function payout()
     {
-        return view('payment.payout');
+        $payouts = Loan::with('client')->where('status', '<>' ,0)->get();
+        $counter = $payouts->count();
+        return view('payment.payout', [
+         'payouts' => $payouts,
+         'counter' => $counter,
+         ]);
+
     }
 
     /**
@@ -44,7 +63,22 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'amount_paid' => 'required|int|min:0',
+        ]
+        
+        );
+
+        $payment = Payment::create([
+            'amount_paid' => $request->amount_paid,
+            'outstanding_payment' => $request->amount_paid,
+            'payment_status' => 0,
+            'date_paid' => Carbon::now(),
+            'payment_purpose'=>'savings',
+            'admin_incharge' => Auth()->user()->name,
+
+        ]);
+         return redirect(route('payment'))->with('message', 'Saved');
     }
 
     /**

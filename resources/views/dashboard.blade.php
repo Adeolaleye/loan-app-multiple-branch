@@ -26,8 +26,8 @@
                 <div class="card-body bg-secondary b-r-16">
                     <div class="tabbed-card">
                         <ul class="pull-right nav nav-tabs border-tab nav-primary" id="top-tab" role="tablist">
-                            <li class="nav-item"><a class="nav-link" id="top-home-tab" data-bs-toggle="tab" href="#top-home" role="tab" aria-controls="top-home" aria-selected="false">Overall</a></li>
-                            <li class="nav-item"><a class="nav-link active" id="profile-top-tab" data-bs-toggle="tab" href="#top-profile" role="tab" aria-controls="top-profile" aria-selected="true">Annual</a></li>
+                            <li class="nav-item"><a class="nav-link active" id="top-home-tab" data-bs-toggle="tab" href="#top-home" role="tab" aria-controls="top-home" aria-selected="false">Overall</a></li>
+                            <li class="nav-item"><a class="nav-link" id="profile-top-tab" data-bs-toggle="tab" href="#top-profile" role="tab" aria-controls="top-profile" aria-selected="true">Annual</a></li>
                             <li class="nav-item"><a class="nav-link" id="contact-top-tab" data-bs-toggle="tab" href="#top-contact" role="tab" aria-controls="top-contact" aria-selected="false">A Month</a></li>
                         </ul>
                         <div class="tab-content" id="pills-clrtabContent1">
@@ -36,7 +36,7 @@
                                     <div class="align-self-center text-center"><i data-feather="database"></i></div>
                                     <div class="media-body">
                                         <span class="m-0">Earnings</span>
-                                        <h4 class="mb-0">#2000</h4>
+                                        <h4 class="mb-0">#{{ $allprofits }}</h4>
                                         <i class="icon-bg" data-feather="database"></i>
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@
                                     <div class="align-self-center text-center"><i data-feather="layers"></i></div>
                                     <div class="media-body">
                                         <span class="m-0">Company Value</span>
-                                        <h4 class="mb-0">#20,000,000</h4>
+                                        <h4 class="mb-0">#{{ $companyvalue }}</h4>
                                         <i class="icon-bg" data-feather="layers"></i>
                                     </div>
                                 </div>
@@ -118,7 +118,7 @@
                                     <div class="align-self-center text-center"><i data-feather="layers"></i></div>
                                     <div class="media-body">
                                         <span class="m-0">All Savings</span>
-                                        <h4 class="mb-0">#2000</h4>
+                                        <h4 class="mb-0">#{{ $allsavings }}</h4>
                                         <i class="icon-bg" data-feather="layers"></i>
                                     </div>
                                 </div>
@@ -187,32 +187,26 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                  <td>12345</td>
-                                  <td>Olaley Adeola</td>
-                                  <td>50,000</td>
-                                  <td>10000</td>
-                                  <td>Sept - Dec 2021</td>
-                                  <td>26/10/2021</td>
-                                  <td>
-                                      <div class="btn-group" role="group" aria-label="Basic example">
-                                          <button class="btn btn-light" type="button" data-bs-toggle="modal" data-bs-target="#tenuredetails" data-bs-toggle="tooltip" title="View Full Details"><i class="fas fa-eye text-warning"></i></button>
-                                      </div>
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td>12345</td>
-                                  <td>Olaley Adeola</td>
-                                  <td>50,000</td>
-                                  <td>23/10/2021</td>
-                                  <td>Sept - Dec 2021</td>
-                                  <td>26/10/2021</td>
-                                  <td>
-                                      <div class="btn-group" role="group" aria-label="Basic example">
-                                          <button class="btn btn-light" type="button" data-bs-toggle="modal" data-bs-target="#tenuredetails" data-bs-toggle="tooltip" title="View Full Details"><i class="fas fa-eye text-warning"></i></button>
-                                      </div>
-                                  </td>
-                              </tr>
+                                @foreach ($monthlyreports as $monthlyreport)
+                                <tr>
+                                    <td>{{ $monthlyreport->client->client_no }}</td>
+                                    <td>{{ $monthlyreport->client->name }}</td>
+                                    <td>{{ $monthlyreport->outstanding_payment }}</td>
+                                    <td>{{ $monthlyreport->expect_pay }}</td>
+                                    <td>
+                                        {{-- @foreach ($monthlyreport->loan as $loan )
+                                        {{ date('M Y', strtotime($loan->disbursement_date)) }} - {{ date('M Y', strtotime($loan->loan_duration)) }}
+                                        @endforeach
+                                        {{ $monthlyreport->loan }} --}}
+                                    </td>
+                                    <td>{{ date('d,M Y', strtotime($monthlyreport->next_due_date)) }}</td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button class="btn btn-light" type="button" data-bs-toggle="modal" data-bs-target="#tenuredetails" data-bs-toggle="tooltip" title="View Full Details"><i class="fas fa-eye text-warning"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

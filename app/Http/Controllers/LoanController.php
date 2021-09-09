@@ -18,7 +18,11 @@ class LoanController extends Controller
     public function index()
     {
         $loans = Loan::with('client','payment')->Orderby('created_at','desc')->get();
-        return view('loan.index', compact('loans'));
+        $counter = $loans->count();
+        return view('loan.index', [
+            'loans' => $loans,
+            'counter' => $counter,
+        ]);
     }
 
     /**
@@ -44,9 +48,7 @@ class LoanController extends Controller
             'client_id' => 'required|int|max:255',
             'loan_amount' => 'required|int|min:0',
             'tenure' => 'required|string|min:1',
-        ]
-        
-        );
+        ]);
         {
         $loan_amount = $request->loan_amount;
         $intrest = 5*$request->tenure /100 * $loan_amount;
@@ -65,6 +67,7 @@ class LoanController extends Controller
             'total_payback'=> $total_payback,
             'fp_amount'=>$fp_amount,
             'fp_status'=>'Not paid',
+            'purpose'=>'loan',
             'admin_incharge' => Auth()->user()->name,
 
         ]);
@@ -139,6 +142,7 @@ class LoanController extends Controller
         $loan->monthly_payback = $loan->total_payback / $loan->tenure;
         $loan->expected_profit = $loan->intrest + $loan->fp_amount;
         $loan->status= 1;
+        $loan->actual_profit = $loan->fp_amount;
         $loan->client->status= 'in tenure';
         $loan->admin_who_disburse = Auth()->user()->name;
         $loan->save();

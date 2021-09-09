@@ -5,7 +5,7 @@
     <div class="page-title">
         <div class="row">
             <div class="col-6">
-                <h3>Payout History</h3>
+                <h3>Payout History <br> <span class="f-14 font-bold text-warning"> {{ $counter }} total payouts</span></h3>
             </div>
             <div class="col-6">
                 <ol class="breadcrumb">
@@ -42,7 +42,7 @@
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                    <table class="display" id="basic-2">
+                    <table class="display" id="advance-1">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -55,24 +55,20 @@
                         </tr>
                       </thead>
                       <tbody>
+                        @php 
+                        $i = 1;
+                        @endphp
+                        @foreach ($payouts as $payout)
                         <tr>
-                            <td>1</td>
-                            <td>Olaleye Adeola</td>
-                            <td>August</td>
-                            <td>50,000</td>
+                            <td>{{ $i++ }}</td>
+                            <td>{{ $payout->client->name }}</td>
+                            <td>{{ date('F', strtotime($payout->disbursement_date)) }}</td>
+                            <td>{{ $payout->loan_amount }}</td>
                             <td>Loan</td>
-                            <td>Davide Ogeh</td>
-                            <td>20/11/2021</td>
+                            <td>{{ $payout->admin_who_disburse }}</td>
+                            <td>{{ date('d, M Y', strtotime($payout->disbursement_date)) }}</td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Olaleye Adeola</td>
-                            <td>August</td>
-                            <td>50,000</td>
-                            <td>Loan</td>
-                            <td>Davide Ogeh</td>
-                            <td>20/11/2021</td>
-                        </tr>
+                        @endforeach
                       </tbody>
                     </table>
                   </div>

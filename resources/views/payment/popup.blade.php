@@ -6,10 +6,9 @@
             <h5 class="modal-title f-16">Random Payment</h5>
             <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="">
+            <form>
                 @csrf
                 <div class="modal-body">
-                    <form>
                         <div class="mb-3">
                             <label class="col-form-label" for="purpose">Purpose</label>
                             <input class="form-control" type="text" value="">
@@ -18,7 +17,6 @@
                             <label class="col-form-label" for="Amount">Amount</label>
                             <input class="form-control" type="text" value="">
                         </div>
-                    </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
@@ -36,19 +34,17 @@
             <h5 class="modal-title f-16">Save Money</h5>
             <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="">
+            <form method="post" action="{{ route('savemoney')}}">
                 @csrf
                 <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label class="col-form-label" for="amount">Amount</label>
-                            <input class="form-control" type="text" value="" name="amount">
-                        </div>
-                    </form>
+                    <div class="mb-3">
+                        <label class="col-form-label" for="amount">Amount</label>
+                        <input class="form-control" type="number" value="{{ old('amount_paid') }}" name="amount_paid">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary" type="button">Save</button>
+                    <button class="btn btn-primary" type="submit">Save</button>
                 </div>
             </form>
         </div>

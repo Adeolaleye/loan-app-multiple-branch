@@ -26,21 +26,27 @@
             <div class="row">
                 <div id="profile_picture" class="col-sm-2 col-md-2 col-lg-2 p-r-0">
                     @if($loan->client->profile_picture)
-                        <img width="50px" src="{{ "/".$loan->client->profile_picture }}" class="b-r-half pull-right">
+                        <img width="60px" src="{{ "/".$loan->client->profile_picture }}" class="b-r-half pull-right">
                         @else 
-                        <img width="50px" src="/profile_pictures/avater.png" class="pull-right"> 
+                        <img width="60px" src="/profile_pictures/avater.png" class="pull-right"> 
                     @endif
                 </div>
                 <div class="col-sm-12 col-md-5 col-lg-5 padding-0">
-                    <a href="{{ route('viewclient',$loan->client->id) }}" data-bs-toggle="tooltip" title="View Client Details"><h5><span class="text-warning">{{ $loan->client->name }}'s</span> Payback</h5></a>
+                    <span class="f-14 f-w-600">Client ID : {{ $loan->client->client_no }}</span>
+                    <a href="{{ route('viewclient',$loan->client->id) }}" data-bs-toggle="tooltip" title="View Client Details">
+                        <h5 class="f-18"><span class="text-warning">{{ $loan->client->name }}'s</span> Payback</h5>
+                    </a>
                     <span class="f-12">{{ $loan->client->phone }}</span>
                 </div>
                 <div class="col-sm-12 col-md-3 col-lg-3 text-center" style="margin-left: -15px">
-                    @if ($loan->status == 0)
-                        <div class="span badge rounded-pill pill-badge-warning pull-right">In Review</div>
+                    @if ($loan->status == 3)
+                        <div class="span badge rounded-pill pill-badge-info pull-right">Tenure Extended</div>
+                    @endif
+                    @if ($loan->status == 2)
+                        <div class="span badge rounded-pill pill-badge-secondary pull-right">Payment Completed</div>
                     @endif
                     @if ($loan->status == 1)
-                        <div class="span badge rounded-pill pill-badge-secondary pull-right">Disbursed</div>
+                        <div class="span badge rounded-pill pill-badge-success pull-right">In Tenure</div>
                     @endif
                 </div>
             </div>
@@ -58,34 +64,64 @@
                     </div>
                 </div>
                 <div class="row m-t-20 text-center">
-                    <div class="col-lg-2 col-sm-12 text-center">
+                    <div class="col-6 col-lg-3 text-center">
+                        <p class="f-14 text-success" style="margin-bottom: 0rem">Loan Amount</p>
+                        <h3 class="f-14 f-w-600">
+                            <span>
+                                #{{ $loan->loan_amount}}   
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="col-6 col-lg-3 text-center">
+                        <p class="f-14 text-success" style="margin-bottom: 0rem">Expected Intrest</p>
+                        <h3 class="f-14 f-w-600">
+                            <span>
+                                #{{ $loan->intrest}}<br>
+                                <span class="font-success f-12 f-w-300">5% per month</span>   
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="col-6 col-lg-3 text-center">
                         <p class="f-14 text-warning" style="margin-bottom: 0rem">Total Payback</p>
-                        <h3 class="f-14 f-w-600"><span># {{ $loan->total_payback }}</span></h3>
+                        <h3 class="f-14 f-w-600"><span>#{{ $loan->total_payback }}</span></h3>
                     </div>
-                    <div class="col-lg-2 col-sm-12 text-center">
-                        <p class="f-14 text-success" style="margin-bottom: 0rem">Expect Pay This Month</p>
-                        <h3 class="f-14 f-w-600"><span>
-                            @foreach ($loan->payment as $payment)
-                            @if ($payment->payment_status == 0 )
-                                #{{ round($payment->expect_pay,1) }}<br>
-                                {{-- {{ $payment->expect_pay }} --}}
-                            @endif
-                            @endforeach
-                        </span></h3>
+                    <div class="col-6 col-lg-3 text-center">
+                        <p class="f-14 text-success" style="margin-bottom: 0rem">Total Amount Paid</p>
+                        <h3 class="f-14 f-w-600">
+                            <span>
+                                #{{ round($loan->sum_of_allpayback) }}   
+                            </span>
+                        </h3>
                     </div>
-                    <div class="col-lg-2 col-sm-12 text-center">
+                    <div class="col-6 col-lg-3 text-center">
+                        <p class="f-14 text-success" style="margin-bottom: 0rem">Tenure</p>
+                        <h3 class="f-14 f-w-600">
+                            <span>
+                                {{ $loan->tenure}} months  
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="col-6 col-lg-3 text-center">
+                        <p class="f-14 text-success" style="margin-bottom: 0rem">No of time Paid</p>
+                        <h3 class="f-14 f-w-600">
+                            <span>
+                                {{ $paymentimes }}  
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="col-6 col-lg-3 text-center">
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Outstanding</p>
                         <h3 class="f-14 f-w-600">
                             <span>
                             @foreach ($loan->payment as $payment)
-                            @if ($payment->payment_status == 0 )
-                                {{ $payment->outstanding_payment }}
-                            @endif
+                                @if ($payment->payment_status == 0 )
+                                    {{ $payment->outstanding_payment }}
+                                @endif
                             @endforeach    
                             </span>
                         </h3>
                     </div>
-                    <div class="col-lg-3 col-sm-12 text-center">
+                    <div class="col-6 col-lg-3 text-center">
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Payback Per Month</p>
                         <h3 class="f-14 f-w-600">
                             <span>
@@ -93,27 +129,59 @@
                             </span>
                         </h3>
                     </div>
-                    <div class="col-lg-3 col-sm-12 text-center">
+                    <div class="col-6 col-lg-3 text-center">
+                        <p class="f-14 text-success" style="margin-bottom: 0rem">Our Current Total Profit</p>
+                        <h3 class="f-14 f-w-600">
+                            <span>
+                                {{ !is_null(round($loan->actual_profit)) ? round($loan->actual_profit) : 'N/A' }}   
+                            </span>
+                        </h3>
+                    </div>
+                @if ($loan->status == 1 && 3)
+                    <div class="col-6 col-lg-3 text-center">
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Balance Brought Forward</p>
                         <h3 class="f-14 f-w-600"><span>
                             @foreach ($loan->payment as $payment)
-                            @if ($payment->payment_status == 0 )
-                                {{ !is_null($payment->bb_forward) ? '#'.$payment->bb_forward : '0.00' }}
-                            @endif
+                                @if ($payment->payment_status == 0 )
+                                    {{ !is_null($payment->bb_forward) ? '#'.$payment->bb_forward : '0.00' }}
+                                @endif
                             @endforeach
                         </span></h3>
                     </div>
-                </div>
-                <div class="row g-3 mb-2 m-t-30">
-                    <div class="col-md-6 offset-md-3">
-                      <label class="form-label" for="amount">Amount</label>
-                      <div class="input-group input-group-air"><span class="input-group-text">#</span>
-                        <input class="form-control" type="number" placeholder="50000" name="amount_paid" value="#{{ round($payment->expect_pay,1) }}"{{ old('amount_paid') }} required="">
-                        <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
-                      </div>
+                    <div class="col-6 col-lg-3 text-center">
+                        <p class="f-14 text-success" style="margin-bottom: 0rem">Expected Next Pay</p>
+                        <h3 class="f-14 f-w-600"><span>
+                            @foreach ($loan->payment as $payment)
+                                @if ($payment->payment_status == 0 )
+                                    #{{ round($payment->expect_pay,1) }}<br>
+                                    {{-- {{ $payment->expect_pay }} --}}
+                                @endif
+                            @endforeach
+                        </span></h3>
                     </div>
-                    <button class="btn btn-primary" type="submit">Submit</button>
+                    <div class="col-6 col-lg-3 text-center">
+                        <p class="f-14 text-success" style="margin-bottom: 0rem">Next Due Date</p>
+                        <h3 class="f-14 f-w-600">
+                            <span>
+                                {{ date('d,M Y', strtotime($unpaiddetails->next_due_date)) }} 
+                                {{-- {{ !is_null(date('d,M Y', strtotime($unpaiddetails->next_due_date))) ? date('d,M Y', strtotime($unpaiddetails->next_due_date)) : 'Not Available' }} --}}
+                            </span>
+                        </h3>
+                    </div>
+                @endif
                 </div>
+                @if ($loan->status == 1 && 3)
+                    <div class="row g-3 mb-2 m-t-30">
+                        <div class="col-md-6 offset-md-3">
+                        <label class="form-label" for="amount">Amount</label>
+                        <div class="input-group input-group-air"><span class="input-group-text">#</span>
+                            <input class="form-control" type="number" placeholder="50000" name="amount_paid" value="#{{ round($payment->expect_pay,1) }}"{{ old('amount_paid') }} required="">
+                            <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
+                        </div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+                @endif
             </form>
           </div>
         </div>

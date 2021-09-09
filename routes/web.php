@@ -54,6 +54,7 @@ Route::post('updateloan/{id}', 'LoanController@update')->name('updateloan');
 Route::get('/payment', 'PaymentController@index')->name('payment');
 Route::get('/payout', 'PaymentController@payout')->name('payout');
 Route::get('viewclientintenure', 'InTenureController@show')->name('viewclientintenure');
+Route::post('savemoney', 'PaymentController@store')->name('savemoney');
 
 // monthly
 Route::get('/monthly', 'MonthlyController@index')->name('monthly');
