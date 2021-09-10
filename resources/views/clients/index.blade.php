@@ -69,21 +69,19 @@
                             <td>{{ $client->created_at->format('M ,d Y') }}</td>
                             <td>{{ $client->g_name }}</td>
                             <td>
-                                @foreach ($client->loan as $loan )
-                                    @if ($loan->status == 0)
+                                    @if ($client->status == 'in review')
                                     <div class="span badge rounded-pill pill-badge-warning">In Review
                                     </div>
                                     @endif
-                                    @if ($loan->status == 1)
+                                    @if ($client->status == 'in tenure')
                                     <div class="span badge rounded-pill pill-badge-success">In Tenure</div>
                                     @endif
-                                    @if ($loan->status == 2)
+                                    @if ($client->status == 'out of tenure')
                                     <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div>
                                     @endif
-                                    @if ($loan->status == 3)
+                                    @if ($client->status == 'tenure extended')
                                     <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
                                     @endif
-                                @endforeach
                             </td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">

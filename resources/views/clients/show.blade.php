@@ -61,21 +61,19 @@
                         <div class="title"><a target="_blank" href="#">{{ $client->name }}</a></div>
                         <div class="desc">{{ $client->phone }}</div>
                         <a href="#loanhistory" data-bs-toggle="tooltip" title="Click to view loan history">
-                            @foreach ( $client->loan as $loan )
-                                @if ($loan->status == 0)
-                                <div class="span badge rounded-pill pill-badge-warning">In Review
-                                </div>
-                                @endif
-                                @if ($loan->status == 1)
-                                <div class="span badge rounded-pill pill-badge-success">In Tenure</div>
-                                @endif
-                                @if ($loan->status == 2)
-                                <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div>
-                                @endif
-                                @if ($loan->status == 3)
-                                <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
-                                @endif
-                            @endforeach
+                                    @if ($client->status == 'in review')
+                                    <div class="span badge rounded-pill pill-badge-warning">In Review
+                                    </div>
+                                    @endif
+                                    @if ($client->status == 'in tenure')
+                                    <div class="span badge rounded-pill pill-badge-success">In Tenure</div>
+                                    @endif
+                                    @if ($client->status == 'out of tenure')
+                                    <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div>
+                                    @endif
+                                    @if ($client->status == 'tenure extended')
+                                    <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
+                                    @endif
                         </a>
                         {{-- <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div> --}}
                     </div>

@@ -36,7 +36,7 @@
             </li>
             <li class="sidebar-list">
               <a class="sidebar-link sidebar-title link-nav" href="{{ route('payment') }}">
-              <i data-feather="file-text"> </i><span>Payment</span></a>
+              <i data-feather="file-text"> </i><span>Payment History</span></a>
             </li>
             <li class="sidebar-list">
               <a class="sidebar-link sidebar-title link-nav" href="{{ route('loan') }}">

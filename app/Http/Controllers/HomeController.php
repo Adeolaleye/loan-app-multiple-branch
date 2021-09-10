@@ -39,7 +39,7 @@ class HomeController extends Controller
         $profit = Loan::all();
         $allprofits = $profit->sum('actual_profit');
 
-        $monthlyreports = Payment::with('client','loan')->where('payment_status',0)->where('payment_purpose','=','loan payback')->take(3)->get();
+        $monthlyreports = Payment::with('client','loan')->where('payment_status',0)->take(3)->get();
 
         // $payable = Loan::with('user')->take(5)->get();
         // $clientintenure = VendorProduct::take(4)->get();

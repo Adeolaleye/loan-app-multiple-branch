@@ -6,7 +6,9 @@ use App\Loan;
 use App\Client;
 use App\Payment;
 use Carbon\Carbon;
+use App\Mail\AgapeEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class LoanController extends Controller
 {
@@ -32,7 +34,7 @@ class LoanController extends Controller
      */
     public function create()
     {
-        $clients = Client::where('status', '=', Null)->get();
+        $clients = Client::where('status', '=', Null && 'out of tenure')->get();
         return view('loan.create', compact('clients'));
     }
 
@@ -75,26 +77,22 @@ class LoanController extends Controller
         $client->status= 'in review';
         $client->save();
         
-        // $data = [
-        //     'name'=> $user->name,
-        //     'phone'=> $user->phone,
-        //     'password'=>$request->password,
-        //     'subject'=> 'Welcome, '. $user->name .' to Agapeglobal',
-        //     'type'=> 'welcome',
-        //     'role'=> $user->role,
-        //     'email'=> $user->email,
-        // ];
-        // //dd($data);
-        // Mail::to($user->email)->send(new AgapeEmail($data));
-        // $data = [
-        //     'type'=> 'admin welcome',
-        //     'subject'=> 'New Registration',
-        //     'name'=> $user->name,
-        //     'phone'=> $user->phone,
-        //     'email'=> $user->email,
-            
-        // ];
-        // Mail::to(Auth()->user()->email)->send(new AgapeEmail($data));
+        $data = [
+            'client_no'=> $client->client_no,
+            'name'=> $client->name,
+            'phone'=> $client->phone,
+            'loan_amount' => $request->loan_amount,
+            'tenure'=>$request->tenure,
+            'intrest'=> $intrest,
+            'monthly_payback' => $monthly_payback,
+            'total_payback'=> $total_payback,
+            'fp_amount'=>$fp_amount,
+            'subject'=> 'New Loan Request',
+            'type'=> 'loan request',
+            'admin_incharge'=> Auth()->user()->name,
+            'date'=> Carbon::now(),
+        ];
+        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
 
         return redirect(route('loan'))->with('message', 'Loan Request Sent');
     
@@ -159,6 +157,31 @@ class LoanController extends Controller
             'payment_status' => 0,
         ]);
         }
+        $payment = Payment::with('client','loan')->where('loan_id',$request->loan_id)->where('payment_status',0)->first();
+        $data = [
+            'client_no'=> $loan->client->client_no,
+            'name'=> $loan->client->name,
+            'phone'=> $loan->client->phone,
+            'loan_amount' => $loan->loan_amount,
+            'total_payback' => $loan->total_payback,
+           'tenure'=>$loan->tenure,
+           'intrest'=> $loan->intrest,
+            'monthly_payback' => $payment->payback_permonth,
+            'outstanding'=> $payment->outstanding_payment,
+            'fp_amount'=>$loan->fp_amount,
+            'fp_status'=>$loan->fp_status,
+            'expect_profit'=>$loan->expected_profit,
+            'next_due_date'=> $payment->next_due_date,
+           'expect_pay' => $payment->expect_pay,
+           'subject'=> 'Loan Disbursed',
+           'type'=> 'loan disbursement',
+            'disbursement_date' => $loan->disbursement_date,
+            'loan_duration' => $loan->loan_duration,
+            'admin_incharge'=> Auth()->user()->name,
+            'date'=> Carbon::now(),
+        ];
+        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+
         return redirect(route('loan'))->with('message', 'Loan Disbursed');
     }
 
@@ -194,26 +217,22 @@ class LoanController extends Controller
         $loan->fp_amount=$fp_amount;
         $loan->save();
         
-        // $data = [
-        //     'name'=> $user->name,
-        //     'phone'=> $user->phone,
-        //     'password'=>$request->password,
-        //     'subject'=> 'Welcome, '. $user->name .' to Agapeglobal',
-        //     'type'=> 'welcome',
-        //     'role'=> $user->role,
-        //     'email'=> $user->email,
-        // ];
-        // //dd($data);
-        // Mail::to($user->email)->send(new AgapeEmail($data));
-        // $data = [
-        //     'type'=> 'admin welcome',
-        //     'subject'=> 'New Registration',
-        //     'name'=> $user->name,
-        //     'phone'=> $user->phone,
-        //     'email'=> $user->email,
-            
-        // ];
-        // Mail::to(Auth()->user()->email)->send(new AgapeEmail($data));
+        $data = [
+            'client_no'=> $loan->client->client_no,
+            'name'=> $loan->client->name,
+            'phone'=> $loan->client->phone,
+            'loan_amount' => $request->loan_amount,
+            'tenure'=>$request->tenure,
+            'intrest'=> $intrest,
+            'monthly_payback' => $monthly_payback,
+            'total_payback'=> $total_payback,
+            'fp_amount'=>$fp_amount,
+            'subject'=> 'Loan Request Updated',
+            'type'=> 'update loan request',
+            'admin_incharge'=> Auth()->user()->name,
+            'date'=> Carbon::now(),
+        ];
+        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
 
         return redirect(route('loan'))->with('message', 'Loan Request Updated');
     

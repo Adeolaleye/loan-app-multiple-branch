@@ -23,7 +23,9 @@
       <div class="col-sm-12">
         <div class="card">
           <div class="card-header">
-            <h5>Edit <span class="text-warning">{{ $loan->client->name }}'s</span> Loan Request</h5>
+            <a href="{{ route('viewclient',$loan->client->id) }}" data-bs-toggle="tooltip" title="View Client Details">
+              <h5>Edit <span class="text-warning">{{ $loan->client->name }}'s</span> Loan Request</h5>
+            </a>
           </div>
           <div class="card-body">
             @include('includes.alerts')

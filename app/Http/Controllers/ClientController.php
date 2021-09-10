@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Loan;
 use App\Client;
+use App\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -17,7 +18,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::with('loan')->Orderby('created_at','desc')->get();
+        $clients = Client::with('loan','payment')->Orderby('created_at','desc')->get();
         $counter = Client::all()->count();
         return view('clients.index', [
             'clients' => $clients,
