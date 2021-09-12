@@ -35,7 +35,7 @@
                             <a href="{{ route('payment') }}" data-bs-toggle="tooltip" title="Payout History">
                                 <button class="btn btn-secondary" type="button" title="View Full Details">View All Pay In</button>
                             </a>
-                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#makepayment" data-bs-toggle="tooltip">Make Random Payment</button>
+                            {{-- <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#makepayment" data-bs-toggle="tooltip">Make Random Payment</button> --}}
                         </div>
                     </div>
                 </div>

@@ -210,9 +210,9 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <button class="btn btn-light" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg" data-bs-toggle="tooltip" title="View Payment Hostory">
-                                        <i class="fas fa-eye text-warning"></i>
-                                    </button>
+                                    <a href="{{ route('clientpayhistory',$loan->id) }}" data-bs-toggle="tooltip" title="View Payment History">
+                                        <span>View Pay History</span>
+                                    </a>
                                     @if (!is_null($loan->payment) && $loan->payment->sum('amount_paid') < $loan->total_payback)
                                         <form action="{{ route('makepayment', $loan->id) }}">
                                             <button class="btn btn-light text-secondary" type="submit">Pay Now</button>

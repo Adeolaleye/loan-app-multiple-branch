@@ -89,7 +89,10 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        return view('payment.payhistory');
+        $payhistorys = Payment::with('loan','client')->where('loan_id', $id)->where('payment_status',1)->get();
+        $loanhistory = Loan::with('client','payment')->where('id', $id)->first();
+        $counter = $payhistorys->count();
+        return view('payment.payhistory',compact('payhistorys','loanhistory','counter'));
     }
 
     /**

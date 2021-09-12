@@ -55,7 +55,7 @@ Route::get('/payment', 'PaymentController@index')->name('payment');
 Route::get('/payout', 'PaymentController@payout')->name('payout');
 Route::get('viewclientintenure', 'InTenureController@show')->name('viewclientintenure');
 Route::post('savemoney', 'PaymentController@store')->name('savemoney');
-Route::post('clientpayhistory/{id}', 'PaymentController@show')->name('clientpayhistory');
+Route::get('clientpayhistory/{id}', 'PaymentController@show')->name('clientpayhistory');
 
 // monthly
 Route::get('/monthly', 'MonthlyController@index')->name('monthly');
