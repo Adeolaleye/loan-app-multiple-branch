@@ -27,7 +27,7 @@ class HomeController extends Controller
     public function index()
     {
         $allclients_count = Client::count();
-        $clientintenure_count = Loan::where('status', '=', 1)->count();
+        $clientintenure_count = Loan::where('status', '=', 1)->orwhere('status', '=', 3)->count();
         $profit = Loan::count();
         
         $outstanding = Payment::where('payment_status',0)->get();
