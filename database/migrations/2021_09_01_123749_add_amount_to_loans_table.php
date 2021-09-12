@@ -20,7 +20,7 @@ class AddAmountToLoansTable extends Migration
             $table->string('total_payback')->nullable();
             $table->string('fp_amount')->nullable();
             $table->string('fp_status')->nullable();
-            $table->string('disbursement_date')->nullable();
+            $table->timestamp('disbursement_date')->nullable();
             $table->string('tenure')->nullable();
             $table->string('loan_duration')->nullable();
             $table->string('status')->default(0);

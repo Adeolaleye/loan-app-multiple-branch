@@ -68,7 +68,7 @@
                                 @endif
                             </td>
                             <td>{{ date('F', strtotime($payment->date_paid)) }}</td>
-                            <td>{{ $payment->amount_paid }}</td>
+                            <td>{{ number_format($payment->amount_paid) }}</td>
                             <td>{{ $payment->payment_purpose }}</td>
                             <td>{{ $payment->admin_incharge }}</td>
                             <td>{{ date('d, M Y', strtotime($payment->date_paid)) }}</td>
@@ -109,7 +109,7 @@
                             <td>{{ $i++ }}</td>
                             <td>Admin who disbursed</td>
                             <td>{{ date('F', strtotime($loan->disbursement_date)) }}</td>
-                            <td>{{ $loan->fp_amount }}</td>
+                            <td>{{ number_format($loan->fp_amount) }}</td>
                             <td>{{ $loan->admin_who_disburse }}</td>
                             <td>{{ date('d, M Y', strtotime($loan->disbursement_date)) }}</td>
                         </tr>

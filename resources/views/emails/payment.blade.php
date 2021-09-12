@@ -30,24 +30,24 @@
     <h4>Loan Details</h4>
 <p>
     <strong>Tenure : </strong> {{ $data['tenure'] }} month<br>
-    <strong>Loan Amount : </strong>#{{ $data['loan_amount'] }}<br>
-    <strong>Intrest : </strong>#{{ $data['intrest'] }}<br>
-    <strong>Total Payback : </strong>#{{ $data['total_payback'] }}<br>
+    <strong>Loan Amount : </strong>#{{ number_format($data['loan_amount'])  }}<br>
+    <strong>Intrest : </strong>#{{ number_format($data['intrest']) }}<br>
+    <strong>Total Payback : </strong>#{{ number_format($data['total_payback']) }}<br>
     <strong>Loan Duration : </strong>{{ date('M, Y', strtotime($data['disbursement_date'])) }} - {{ date('M, Y', strtotime($data['loan_duration'])) }}<br>
-    <strong>Total Amount Paid : </strong>#{{ $data['total_amountpaid'] }} (this pay included)<br>
-    <strong>Total Actual Profit Made : </strong>#{{ $data['actual_profit'] }} (this pay included)
+    <strong>Total Amount Paid : </strong>#{{ number_format($data['total_amountpaid']) }} (this pay included)<br>
+    <strong>Total Actual Profit Made : </strong>#{{ number_format($data['actual_profit']) }} (this pay included)
 </p>
 <h4>Payment Details</h4>
 <p>
-    <strong>Amount Paid: </strong>#{{ $data['amount_paid'] }}<br>
+    <strong>Amount Paid: </strong>#{{ number_format($data['amount_paid']) }}<br>
     <strong>No of time the client has paid is : </strong>{{ $data['no_of_time_paid'] }}<br>
 </p>
 <h4>Next Payment Details</h4>
 <p>
-    <strong>Outstanding Pay : </strong>#{{ $data['outstanding'] }}<br>
-    <strong>Balance Brought Forward: </strong>#{{ $data['bb_forward'] }}<br>
-    <strong>Monthly Payback : </strong>#{{ $data['monthly_payback'] }}<br>
-    <strong>Expected Next Pay : </strong>#{{ $data['next_pay'] }}<br>
+    <strong>Outstanding Pay : </strong>#{{ number_format($data['outstanding']) }}<br>
+    <strong>Balance Brought Forward: </strong>#{{ number_format($data['bb_forward']) }}<br>
+    <strong>Monthly Payback : </strong>#{{ number_format($data['monthly_payback']) }}<br>
+    <strong>Expected Next Pay : </strong>#{{ number_format($data['next_pay']) }}<br>
     <strong>Next Due Date : </strong>{{ date('d, M Y', strtotime($data['next_due_date'])) }}<br>
 </p>
 <p>Click <a href="" target="_blank">here</a> to login and review, login on desktop for best review.</p>
@@ -68,20 +68,20 @@
     <h4>Loan Details</h4>
 <p>
     <strong>Tenure : </strong>{{ $data['tenure'] }} month<br>
-    <strong>Loan Amount : </strong>#{{ $data['loan_amount'] }}<br>
-    <strong>Intrest : </strong>#{{ $data['intrest'] }}<br>
-    <strong>Total Payback : </strong>#{{ $data['total_payback'] }}<br>
+    <strong>Loan Amount : </strong>#{{ number_format($data['loan_amount']) }}<br>
+    <strong>Intrest : </strong>#{{ number_format($data['intrest']) }}<br>
+    <strong>Total Payback : </strong>#{{ number_format($data['total_payback']) }}<br>
     <strong>Loan Duration : </strong>{{ date('M, Y', strtotime($data['disbursement_date'])) }} - {{ date('M, Y', strtotime($data['loan_duration'])) }}<br>
-    <strong>Total Amount Paid:</strong>#{{ $data['total_amountpaid'] }} (this pay included)<br>
-    <strong>Monthly Payback : </strong>#{{ $data['monthly_payback'] }}
+    <strong>Total Amount Paid:</strong>#{{ number_format($data['total_amountpaid']) }} (this pay included)<br>
+    <strong>Monthly Payback : </strong>#{{ number_format($data['monthly_payback']) }}
 </p>
 <h4>Payment Details</h4>
 <p>
-    <strong>Amount Paid : </strong>#{{ $data['amount_paid'] }}<br>
+    <strong>Amount Paid : </strong>#{{ number_format($data['amount_paid']) }}<br>
     <strong>No of time the client has paid is : </strong>{{ $data['no_of_time_paid'] }}<br>
 </p>
 <p>Click <a href="" target="_blank">here</a> to login and review, login on desktop for best review.</p>
-<p> Note that this loan tenure has been closed beacuse the payback has been completed, Our total profit was #{{ $data['actual_profit'] }}</p>
+<p> Note that this loan tenure has been closed beacuse the payback has been completed, Our total profit was #{{ number_format($data['actual_profit']) }}</p>
 
 <span>Payment handled by {{ $data['admin_incharge'] }},<br>
     On {{ date('d, M Y, @ h:i:s', strtotime($data['date_paid'])) }}.</span>
@@ -99,24 +99,24 @@
     <h4>Loan Details</h4>
 <p>
     <strong>Initial Tenure : </strong> {{ $data['tenure'] }} month<br>
-    <strong>Loan Amount : </strong>#{{ $data['loan_amount'] }}<br>
-    <strong>Intrest : </strong>#{{ $data['intrest'] }}<br>
-    <strong>Total Payback : </strong>#{{ $data['total_payback'] }}<br>
+    <strong>Loan Amount : </strong>#{{ number_format($data['loan_amount']) }}<br>
+    <strong>Intrest : </strong>#{{ number_format($data['intrest']) }}<br>
+    <strong>Total Payback : </strong>#{{ number_format($data['total_payback']) }}<br>
     <strong>Loan Duration : </strong>{{ date('M, Y', strtotime($data['disbursement_date'])) }} - {{ date('M, Y', strtotime($data['loan_duration'])) }}<br>
-    <strong>Total Amount Paid : </strong>#{{ $data['total_amountpaid'] }} (this pay included)<br>
-    <strong>Total Actual Profit Made : </strong>#{{ $data['actual_profit'] }} (this pay included)
+    <strong>Total Amount Paid : </strong>#{{ number_format($data['total_amountpaid']) }} (this pay included)<br>
+    <strong>Total Actual Profit Made : </strong>#{{number_format($data['actual_profit']) }} (this pay included)
 </p>
 <h4>Payment Details</h4>
 <p>
-    <strong>Amount Paid: </strong>#{{ $data['amount_paid'] }}<br>
+    <strong>Amount Paid: </strong>#{{ number_format($data['amount_paid']) }}<br>
     <strong>No of time the client has paid is : </strong>{{ $data['no_of_time_paid'] }}<br>
 </p>
 <h4>Next Payment Details</h4>
 <p>
-    <strong>Outstanding Pay : </strong>#{{ $data['outstanding'] }}<br>
-    <strong>Balance Brought Forward: </strong>#{{ $data['bb_forward'] }}<br>
-    <strong>Monthly Payback : </strong>#{{ $data['monthly_payback'] }}<br>
-    <strong>Expected Next Pay : </strong>#{{ $data['next_pay'] }}<br>
+    <strong>Outstanding Pay : </strong>#{{ number_format($data['outstanding']) }}<br>
+    <strong>Balance Brought Forward: </strong>#{{ number_format($data['bb_forward']) }}<br>
+    <strong>Monthly Payback : </strong>#{{ number_format($data['monthly_payback']) }}<br>
+    <strong>Expected Next Pay : </strong>#{{ number_format($data['next_pay']) }}<br>
     <strong>Next Due Date : </strong>{{ date('d, M Y', strtotime($data['next_due_date'])) }}<br>
 </p>
 <p>Click <a href="" target="_blank">here</a> to login and review, login on desktop for best review.</p>

@@ -37,9 +37,19 @@ class HomeController extends Controller
         $allsavings = $savings->sum('outstanding_payment');
 
         $profit = Loan::all();
+        $monthlyprofit = Loan::whereMonth('created_at', date('m'))->sum('actual_profit');
+        //dd($monthlyprofit);
+        // $from = date('2018-01-01');
+        // $to = date('2018-05-02');
+        // Reservation::
+        // User::whereMonth('created_at', date('m'))
+        // ->whereYear('created_at', date('Y'))
+        // ->get(['name','created_at']);
+
         $allprofits = $profit->sum('actual_profit');
 
-        $monthlyreports = Payment::with('client','loan')->where('payment_status',0)->take(3)->get();
+        $monthlyreports = Payment::whereMonth('next_due_date', date('m'))->with('client','loan')->where('payment_status',0)->take(3)->get();
+        $monthreportcounter = $monthlyreports->count();
 
         // $payable = Loan::with('user')->take(5)->get();
         // $clientintenure = VendorProduct::take(4)->get();
@@ -51,6 +61,8 @@ class HomeController extends Controller
             'allsavings',
             'allprofits',
             'monthlyreports',
+            'monthlyprofit',
+            'monthreportcounter',
         ));
         return view('dashboard');
     }

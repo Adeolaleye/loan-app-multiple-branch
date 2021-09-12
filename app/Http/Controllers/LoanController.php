@@ -34,7 +34,7 @@ class LoanController extends Controller
      */
     public function create()
     {
-        $clients = Client::where('status', '=', Null && 'out of tenure')->get();
+        $clients = Client::where('status', '=','out of tenure')->orwhere('status', Null)->get();
         return view('loan.create', compact('clients'));
     }
 
@@ -53,10 +53,11 @@ class LoanController extends Controller
         ]);
         {
         $loan_amount = $request->loan_amount;
-        $intrest = 5*$request->tenure /100 * $loan_amount;
-        $total_payback = $intrest + $loan_amount;
-        $monthly_payback = $total_payback / $request->tenure;
-        $fp_amount = 5.99/100 * $loan_amount + 1000;
+        $intrest = ceil(5*$request->tenure /100 * $loan_amount);
+        $cal_payback = $intrest + $loan_amount;
+        $monthly_payback = ceil($cal_payback / $request->tenure);
+        $total_payback = $monthly_payback * $request->tenure;
+        $fp_amount = ceil(5.99/100 * $loan_amount + 1000);
         $profit = $intrest + $fp_amount;
         $intrest_permonth = $intrest / $request->tenure;
 
@@ -92,7 +93,7 @@ class LoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+        Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
 
         return redirect(route('loan'))->with('message', 'Loan Request Sent');
     
@@ -137,7 +138,6 @@ class LoanController extends Controller
         $loan->disbursement_date = Carbon::now();
         $loan->fp_status = (is_null($request->fp_status) ? 'Not paid' : 'Paid' );
         $loan->loan_duration = Carbon::now()->addMonth($loan->tenure);
-        $loan->monthly_payback = $loan->total_payback / $loan->tenure;
         $loan->expected_profit = $loan->intrest + $loan->fp_amount;
         $loan->status= 1;
         $loan->actual_profit = $loan->fp_amount;
@@ -151,9 +151,9 @@ class LoanController extends Controller
             'loan_id' => $loan->id,
             'next_due_date' => Carbon::now()->addDay(30),
             'outstanding_payment' => $loan->total_payback,
-            'expect_pay' => $loan->total_payback / $loan->tenure,
+            'expect_pay' => $loan->monthly_payback,
             'bb_forward' => 0.00,
-            'payback_permonth' => $loan->total_payback / $loan->tenure,
+            'payback_permonth' => $loan->monthly_payback,
             'payment_status' => 0,
         ]);
         }
@@ -180,7 +180,7 @@ class LoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+        Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
 
         return redirect(route('loan'))->with('message', 'Loan Disbursed');
     }
@@ -200,13 +200,14 @@ class LoanController extends Controller
             'tenure' => 'required|string|max:10',
         ]);
         {
-        $loan_amount = $request->loan_amount;
-        $intrest = 5*$request->tenure /100 * $loan_amount;
-        $total_payback = $intrest + $loan_amount;
-        $monthly_payback = $total_payback / $request->tenure;
-        $fp_amount = 5.99/100 * $loan_amount + 1000;
-        $profit = $intrest + $fp_amount;
-        $intrest_permonth = $intrest / $request->tenure;
+            $loan_amount = $request->loan_amount;
+            $intrest = ceil(5*$request->tenure /100 * $loan_amount);
+            $cal_payback = $intrest + $loan_amount;
+            $monthly_payback = ceil($cal_payback / $request->tenure);
+            $total_payback = $monthly_payback * $request->tenure;
+            $fp_amount = ceil(5.99/100 * $loan_amount + 1000);
+            $profit = $intrest + $fp_amount;
+            $intrest_permonth = $intrest / $request->tenure;
 
         $loan= Loan::find($id);
         $loan->loan_amount=$request->loan_amount;
@@ -232,7 +233,7 @@ class LoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+        Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
 
         return redirect(route('loan'))->with('message', 'Loan Request Updated');
     

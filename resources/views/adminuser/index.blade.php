@@ -70,8 +70,8 @@
                             <td>{{ $user->created_at->format('M ,d Y') }}</td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <button class="btn btn-light edit-user" type="button" data-bs-toggle="modal" data-bs-target="#editadmin" data-userid="{{ $user->id }}" data-user="{{ json_encode($user->toArray()) }}" data-bs-toggle="tooltip" title="Edit Admin"><i class="fas fa-edit text-warning"></i>
-                                    </button>
+                                    {{-- <button class="btn btn-light edit-user" type="button" data-bs-toggle="modal" data-bs-target="#editadmin" data-userid="{{ $user->id }}" data-user="{{ json_encode($user->toArray()) }}" data-bs-toggle="tooltip" title="Edit Admin"><i class="fas fa-edit text-warning"></i>
+                                    </button> --}}
                                     <button type="button" class="btn btn-light delete-user" data-bs-toggle="modal" data-bs-target="#deleteadmin" data-userid="{{ $user->id }}" data-username="{{ $user->name }}" data-bs-toggle="tooltip" title="Delete This Admin"><i class="fas fa-trash-alt text-danger"></i></button>
                                 </div>
                             </td>

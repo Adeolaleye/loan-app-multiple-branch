@@ -5,7 +5,7 @@
     <div class="page-title">
         <div class="row">
             <div class="col-6">
-                <h5>Monthly Report <br> <span class="f-14 font-bold text-warning">20 Clients to pay in September</span></h5>
+                <h5>Monthly Report <br> <span class="f-14 font-bold text-warning">{{ $counter }} Clients to pay in {{ date('F') }}</span></h5>
                     <div class="card-header-right">
                     </div>
             </div>
@@ -29,11 +29,6 @@
                     <div class="col-md-8 col-sm-12">
                         <span>Here is history of those owing for this month.</span>
                     </div>
-                    <div class="col-md-4 col-sm-12">
-                        <a href="{{ route('requestloan') }}">
-                            <button class="btn btn-primary pull-right" type="button" data-bs-toggle="tooltip" title="Add new debitor">Request Loan</button>
-                        </a>
-                    </div>
                 </div>
               </div>
               <div class="card-body">
@@ -52,21 +47,28 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>12345</td>
-                                <td>Olaley Adeola</td>
-                                <td>50,000</td>
-                                <td>10000</td>
-                                <td>Sept - Dec 2021</td>
-                                <td>26/10/2021</td>
-                                <td>
-                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                        <form action="">
-                                            <button class="btn btn-light text-success" type="submit">Pay Now</button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
+                            @foreach ($monthlyreports as $monthlyreport)
+                                <tr>
+                                    <td>{{ $monthlyreport->client->client_no }}</td>
+                                    <td>{{ $monthlyreport->client->name }}</td>
+                                    <td>{{ $monthlyreport->outstanding_payment }}</td>
+                                    <td>{{ $monthlyreport->expect_pay }}</td>
+                                    <td>
+                                        {{-- @foreach ($monthlyreport->loan as $loan )
+                                        {{ date('M Y', strtotime($loan->disbursement_date)) }} - {{ date('M Y', strtotime($loan->loan_duration)) }}
+                                        @endforeach
+                                        {{ $monthlyreport->loan }} --}}
+                                    </td>
+                                    <td>{{ date('d,M Y', strtotime($monthlyreport->next_due_date)) }}</td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <form action="{{ route('makepayment', $monthlyreport->loan_id) }}">
+                                                <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
+                                            </form> 
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

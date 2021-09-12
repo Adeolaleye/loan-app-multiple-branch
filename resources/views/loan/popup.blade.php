@@ -36,6 +36,7 @@
             </div>
             <div class="dropdown-divider"></div>
                 <div class="card-body">
+                    <span>Tenure: <strong id="tenure"></strong></span><br>
                     <span>Date Of Disbursement: <strong id="dd"></strong></span><br>
                     <span>Expected Monthly Pay: <strong id="expected_pay"></strong></span><br>
                     <span>Forward Payment: <strong id="fpamount">#</strong>(<span id="fpstatus"></span>)</span><br>

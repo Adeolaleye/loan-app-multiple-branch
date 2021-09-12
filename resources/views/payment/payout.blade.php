@@ -63,8 +63,8 @@
                             <td>{{ $i++ }}</td>
                             <td>{{ $payout->client->name }}</td>
                             <td>{{ date('F', strtotime($payout->disbursement_date)) }}</td>
-                            <td>{{ $payout->loan_amount }}</td>
-                            <td>Loan</td>
+                            <td>{{ number_format($payout->loan_amount) }}</td>
+                            <td>Forward Payment</td>
                             <td>{{ $payout->admin_who_disburse }}</td>
                             <td>{{ date('d, M Y', strtotime($payout->disbursement_date)) }}</td>
                         </tr>

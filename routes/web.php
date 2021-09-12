@@ -24,7 +24,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 // adminuser
 Route::get('/adminuser', 'UserController@index')->name('adminuser');
 Route::post('createadmin', 'UserController@store')->name('createadmin');
-Route::post('destroy/{id}', 'UserController@destroy')->name('destroy');
+Route::post('destroyuser/{id}', 'UserController@destroy')->name('destroyuser');
 Route::post('update/{id}', 'UserController@update')->name('update');
 
 // clients
@@ -55,6 +55,7 @@ Route::get('/payment', 'PaymentController@index')->name('payment');
 Route::get('/payout', 'PaymentController@payout')->name('payout');
 Route::get('viewclientintenure', 'InTenureController@show')->name('viewclientintenure');
 Route::post('savemoney', 'PaymentController@store')->name('savemoney');
+Route::post('clientpayhistory/{id}', 'PaymentController@show')->name('clientpayhistory');
 
 // monthly
 Route::get('/monthly', 'MonthlyController@index')->name('monthly');

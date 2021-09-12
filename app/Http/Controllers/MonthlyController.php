@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Loan;
+use App\Client;
+use App\Payment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Void_;
 
@@ -14,7 +17,12 @@ class MonthlyController extends Controller
      */
     public function index()
     {
-        return view('monthly.index');
+        $monthlyreports = Payment::whereMonth('next_due_date', date('m'))->with('client','loan')->where('payment_status',0)->Orderby('created_at','desc')->get();
+        $counter = $monthlyreports->count();
+        return view('monthly.index', [
+            'monthlyreports' => $monthlyreports,
+            'counter' => $counter,
+        ]);
     }
 
     /**

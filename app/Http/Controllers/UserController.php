@@ -47,6 +47,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            //'email' => 'required|unique:users,email',
             'password' => 'required|string|min:5|unique:users',
             'phone' => 'required|string|min:5',
             'role' => 'required|string',
@@ -83,16 +84,6 @@ class UserController extends Controller
             'email'=> $user->email,
         ];
         Mail::to($user->email)->send(new AgapeEmail($data));
-        // $data = [
-        //     'type'=> 'admin welcome',
-        //     'subject'=> 'New Registration',
-        //     'name'=> $user->name,
-        //     'phone'=> $user->phone,
-        //     'email'=> $user->email,
-            
-        // ];
-        // Mail::to(Auth()->user()->email)->send(new AgapeEmail($data));
-
         return redirect(route('adminuser'))->with('message', 'User Added Successfully');
     
     
@@ -131,8 +122,20 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {   
-
+       
         $user= User::find($id);
+       
+        $data = $this->validate($request, [
+            'profile_picture' => 'nullable|max:250|mimes:jpg,jpeg,png',
+            // 'email' => 'unique:users,email,' . $user->id,
+           // 'email' => 'required|unique:users,email',
+        //    'email' => 'unique:users,email,' . $user->id,
+            'phone' => 'required',
+            'name' => 'required|max:70|min:3',
+            'role' => 'required'
+
+        ]);
+      
         if(request()->has('profile_picture')){
             //delete old one
             if(isset($user->profile_picture)){
@@ -142,16 +145,15 @@ class UserController extends Controller
             $imgName = time() . '-' .$request['profile_picture']->getClientOriginalName();
             $image = Image::make($request['profile_picture'])->resize(100, 100);
             $image->save('profile_pictures/'.$imgName);
-
             $user->profile_picture = 'profile_pictures/'.$imgName;
-
-            $user->save();
-
+           // $user->save();
         }
-        $user->name=$request->name;
-        $user->email=$request->email;
-        $user->phone=$request->phone;
-        $user->role=$request->role;
+
+        $user->name=$data['name'];
+        // $user->email = isset($request->email) ? $request->email: NULL;
+        $user->phone=$data['phone'];
+        $user->role=$data['role'];
+        // $user->role=$data['role'];
         $user->save();
         return back()->with('message', 'Updated');
     }

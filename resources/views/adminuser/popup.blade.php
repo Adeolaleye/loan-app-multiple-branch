@@ -29,9 +29,9 @@
                             <label class="col-form-label" for="Role">Role</label>
                             <select class="form-control" name="role">
                                 <option>-- Choose Option --</option>
-                                <option value="Administrator"{{ old('role') }} >Administrator</option>
-                                <option value="Accountant"{{ old('role') }}>Accountant</option>
-                                <option value="Entry"{{ old('role') }}>Entry</option>
+                                <option value="Super Admin"{{ old('role') }} >Super Admin</option>
+                                <option value="Branch Manager"{{ old('role') }}>Branch Manager</option>
+                                <option value="Officer"{{ old('role') }}>Officer</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -56,7 +56,7 @@
             <h5 class="modal-title f-16">Delete Admin</h5>
             <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ route('destroy', $user->id) }}">
+            <form method="post" action="{{ route('destroyuser', $user->id) }}">
                 @csrf
                     <div class="modal-body text-center">
                       <h5 class="p-t-5">
@@ -97,18 +97,18 @@
                             <input class="form-control" type="email" value="" name="email" required>
                         </div>
                         <div class="mb-3">
-                            <label class="col-form-label" for="Role">Role</label>
+                            <label class="col-form-label">Role</label>
                             <select class="form-control" name="role" required>
-                                <option>-- Choose Option --</option>
-                                <option value="Administrator" >Administrator</option>
-                                <option value="Accountant">Accountant</option>
-                                <option value="Entry">Entry</option>
+                                <option value=""></option>
+                                <option value="Super Admin"{{ old('role') }} >Super Admin</option>
+                                <option value="Branch Manager"{{ old('role') }}>Branch Manager</option>
+                                <option value="Officer"{{ old('role') }}>Officer</option>
                             </select>
                         </div>
-                        {{-- <div class="mb-3">
+                        <div class="mb-3">
                             <label class="col-form-label" for="profile_picture">Profile Picture (Optional)</label>
                             <input class="form-control" type="file" name="profile_picture">
-                        </div> --}}
+                        </div>
                     </div>
                     <div class="modal-footer bg-whitesmoke br">
                       <button type="submit" class="btn btn-primary">Update</button>

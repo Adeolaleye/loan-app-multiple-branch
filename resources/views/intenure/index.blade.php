@@ -50,8 +50,8 @@
                         <tr>
                             <td>{{ $loan->client->client_no }}</td>
                             <td>{{ $loan->client->name }}</td>
-                            <td>{{ $loan->loan_amount }}</td>
-                            <td>{{ round($loan->monthly_payback,1) }}</td>
+                            <td>{{ number_format($loan->loan_amount) }}</td>
+                            <td>{{ number_format($loan->monthly_payback) }}</td>
                             <td>
                                 {{ date('M Y', strtotime($loan->disbursement_date)) }} - {{ date('M Y', strtotime($loan->loan_duration)) }}
                             </td>

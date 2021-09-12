@@ -68,7 +68,7 @@
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Loan Amount</p>
                         <h3 class="f-14 f-w-600">
                             <span>
-                                #{{ $loan->loan_amount}}   
+                                #{{ number_format($loan->loan_amount)}}   
                             </span>
                         </h3>
                     </div>
@@ -76,20 +76,20 @@
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Expected Intrest</p>
                         <h3 class="f-14 f-w-600">
                             <span>
-                                #{{ $loan->intrest}}<br>
+                                #{{ number_format($loan->intrest)}}<br>
                                 <span class="font-success f-12 f-w-300">5% per month</span>   
                             </span>
                         </h3>
                     </div>
                     <div class="col-6 col-lg-3 text-center">
                         <p class="f-14 text-warning" style="margin-bottom: 0rem">Total Payback</p>
-                        <h3 class="f-14 f-w-600"><span>#{{ $loan->total_payback }}</span></h3>
+                        <h3 class="f-14 f-w-600"><span>#{{ number_format($loan->total_payback) }}</span></h3>
                     </div>
                     <div class="col-6 col-lg-3 text-center">
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Total Amount Paid</p>
                         <h3 class="f-14 f-w-600">
                             <span>
-                                #{{ round($loan->sum_of_allpayback) }}   
+                                #{{ number_format($loan->sum_of_allpayback) }}   
                             </span>
                         </h3>
                     </div>
@@ -115,7 +115,7 @@
                             <span>
                             @foreach ($loan->payment as $payment)
                                 @if ($payment->payment_status == 0 )
-                                    #{{ $payment->outstanding_payment }}
+                                    #{{ number_format($payment->outstanding_payment) }}
                                 @endif
                             @endforeach    
                             </span>
@@ -125,7 +125,7 @@
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Payback Per Month</p>
                         <h3 class="f-14 f-w-600">
                             <span>
-                                #{{ round($loan->monthly_payback,1) }}   
+                                #{{ number_format($loan->monthly_payback) }}   
                             </span>
                         </h3>
                     </div>
@@ -133,7 +133,7 @@
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Our Current Total Profit</p>
                         <h3 class="f-14 f-w-600">
                             <span>
-                                {{ !is_null( '#'.round($loan->actual_profit)) ? '#'.round($loan->actual_profit) : 'N/A' }}   
+                                {{ !is_null( '#'.number_format($loan->actual_profit)) ? '#'. number_format($loan->actual_profit) : 'N/A' }}   
                             </span>
                         </h3>
                     </div>
@@ -153,7 +153,7 @@
                         <h3 class="f-14 f-w-600"><span>
                             @foreach ($loan->payment as $payment)
                                 @if ($payment->payment_status == 0 )
-                                    #{{ round($payment->expect_pay,1) }}<br>
+                                    #{{ number_format($payment->expect_pay) }}<br>
                                     {{-- {{ $payment->expect_pay }} --}}
                                 @endif
                             @endforeach
@@ -175,7 +175,7 @@
                         <h3 class="f-14 f-w-600"><span>
                             @foreach ($loan->payment as $payment)
                                 @if ($payment->payment_status == 0 )
-                                    {{ !is_null($payment->bb_forward) ? '#'.$payment->bb_forward : '0.00' }}
+                                    {{ !is_null(number_format($payment->bb_forward)) ? '#'.number_format($payment->bb_forward) : '0.00' }}
                                 @endif
                             @endforeach
                         </span></h3>
@@ -185,7 +185,7 @@
                         <h3 class="f-14 f-w-600"><span>
                             @foreach ($loan->payment as $payment)
                                 @if ($payment->payment_status == 0 )
-                                    #{{ round($payment->expect_pay,1) }}<br>
+                                    #{{ number_format($payment->expect_pay) }}<br>
                                     {{-- {{ $payment->expect_pay }} --}}
                                 @endif
                             @endforeach
@@ -207,7 +207,7 @@
                         <div class="col-md-6 offset-md-3">
                         <label class="form-label" for="amount">Amount</label>
                         <div class="input-group input-group-air"><span class="input-group-text">#</span>
-                            <input class="form-control" type="number" placeholder="50000" name="amount_paid" value="#{{ round($payment->expect_pay,1) }}"{{ old('amount_paid') }} required="">
+                            <input class="form-control" type="number" name="amount_paid" value="{{ $payment->expect_pay}}"{{ old('amount_paid') }} required="">
                             <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
                         </div>
                         </div>
@@ -219,13 +219,13 @@
                     <div class="col-md-6 offset-md-3">
                     <label class="form-label" for="amount">Amount</label>
                     <div class="input-group input-group-air"><span class="input-group-text">#</span>
-                        <input class="form-control" type="number" placeholder="50000" name="amount_paid" value="#{{ round($payment->expect_pay,1) }}"{{ old('amount_paid') }} required="">
+                        <input class="form-control" type="number" name="amount_paid" value="{{$payment->expect_pay }}"{{ old('amount_paid') }} required="">
                         <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
                     </div>
                     </div>
                     <button class="btn btn-primary" type="submit">Submit</button>
                 </div>
-            @endif
+                @endif
             </form>
           </div>
         </div>

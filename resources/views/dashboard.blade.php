@@ -36,7 +36,7 @@
                                     <div class="align-self-center text-center"><i data-feather="database"></i></div>
                                     <div class="media-body">
                                         <span class="m-0">Earnings</span>
-                                        <h4 class="mb-0">#{{ $allprofits }}</h4>
+                                        <h4 class="mb-0">#{{ number_format($allprofits) }}</h4>
                                         <i class="icon-bg" data-feather="database"></i>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
                                     <div class="align-self-center text-center"><i data-feather="database"></i></div>
                                     <div class="media-body">
                                         <span class="m-0">Earnings</span>
-                                        <h4 class="mb-0">#1000</h4>
+                                        <h4 class="mb-0">#{{ number_format($monthlyprofit) }}</h4>
                                         <i class="icon-bg" data-feather="database"></i>
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@
                                     <div class="align-self-center text-center"><i data-feather="layers"></i></div>
                                     <div class="media-body">
                                         <span class="m-0">Company Value</span>
-                                        <h4 class="mb-0">#{{ $companyvalue }}</h4>
+                                        <h4 class="mb-0">#{{ number_format($companyvalue) }}</h4>
                                         <i class="icon-bg" data-feather="layers"></i>
                                     </div>
                                 </div>
@@ -118,7 +118,7 @@
                                     <div class="align-self-center text-center"><i data-feather="layers"></i></div>
                                     <div class="media-body">
                                         <span class="m-0">All Savings</span>
-                                        <h4 class="mb-0">#{{ $allsavings }}</h4>
+                                        <h4 class="mb-0">#{{ number_format($allsavings) }}</h4>
                                         <i class="icon-bg" data-feather="layers"></i>
                                     </div>
                                 </div>
@@ -168,7 +168,7 @@
         <div class="col-xl-6 xl-100 box-col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Monthly Report <br> <span class="f-14 font-bold text-warning">20 Clients to pay in September</span></h5>
+                    <h5>Monthly Report <br> <span class="f-14 font-bold text-warning">{{ $monthreportcounter }} Clients to pay in {{ date('F') }}</span></h5>
                     <div class="card-header-right">
                     </div>
                 </div>
@@ -201,9 +201,9 @@
                                     </td>
                                     <td>{{ date('d,M Y', strtotime($monthlyreport->next_due_date)) }}</td>
                                     <td>
-                                        <div class="btn-group" role="group" aria-label="Basic example">
-                                            <button class="btn btn-light" type="button" data-bs-toggle="modal" data-bs-target="#tenuredetails" data-bs-toggle="tooltip" title="View Full Details"><i class="fas fa-eye text-warning"></i></button>
-                                        </div>
+                                        <form action="{{ route('makepayment', $monthlyreport->loan_id) }}">
+                                            <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
+                                        </form>
                                     </td>
                                 </tr>
                                 @endforeach

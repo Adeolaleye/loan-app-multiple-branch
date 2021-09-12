@@ -2,7 +2,7 @@
 {{-- Header --}}
 @slot('header')
 @component('mail::header', ['url' => config('app.url')])
-<img src="http://agapeglobal.com.ng/wp-content/uploads/2020/11/logo-1.png" class="logo" alt="Agapeglobal Logo" height="35px">
+<img src="http://agapeglobal.com.ng/wp-content/uploads/2020/11/logo-1.png" class="logo" alt="Agapeglobal" height="35px">
 @endcomponent
 @endslot
 

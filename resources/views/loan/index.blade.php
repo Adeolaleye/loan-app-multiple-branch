@@ -57,18 +57,18 @@
                         <tr>
                             <td>123445</td>
                             <td>{{ $loan->client->name }}</td>
-                            <td>{{ $loan->loan_amount }}</td>
+                            <td>{{ number_format($loan->loan_amount) }}</td>
                             <td>
                                 @foreach ($loan->payment as $payment)
                                 @if ($payment->payment_status == 0 )
-                                {{ $payment->outstanding_payment }}
+                                {{ number_format($payment->outstanding_payment) }}
                                 @endif
                                 @endforeach 
                             </td>
                             <td>{{ $loan->tenure }}</td>
                             <td>{{ $loan->created_at->format('M ,d Y') }}</td>
                             <td>
-                                {{ $loan->fp_amount }}<br>
+                                {{ number_format($loan->fp_amount) }}<br>
                                 @if ($loan->fp_status == 'Not paid')
                                 <span class="font-secondary f-12">{{ $loan->fp_status }}</span>
                                 @endif
@@ -76,7 +76,7 @@
                                 <span class="font-success f-12">{{ $loan->fp_status }}</span>
                                 @endif
                             </td>
-                            <td>{{ $loan->total_payback }}</td>
+                            <td>{{ number_format($loan->total_payback) }}</td>
                             <td>
                                 @if ($loan->status == 0)
                                 <div class="span badge rounded-pill pill-badge-warning">In Review
@@ -97,8 +97,8 @@
                                         <button class="btn btn-light view-loan" type="button" 
                                             data-bs-toggle="modal" 
                                             data-loanid="{{ $loan->id }}"
-                                            data-payback="{{ !is_null(round($loan->monthly_payback,1)) ? '#'.round($loan->monthly_payback,1) : 'Not Available' }}"
-                                            data-profit=" {{ !is_null($loan->expected_profit) ? '#'.$loan->expected_profit : 'Not Available' }}"
+                                            data-payback="{{ !is_null( number_format($loan->monthly_payback)) ? '#'.number_format($loan->monthly_payback) : 'Not Available' }}"
+                                            data-profit=" {{ !is_null(number_format($loan->expected_profit)) ? '#'.number_format($loan->expected_profit) : 'Not Available' }}"
                                             
                                             data-clientno="{{ $loan->client->client_no }}"
                                             data-name="{{ $loan->client->name }}" 
