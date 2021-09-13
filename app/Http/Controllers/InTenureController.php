@@ -112,7 +112,9 @@ class InTenureController extends Controller
             $payment->loan->status = 3;
             $intrest_permonth = $payment->loan->intrest / $payment->loan->tenure;
             $last_intrest = $payment->loan->actual_profit + $intrest_permonth;
-            $payment->loan->actual_profit = $last_intrest;
+            if($payment->client->status == 'in tenure' ){
+                $payment->loan->actual_profit = $last_intrest;
+            }
             $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
             $payment->client->status= 'tenure extended';
             $payment->save();
@@ -170,7 +172,9 @@ class InTenureController extends Controller
             $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
             $intrest_permonth = $payment->loan->intrest / $payment->loan->tenure;
             $last_intrest = $payment->loan->actual_profit + $intrest_permonth;
-            $payment->loan->actual_profit = $last_intrest;
+            if($payment->client->status == 'in tenure' ){
+                $payment->loan->actual_profit = $last_intrest;
+            }
             $payment->save();
             $payment->loan->save();
     
@@ -225,7 +229,9 @@ class InTenureController extends Controller
             $payment->loan->status = 2;
             $intrest_permonth = $payment->loan->intrest / $payment->loan->tenure;
             $last_intrest = $payment->loan->actual_profit + $intrest_permonth;
-            $payment->loan->actual_profit = $last_intrest;
+            if($payment->client->status == 'in tenure' ){
+                $payment->loan->actual_profit = $last_intrest;
+            }
             $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
             $payment->client->status = 'out of tenure';
             $payment->save();

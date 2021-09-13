@@ -72,7 +72,7 @@ class PaymentController extends Controller
         $payment = Payment::create([
             'amount_paid' => $request->amount_paid,
             'outstanding_payment' => $request->amount_paid,
-            'payment_status' => 0,
+            'payment_status' => 1,
             'date_paid' => Carbon::now(),
             'payment_purpose'=>'savings',
             'admin_incharge' => Auth()->user()->name,
@@ -89,7 +89,7 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        $payhistorys = Payment::with('loan','client')->where('loan_id', $id)->where('payment_status',1)->get();
+        $payhistorys = Payment::with('loan','client')->where('loan_id', $id)->where('payment_status',1)->Orderby('updated','asc')->get();
         $loanhistory = Loan::with('client','payment')->where('id', $id)->first();
         $counter = $payhistorys->count();
         return view('payment.payhistory',compact('payhistorys','loanhistory','counter'));

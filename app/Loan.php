@@ -25,6 +25,7 @@ class Loan extends Model
                 'admin_incharge',
                 'admin_who_disburse',
                 'sum_of_allpayback',
+                'formpayment',
     ];
     public function client (){
         return $this->belongsTo(Client::class);

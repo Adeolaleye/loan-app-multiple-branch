@@ -139,6 +139,7 @@ class LoanController extends Controller
         $loan->fp_status = (is_null($request->fp_status) ? 'Not paid' : 'Paid' );
         $loan->loan_duration = Carbon::now()->addMonth($loan->tenure);
         $loan->expected_profit = $loan->intrest + $loan->fp_amount;
+        $loan->sum_of_allpayback = 0;
         $loan->status= 1;
         $loan->actual_profit = $loan->fp_amount;
         $loan->client->status= 'in tenure';

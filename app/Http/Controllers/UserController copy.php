@@ -128,6 +128,7 @@ class UserController extends Controller
         $data = $this->validate($request, [
             'profile_picture' => 'nullable|max:250|mimes:jpg,jpeg,png',
             'email' => 'unique:users,email,' . $user->id,
+
             'phone' => 'required',
             'name' => 'required|max:70|min:3',
             'role' => 'required'

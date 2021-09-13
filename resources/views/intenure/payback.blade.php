@@ -82,6 +82,14 @@
                         </h3>
                     </div>
                     <div class="col-6 col-lg-3 text-center">
+                        <p class="f-14 text-success" style="margin-bottom: 0rem">Forward Payment Amount</p>
+                        <h3 class="f-14 f-w-600">
+                            <span>
+                                #{{ number_format($loan->fp_amount)}}   
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="col-6 col-lg-3 text-center">
                         <p class="f-14 text-warning" style="margin-bottom: 0rem">Total Payback</p>
                         <h3 class="f-14 f-w-600"><span>#{{ number_format($loan->total_payback) }}</span></h3>
                     </div>

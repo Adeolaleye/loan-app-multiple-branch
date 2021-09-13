@@ -131,7 +131,7 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $data =$this->validate($request, [
             'name' => 'required|string|max:100',
             'phone' => 'required|string|min:5',
             'dob' => 'required|string|max:100',
@@ -148,31 +148,21 @@ class ClientController extends Controller
             'g_relationship' => 'required|string|max:50',
             'profile_picture' => 'nullable|max:250',
         ]);
+        
+        $client= Client::find($id);
         if(request()->has('profile_picture')){
+            //delete old one
+            if(isset($client->profile_picture)){
+                unlink(public_path($client->profile_picture));
+            }
+            //save new image
             $imgName = time() . '-' .$request['profile_picture']->getClientOriginalName();
             $image = Image::make($request['profile_picture'])->resize(100, 100);
             $image->save('profile_pictures/'.$imgName);
+            $data['profile_picture'] = 'profile_pictures/'.$imgName;
         }
-        {
-            $client= Client::find($id);
-            $client->name=$request->name;
-            $client->phone=$request->phone;
-            $client->dob=$request->dob;
-            $client->gender=$request->gender;
-            $client->marital_status=$request->marital_status;
-            $client->occupation=$request->occupation;
-            $client->residential_address=$request->residential_address;
-            $client->office_address=$request->office_address;
-            $client->means_of_id=$request->means_of_id;
-            $client->qualification=$request->qualification;
-            $client->g_name=$request->g_name;
-            $client->g_phone=$request->g_phone;
-            $client->g_address=$request->g_address;
-            $client->g_relationship=$request->g_relationship;
-            $client->profile_picture=isset($imgName) ? 'profile_pictures/'.$imgName: NULL;
-            $client->save();
+         $client->update($data);
             return back()->with('message', 'Client Details Updated');
-        }
     }
 
     /**

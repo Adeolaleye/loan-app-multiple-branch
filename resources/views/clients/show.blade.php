@@ -213,16 +213,26 @@
                                     <a href="{{ route('clientpayhistory',$loan->id) }}" data-bs-toggle="tooltip" title="View Payment History">
                                         <span>View Pay History</span>
                                     </a>
-                                    @if (!is_null($loan->payment) && $loan->payment->sum('amount_paid') < $loan->total_payback)
+                                    @if ($loan->status == 3)
                                         <form action="{{ route('makepayment', $loan->id) }}">
                                             <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
                                         </form> 
                                     @endif
-                                    @if (!is_null($loan->payment) && $loan->payment->sum('amount_paid') == $loan->total_payback)
+                                    @if ($loan->status == 1)
+                                        <form action="{{ route('makepayment', $loan->id) }}">
+                                            <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
+                                        </form> 
+                                    @endif
+                                    @if ($loan->status == 0)
                                         <form action="{{ route('makepayment', $loan->id) }}">
                                             <button class="btn btn-light text-secondary" type="submit">View More</button>
                                         </form> 
                                     @endif
+                                    @if ($loan->status == 2)
+                                    <form action="{{ route('makepayment', $loan->id) }}">
+                                        <button class="btn btn-light text-secondary" type="submit">View More</button>
+                                    </form> 
+                                @endif
                                 </div>
                             </td>
                         </tr>
@@ -236,45 +246,3 @@
     </div>
   </div>
 @endsection
-<!-- Modal-->
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="paymenthistory" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="paymenthistory">Payment History</h4>
-          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="table-responsive">
-              <table class="display" id="basic-1">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Payment No</th>
-                    <th>Balance Brought Forward</th>
-                    <th>Amount Paid</th>
-                    <th>Outstanding</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>26/10/2021</td>
-                        <td>1</td>
-                        <td>750</td>
-                        <td>12,000</td>
-                        <td>42,250</td>
-                    </tr>
-                    <tr>
-                        <td>27/10/2021</td>
-                        <td>2</td>
-                        <td>750</td>
-                        <td>12,000</td>
-                        <td>42,250</td>
-                    </tr>
-                </tbody>
-              </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
