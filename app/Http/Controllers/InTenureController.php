@@ -28,6 +28,18 @@ class InTenureController extends Controller
             'counter' => $counter,
         ]); 
     }
+    public function filter()
+    {
+        // $loans = Loan::with('client','payment')->where('status', 1)->orwhere('status', 3)->Orderby('created_at','desc')->get();
+        // // dd($loans);
+        // $counter =$loans->count();
+        return view('intenure.filter');
+        // , [
+        //     'loans' => $loans,
+        //     'counter' => $counter,
+        // ]
+    // ); 
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -41,6 +41,7 @@ Route::post('destroy/{id}', 'ClientController@destroy')->name('destroy');
 // intenure
 Route::get('/clientsintenure', 'InTenureController@index')->name('clientsintenure');
 Route::get('viewclientintenure', 'InTenureController@show')->name('viewclientintenure');
+Route::get('filter', 'InTenureController@filter')->name('filter');
 Route::get('makepayment/{id}', 'InTenureController@makepayment')->name('makepayment');
 Route::post('paynow/{id}', 'InTenureController@paynow')->name('paynow');
 
@@ -58,6 +59,7 @@ Route::get('/payout', 'PaymentController@payout')->name('payout');
 Route::get('viewclientintenure', 'InTenureController@show')->name('viewclientintenure');
 Route::post('savemoney', 'PaymentController@store')->name('savemoney');
 Route::get('clientpayhistory/{id}', 'PaymentController@show')->name('clientpayhistory');
+Route::post('filterpayment', 'PaymentController@filter')->name('filterpayment');
 
 // monthly
 Route::get('/monthly', 'MonthlyController@index')->name('monthly');

@@ -21,7 +21,7 @@
       <div class="nav-right col-8 pull-right right-header p-0">
         <ul class="nav-menus">
           <li class="text-center"><h5><span id="greeting"></span> {{ Auth::user()->name }}, </h5></li>
-          <li><span class="header-search"><i data-feather="search"></i></span></li>
+          {{-- <li><span class="header-search"><i data-feather="search"></i></span></li> --}}
           <li class="maximize">
               <a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize"></i></a>
           </li>
