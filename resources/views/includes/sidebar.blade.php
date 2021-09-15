@@ -21,35 +21,35 @@
                 </div>
             </li>
             <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title link-nav" href="{{ route('adminprofile') }}">
+              <a class="sidebar-link sidebar-title {{ Request::is('adminprofile*') ? 'active' : 'link-nav'}}" href="{{ route('adminprofile') }}">
                   <span class="">Your Profile</span>
               </a>
             </li>
             @if(Auth::user()->role=='Super Admin')
             <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title link-nav" href="{{ route('home') }}">
+              <a class="sidebar-link sidebar-title {{ Request::is('home*') ? 'active' : 'link-nav'}}" href="{{ route('home') }}">
                   <i data-feather="home" ></i>
                   <span class="">Dashboard</span>
               </a>
             </li>
             <li class="sidebar-list">
-                <a class="sidebar-link sidebar-title link-nav" href="{{ route('clients') }}">
+                <a class="sidebar-link sidebar-title {{ Request::is('clients') ? 'active' : 'link-nav'}}" href="{{ route('clients') }}">
                 <i data-feather="users"> </i><span>All Clients</span></a>
             </li>
             <li class="sidebar-list">
-                <a class="sidebar-link sidebar-title link-nav" href="{{ route('clientsintenure') }}">
+                <a class="sidebar-link sidebar-title {{ Request::is('clientsintenure') ? 'active' : 'link-nav'}}" href="{{ route('clientsintenure') }}">
                 <i data-feather="user"> </i><span>Clients in Tenure</span></a>
             </li>
             <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title link-nav" href="{{ route('payment') }}">
+              <a class="sidebar-link sidebar-title {{ Request::is('payment*') ? 'active' : 'link-nav'}}" href="{{ route('payment') }}">
               <i data-feather="file-text"> </i><span>Payment History</span></a>
             </li>
             <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title link-nav" href="{{ route('loan') }}">
+              <a class="sidebar-link sidebar-title {{ Request::is('loan') ? 'active' : 'link-nav'}}" href="{{ route('loan') }}">
               <i data-feather="list"> </i><span>Loan History</span></a>
             </li>
             <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title link-nav" href="{{ route('adminuser') }}">
+              <a class="sidebar-link sidebar-title {{ Request::is('adminuser') ? 'active' : 'link-nav'}}" href="{{ route('adminuser') }}">
               <i data-feather="layers"> </i><span>Admin Role</span></a>
             </li>
             @endif
