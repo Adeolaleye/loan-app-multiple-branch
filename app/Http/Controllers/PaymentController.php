@@ -22,10 +22,14 @@ class PaymentController extends Controller
        $payment_counter = $payments->count();
        $loans_counter = $loans->count();
        $counter = $payment_counter + $loans_counter;
+       $months = $this->getMonths();
+       $years = array_combine(range( date('Y'), date('2020')), range(date('Y'), date('2020')));
        return view('payment.index', [
         'payments' => $payments,
         'loans' => $loans,
         'counter' => $counter,
+        'months' => $months,
+        'years'=> $years,
         ]);
     }
 
@@ -43,6 +47,25 @@ class PaymentController extends Controller
          'counter' => $counter,
          ]);
 
+    }
+    public function filter(Request $request)
+    {
+        $payments = Payment::whereYear('date_paid', $request->year)->whereMonth('date_paid', $request->month)->get();
+        //$payments = Payment::with('client','loan')->where('payment_status',1)->get();
+       $loans = Loan::where('fp_status','Paid')->get();
+       $payment_counter = $payments->count();
+       $loans_counter = $loans->count();
+       $counter = $payment_counter + $loans_counter;
+       $months = $this->getMonths();
+       $years = array_combine(range( date('Y'), date('2020')), range(date('Y'), date('2020')));
+       return view('payment.index', [
+        'payments' => $payments,
+        'loans' => $loans,
+        'counter' => $counter,
+        'months' => $months,
+        'years'=> $years,
+        'month'=> $request->month,
+        ]);
     }
 
     /**

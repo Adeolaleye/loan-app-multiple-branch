@@ -39,6 +39,33 @@
               </div>
               <div class="card-body">
                   @include('includes.alerts')
+                      <form method="post" action="{{ route('filterpayment')}}">
+                        @csrf
+                        <div class="row g-3">
+                          <div class="col-md-3 offset-md-2">
+                            <label class="form-label" for="year">Year</label>
+                            <select class="form-select" id="year" required="" name="year">
+                                <option></option>
+                              @foreach($years as $key => $value)
+                                <option value="{{ $value }}" {{ old('year') == $value ? 'selected' : '' }}>{{ $key }}</option>
+                              @endforeach
+                            </select>
+                          </div>
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="month">Months</label>
+                            <select class="form-select" id="month" required="" name="month">
+                                <option></option>
+                              @foreach($months as $month=>$value)
+                                <option value="{{ $value }}" {{ isset($month) ? 'selected' : '' }}>{{ $month }}</option>
+                              @endforeach
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label></label><br>
+                            <button class="btn btn-primary" type="submit">Filter</button>
+                          </div>
+                        </div>
+                      </form>
                 <div class="table-responsive">
                     <table class="display" id="advance-1">
                       <thead>
