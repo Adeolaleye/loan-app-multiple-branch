@@ -18,19 +18,20 @@ class PaymentController extends Controller
     public function index()
     {
        $payments = Payment::with('client','loan')->where('payment_status',1)->get();
-       $loans = Loan::where('fp_status','Paid')->get();
-       $payment_counter = $payments->count();
-       $loans_counter = $loans->count();
-       $counter = $payment_counter + $loans_counter;
-       $months = $this->getMonths();
-       $years = array_combine(range( date('Y'), date('2020')), range(date('Y'), date('2020')));
-       return view('payment.index', [
-        'payments' => $payments,
-        'loans' => $loans,
-        'counter' => $counter,
-        'months' => $months,
-        'years'=> $years,
-        ]);
+       $allData = $this->getFilterData($payments);
+    //    $loans = Loan::where('fp_status','Paid')->get();
+    //    $payment_counter = $payments->count();
+    //    $loans_counter = $loans->count();
+    //    $counter = $payment_counter + $loans_counter;
+    //    $months = $this->getMonths();
+    //    $years = array_combine(range( date('Y'), date('2020')), range(date('Y'), date('2020')));
+        return view('payment.index', [
+            'payments' => $allData['payments'],
+            'loans' => $allData['loans'],
+            'counter' => $allData['counter'],
+            'months' => $allData['months'],
+            'years'=> $allData['years'],
+            ]);
     }
 
     /**
@@ -50,24 +51,47 @@ class PaymentController extends Controller
     }
     public function filter(Request $request)
     {
+
         $payments = Payment::whereYear('date_paid', $request->year)->whereMonth('date_paid', $request->month)->get();
-        //$payments = Payment::with('client','loan')->where('payment_status',1)->get();
-       $loans = Loan::where('fp_status','Paid')->get();
-       $payment_counter = $payments->count();
-       $loans_counter = $loans->count();
-       $counter = $payment_counter + $loans_counter;
-       $months = $this->getMonths();
-       $years = array_combine(range( date('Y'), date('2020')), range(date('Y'), date('2020')));
-       return view('payment.index', [
-        'payments' => $payments,
-        'loans' => $loans,
-        'counter' => $counter,
-        'months' => $months,
-        'years'=> $years,
-        'month'=> $request->month,
-        ]);
+        
+        $allData = $this->getFilterData($payments);
+        // dd($allData['payments']);
+        // $loans = Loan::where('fp_status','Paid')->get();
+        // $payment_counter = $payments->count();
+        // $loans_counter = $loans->count();
+        // $counter = $payment_counter + $loans_counter;
+        // $months = $this->getMonths();
+        // $years = array_combine(range( date('Y'), date('2020')), range(date('Y'), date('2020')));
+
+        return view('payment.index', [
+            'payments' => $allData['payments'],
+            'loans' => $allData['loans'],
+            'counter' => $allData['counter'],
+            'months' => $allData['months'],
+            'years'=> $allData['years'],
+            'selected_month'=> $request->month,
+            'selected_year'=> $request->year,
+            ]);
     }
 
+    //This is to refactor cos we are going to be needing all this code in the index and filter functions, we no longer have to repeat it
+    private function getFilterData($payments){
+        $loans = Loan::where('fp_status','Paid')->get();
+        $months = $this->getMonths();
+        $years = array_combine(range( date('Y'), date('2020')), range(date('Y'), date('2020')));
+
+        $data = [
+            'months' => $months,
+            'years' => $years,
+            'loans' => $loans,
+            'payment_counter' => $payments->count(),
+            'loans_counter' => $loans->count(),
+            'counter' => $payments->count() + $loans->count(),
+            'payments' => $payments,
+        ];
+
+        return $data;
+    }
     /**
      * Show the form for creating a new resource.
      *

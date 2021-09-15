@@ -39,33 +39,40 @@
               </div>
               <div class="card-body">
                   @include('includes.alerts')
-                      <form method="post" action="{{ route('filterpayment')}}">
+                      <form class="f1" method="post" action="{{ route('filterpayment')}}">
                         @csrf
-                        <div class="row g-3">
-                          <div class="col-md-3 offset-md-2">
+                        <div class="row">
+                          <div class="col-md-5">
                             <label class="form-label" for="year">Year</label>
                             <select class="form-select" id="year" required="" name="year">
-                                <option></option>
+                                <option value="">--Select year--</option>
                               @foreach($years as $key => $value)
-                                <option value="{{ $value }}" {{ old('year') == $value ? 'selected' : '' }}>{{ $key }}</option>
+                                <option value="{{ $value }}" {{ old('year') == $value ? 'selected' : '' }} {{ isset($selected_year) && $selected_year == $value ? 'selected' : '' }}>{{ $key }}</option>
                               @endforeach
                             </select>
                           </div>
-                          <div class="col-md-3 mb-3">
+                          <div class="col-md-5">
                             <label class="form-label" for="month">Months</label>
                             <select class="form-select" id="month" required="" name="month">
-                                <option></option>
+                                <option value="">--Seect month--</option>
                               @foreach($months as $month=>$value)
-                                <option value="{{ $value }}" {{ isset($month) ? 'selected' : '' }}>{{ $month }}</option>
+                                <option value="{{ $value }}" {{ old('month') == $value ? 'selected' : '' }} {{ isset($selected_month) && $selected_month == $value ? 'selected' : '' }}>{{ $month }}</option>
                               @endforeach
                             </select>
                           </div>
-                          <div class="col-md-3">
-                            <label></label><br>
-                            <button class="btn btn-primary" type="submit">Filter</button>
+                          <div class="col-md-1">
+                            <label class="form-label">Filter</label>
+                            <button class="btn btn-primary" type="submit"><i class="fa fa-random" aria-hidden="true"></i>
+                            </button>
+                          </div>
+                       
+                          </form>
+                          <div class="col-md-1">
+                            <label class="form-label">Reset</label>
+                            <a href="{{ route('payment') }}" class="btn btn-danger"><i class="fa fa-undo" ></i></a>
                           </div>
                         </div>
-                      </form>
+                </div>
                 <div class="table-responsive">
                     <table class="display" id="advance-1">
                       <thead>
