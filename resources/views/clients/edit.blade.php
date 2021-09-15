@@ -112,7 +112,9 @@
                         <select class="form-control" name="means_of_id">
                             <option value="{{ $client->means_of_id }}">{{ $client->means_of_id }}</option>
                             <option value="National Identity Card">National Identity Card</option>
-                            <option value="Voters Card">Voters Card</option>
+                            <option value="Voters Card">Voters Card</option> 
+                            <option value="International ID Card">International ID Card</option>
+                            <option value="Office ID Card">Office ID Card</option>
                         </select>
                     </div>
                     <div class="col-md-6">

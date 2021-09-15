@@ -81,9 +81,11 @@
                                         </button>
                                     </form> 
                                     @if (!is_null($loan->payment) && $loan->payment->sum('amount_paid') < $loan->total_payback)
-                                        <form action="{{ route('makepayment', $loan->id) }}">
-                                            <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
-                                        </form> 
+                                        @if(Auth::user()->role=='Branch Manager' || Auth::user()->role=='Super Admin' )
+                                            <form action="{{ route('makepayment', $loan->id) }}">
+                                                <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
+                                            </form>
+                                        @endif 
                                     @endif
                                 </div>
                             </td>

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\AgapeEmail;
 use App\User;
+use App\Mail\AgapeEmail;
 use Illuminate\Mail\Mailer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Intervention\Image\Facades\Image as Image;
 
@@ -18,12 +19,16 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        if(Auth::user()->role=='Super Admin'){
+          
+        $users = User::where('status', '<>', 1)->get();
         $counter = User::all()->count();
         return view('adminuser.index', [
             'users' => $users,
             'counter' => $counter,
-        ]); 
+        ]);  
+        
+        } 
     }
 
     /**
@@ -96,9 +101,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        return view('adminuser.show');
     }
 
     /**
@@ -128,12 +133,16 @@ class UserController extends Controller
         $data = $this->validate($request, [
             'profile_picture' => 'nullable|max:250|mimes:jpg,jpeg,png',
             'email' => 'unique:users,email,' . $user->id,
+            'password' => 'unique:users,password,' . $user->id,
             'phone' => 'required',
             'name' => 'required|max:70|min:3',
             'role' => 'required'
 
         ]);
-      
+        if($request['password']){
+            $user->password = bcrypt($request['password']);
+            $user->save();
+        }
         if(request()->has('profile_picture')){
             //delete old one
             if(isset($user->profile_picture)){
@@ -146,7 +155,6 @@ class UserController extends Controller
             $user->profile_picture = 'profile_pictures/'.$imgName;
            // $user->save();
         }
-
         $user->name=$data['name'];
         $user->email = isset($request->email) ? $request->email: NULL;
         $user->phone=$data['phone'];

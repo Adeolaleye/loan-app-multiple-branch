@@ -3,6 +3,12 @@
 @include('includes.head')
 @section('title','Login') 
   <body>
+    <style>
+      .login-card {
+    background: #322d70;
+    padding: 30px 12px;
+    }
+    </style>
     <!-- login page start-->
     <div class="container-fluid">
       <div class="row">
@@ -12,10 +18,10 @@
         <div class="col-xl-5 p-0">
           <div class="login-card">
             <div>
+              <div class="login-main">
                 <div class="p-b-15">
-                    <img class="img-fluid for-light center" src="{{ asset('assets/images/logo/logo.png') }}" alt="looginpage" style="height:90px;">
-                </div>
-              <div class="login-main"> 
+                  <img class="img-fluid for-light center" src="{{ asset('assets/images/logo/logo.png') }}" alt="looginpage" style="height:90px;">
+              </div> 
                 <form class="theme-form" method="POST" action="{{ route('login') }}">
                     @csrf
                   <h4>Sign in to account</h4>

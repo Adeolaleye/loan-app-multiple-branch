@@ -116,6 +116,8 @@
                             <option>--Choose Option--</option>
                             <option value="National Identity Card"{{ old('means_of_id') }} >National Identity Card</option>
                             <option value="Voters Card" {{ old('means_of_id') }}>Voters Card</option>
+                            <option value="International ID Card" {{ old('means_of_id') }}>International ID Card</option>
+                            <option value="Office ID Card" {{ old('means_of_id') }}>Office ID Card</option>
                         </select>
                     </div>
                     <div class="col-md-6">

@@ -23,47 +23,61 @@
     <div class="row">
         <div class="col-sm-6 col-xl-3 col-lg-6">
             <div class="card">
+                @if(Auth::user()->role=='Super Admin' )
                 <div class="card-body bg-secondary b-r-16">
                     <div class="tabbed-card">
-                        <ul class="pull-right nav nav-tabs border-tab nav-primary" id="top-tab" role="tablist">
-                            <li class="nav-item"><a class="nav-link active" id="top-home-tab" data-bs-toggle="tab" href="#top-home" role="tab" aria-controls="top-home" aria-selected="false">Overall</a></li>
-                            <li class="nav-item"><a class="nav-link" id="profile-top-tab" data-bs-toggle="tab" href="#top-profile" role="tab" aria-controls="top-profile" aria-selected="true">Annual</a></li>
-                            <li class="nav-item"><a class="nav-link" id="contact-top-tab" data-bs-toggle="tab" href="#top-contact" role="tab" aria-controls="top-contact" aria-selected="false">A Month</a></li>
-                        </ul>
-                        <div class="tab-content" id="pills-clrtabContent1">
-                            <div class="tab-pane fade show active" id="top-home" role="tabpanel" aria-labelledby="top-home-tab">
-                                <div class="media static-top-widget">
-                                    <div class="align-self-center text-center"><i data-feather="database"></i></div>
-                                    <div class="media-body">
-                                        <span class="m-0">Earnings</span>
-                                        <h4 class="mb-0">#{{ number_format($allprofits) }}</h4>
-                                        <i class="icon-bg" data-feather="database"></i>
+                            <ul class="pull-right nav nav-tabs border-tab nav-primary" id="top-tab" role="tablist">
+                                <li class="nav-item"><a class="nav-link active" id="top-home-tab" data-bs-toggle="tab" href="#top-home" role="tab" aria-controls="top-home" aria-selected="false">Overall</a></li>
+                                <li class="nav-item"><a class="nav-link" id="profile-top-tab" data-bs-toggle="tab" href="#top-profile" role="tab" aria-controls="top-profile" aria-selected="true">Annual</a></li>
+                                <li class="nav-item"><a class="nav-link" id="contact-top-tab" data-bs-toggle="tab" href="#top-contact" role="tab" aria-controls="top-contact" aria-selected="false">A Month</a></li>
+                            </ul>
+                            <div class="tab-content" id="pills-clrtabContent1">
+                                <div class="tab-pane fade show active" id="top-home" role="tabpanel" aria-labelledby="top-home-tab">
+                                    <div class="media static-top-widget">
+                                        <div class="align-self-center text-center"><i data-feather="database"></i></div>
+                                        <div class="media-body">
+                                            <span class="m-0">Earnings</span>
+                                            <h4 class="mb-0">#{{ number_format($allprofits) }}</h4>
+                                            <i class="icon-bg" data-feather="database"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="top-profile" role="tabpanel" aria-labelledby="profile-top-tab">
+                                    <div class="media static-top-widget">
+                                        <div class="align-self-center text-center"><i data-feather="database"></i></div>
+                                        <div class="media-body">
+                                            <span class="m-0">Earnings</span>
+                                            <h4 class="mb-0">#2300</h4>
+                                            <i class="icon-bg" data-feather="database"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="top-contact" role="tabpanel" aria-labelledby="contact-top-tab">
+                                    <div class="media static-top-widget">
+                                        <div class="align-self-center text-center"><i data-feather="database"></i></div>
+                                        <div class="media-body">
+                                            <span class="m-0">Earnings</span>
+                                            <h4 class="mb-0">#{{ number_format($monthlyprofit) }}</h4>
+                                            <i class="icon-bg" data-feather="database"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="top-profile" role="tabpanel" aria-labelledby="profile-top-tab">
-                                <div class="media static-top-widget">
-                                    <div class="align-self-center text-center"><i data-feather="database"></i></div>
-                                    <div class="media-body">
-                                        <span class="m-0">Earnings</span>
-                                        <h4 class="mb-0">#2300</h4>
-                                        <i class="icon-bg" data-feather="database"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="top-contact" role="tabpanel" aria-labelledby="contact-top-tab">
-                                <div class="media static-top-widget">
-                                    <div class="align-self-center text-center"><i data-feather="database"></i></div>
-                                    <div class="media-body">
-                                        <span class="m-0">Earnings</span>
-                                        <h4 class="mb-0">#{{ number_format($monthlyprofit) }}</h4>
-                                        <i class="icon-bg" data-feather="database"></i>
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                @endif
+                @if(Auth::user()->role=='Branch Manager' || Auth::user()->role=='Officer' )
+                <div class="bg-secondary b-r-16 card-body">
+                    <div class="media static-top-widget">
+                        <div class="align-self-center text-center"><i data-feather="database"></i></div>
+                        <div class="media-body">
+                            <span class="m-0">Extended Tenure</span>
+                            <h4 class="mb-0 counter">{{ $clienttenurextended_count }}</h4>
+                            <i class="icon-bg" data-feather="database"></i>
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
         <div class="col-sm-6 col-xl-3 col-lg-6">
@@ -86,7 +100,7 @@
                     <div class="media static-top-widget">
                         <div class="align-self-center text-center"><i data-feather="user"></i></div>
                         <div class="media-body">
-                            <span class="m-0">Clients in Tenure</span>
+                            <span class="m-0">All Clients in Tenure</span>
                             <h4 class="mb-0 counter">{{ $clientintenure_count }}</h4>
                             <i class="icon-bg" data-feather="user"></i>
                         </div>
@@ -99,7 +113,9 @@
                 <div class="card-body bg-secondary b-r-16">
                     <div class="tabbed-card">
                         <ul class="nav nav-tabs border-tab nav-primary" id="top-tab" role="tablist">
+                            @if(Auth::user()->role=='Super Admin' )
                             <li class="nav-item"><a class="nav-link" id="value_tab" data-bs-toggle="tab" href="#company_value" role="tab" aria-controls="company_value" aria-selected="true">Payable</a></li>
+                            @endif
                             <li class="nav-item"><a class="nav-link active" id="savings-tab" data-bs-toggle="tab" href="#savings" role="tab" aria-controls="savings" aria-selected="false">Savings</a></li>
                         </ul>
                         <div class="tab-content" id="pills-clrtabContent2">

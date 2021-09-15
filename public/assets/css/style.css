@@ -3329,7 +3329,7 @@ strong ~ p {
     left: 20px;
     z-index: 1;
 }
-.bookmark ul li .search-form .form-control-search:before {
+/* .bookmark ul li .search-form .form-control-search:before {
     left: 50px;
     top: 9px;
     z-index: 2;
@@ -3368,7 +3368,7 @@ strong ~ p {
     z-index: 1;
     right: 0;
     left: 0;
-}
+} */
 .breadcrumb-colored {
     padding: 12px 16px;
     border-radius: 4px;
@@ -20480,7 +20480,7 @@ footer {
 }
 .login-card .login-main {
     width: 450px;
-    padding: 40px;
+    padding: 30px 40px;
     border-radius: 10px;
     -webkit-box-shadow: 0 0 37px rgba(8, 21, 66, 0.05);
     box-shadow: 0 0 37px rgba(8, 21, 66, 0.05);

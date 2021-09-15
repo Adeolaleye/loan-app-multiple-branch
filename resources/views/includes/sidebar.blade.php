@@ -21,6 +21,12 @@
                 </div>
             </li>
             <li class="sidebar-list">
+              <a class="sidebar-link sidebar-title link-nav" href="{{ route('adminprofile') }}">
+                  <span class="">Your Profile</span>
+              </a>
+            </li>
+            @if(Auth::user()->role=='Super Admin')
+            <li class="sidebar-list">
               <a class="sidebar-link sidebar-title link-nav" href="{{ route('home') }}">
                   <i data-feather="home" ></i>
                   <span class="">Dashboard</span>
@@ -46,6 +52,31 @@
               <a class="sidebar-link sidebar-title link-nav" href="{{ route('adminuser') }}">
               <i data-feather="layers"> </i><span>Admin Role</span></a>
             </li>
+            @endif
+            @if(Auth::user()->role=='Branch Manager' || Auth::user()->role=='Officer' )
+            <li class="sidebar-list">
+              <a class="sidebar-link sidebar-title link-nav" href="{{ route('home') }}">
+                  <i data-feather="home" ></i>
+                  <span class="">Dashboard</span>
+              </a>
+            </li>
+            <li class="sidebar-list">
+                <a class="sidebar-link sidebar-title link-nav" href="{{ route('clients') }}">
+                <i data-feather="users"> </i><span>All Clients</span></a>
+            </li>
+            <li class="sidebar-list">
+                <a class="sidebar-link sidebar-title link-nav" href="{{ route('clientsintenure') }}">
+                <i data-feather="user"> </i><span>Clients in Tenure</span></a>
+            </li>
+            <li class="sidebar-list">
+              <a class="sidebar-link sidebar-title link-nav" href="{{ route('payment') }}">
+              <i data-feather="file-text"> </i><span>Payment History</span></a>
+            </li>
+            <li class="sidebar-list">
+              <a class="sidebar-link sidebar-title link-nav" href="{{ route('loan') }}">
+              <i data-feather="list"> </i><span>Loan History</span></a>
+            </li>
+            @endif
             <li class="sidebar-list">
               <a class="sidebar-link sidebar-title link-nav" href="{{ route('logout') }}"
               onclick="event.preventDefault();
@@ -62,15 +93,4 @@
     </nav>
   </div>
 </div>
-<style>
-  .activity a{
-    color: #455668 !important;
-  }
-</style>
-{{-- @if(Auth::user()->role=='Administrator')
-<ul class="sidebar-menu">
-    <li class="{{ Request::is('dashboard') || Request::is('/') ? 'active' : '' }}">
-        <a href="{{ route('dashboard') }}" class="nav-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
-    </li>
-@endif --}}
                

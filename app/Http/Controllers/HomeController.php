@@ -28,6 +28,7 @@ class HomeController extends Controller
     {
         $allclients_count = Client::count();
         $clientintenure_count = Loan::where('status', '=', 1)->orwhere('status', '=', 3)->count();
+        $clienttenurextended_count = Loan::where('status', '=', 3)->count();
         $profit = Loan::count();
         
         $outstanding = Payment::where('payment_status',0)->get();
@@ -39,19 +40,8 @@ class HomeController extends Controller
         $monthlyprofit = Loan::whereMonth('created_at', date('m'))->sum('actual_profit');
         $allprofits = $profit->sum('actual_profit');
         $companyvalue = $outstanding->sum('outstanding_payment') + $allprofits;
-        //dd($monthlyprofit);
-        // $from = date('2018-01-01');
-        // $to = date('2018-05-02');
-        // Reservation::
-        // User::whereMonth('created_at', date('m'))
-        // ->whereYear('created_at', date('Y'))
-        // ->get(['name','created_at']);
-
         $monthlyreports = Payment::whereMonth('next_due_date', date('m'))->with('client','loan')->where('payment_status',0)->take(3)->get();
         $monthreportcounter = $monthlyreports->count();
-
-        // $payable = Loan::with('user')->take(5)->get();
-        // $clientintenure = VendorProduct::take(4)->get();
         
         return view('dashboard', compact(
             'allclients_count',
@@ -62,6 +52,7 @@ class HomeController extends Controller
             'monthlyreports',
             'monthlyprofit',
             'monthreportcounter',
+            'clienttenurextended_count',
         ));
         return view('dashboard');
     }

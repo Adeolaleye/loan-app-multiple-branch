@@ -114,7 +114,7 @@
                       <button type="submit" class="btn btn-primary">Update</button>
                       <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">No take me back</button>
                     </div>
-                </form>
+            </form>
         </div>
     </div>
 </div>

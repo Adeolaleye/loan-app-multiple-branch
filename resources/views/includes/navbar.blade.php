@@ -30,7 +30,7 @@
                   <i data-feather="bell"> </i>
                   <span class="badge rounded-pill badge-secondary">4</span>
               </div>
-              <ul class="notification-dropdown onhover-show-div">
+              {{-- <ul class="notification-dropdown onhover-show-div">
                   <li>
                       <i data-feather="bell"></i>
                       <h6 class="f-18 mb-0">Notitications</h6>
@@ -51,7 +51,7 @@
                   <li>
                       <a class="btn btn-primary" href="#">Check all notification</a>
                   </li>
-              </ul>
+              </ul> --}}
           </li>
           <li class="profile-nav onhover-dropdown p-0 me-0">
               <div class="media profile-media">
@@ -64,7 +64,7 @@
               </div>
               </div>
               <ul class="profile-dropdown onhover-show-div">
-              <li><a href="#"><i data-feather="user"></i><span>Profile </span></a></li>
+              <li><a href="{{ route('adminprofile') }}"><i data-feather="user"></i><span>Profile </span></a></li>
               <li><a href="{{ route('logout') }}"
                 onclick="event.preventDefault();
                               document.getElementById('logout-form').submit();"><i data-feather="log-out"> </i><span>Log Out</span></a>

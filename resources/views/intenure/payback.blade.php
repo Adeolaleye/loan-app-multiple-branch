@@ -145,7 +145,7 @@
                             </span>
                         </h3>
                     </div>
-                @if ($loan->client->status == 'in tenure')
+                @if ($loan->client->status == 'in tenure' || $loan->client->status == 'tenure extended')
                     <div class="col-6 col-lg-3 text-center">
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Balance Brought Forward</p>
                         <h3 class="f-14 f-w-600"><span>
@@ -177,62 +177,20 @@
                         </h3>
                     </div>
                 @endif
-                @if ($loan->client->status == 'tenure extended')
-                    <div class="col-6 col-lg-3 text-center">
-                        <p class="f-14 text-success" style="margin-bottom: 0rem">Balance Brought Forward</p>
-                        <h3 class="f-14 f-w-600"><span>
-                            @foreach ($loan->payment as $payment)
-                                @if ($payment->payment_status == 0 )
-                                    {{ !is_null(number_format($payment->bb_forward)) ? '#'.number_format($payment->bb_forward) : '0.00' }}
-                                @endif
-                            @endforeach
-                        </span></h3>
-                    </div>
-                    <div class="col-6 col-lg-3 text-center">
-                        <p class="f-14 text-success" style="margin-bottom: 0rem">Expected Next Pay</p>
-                        <h3 class="f-14 f-w-600"><span>
-                            @foreach ($loan->payment as $payment)
-                                @if ($payment->payment_status == 0 )
-                                    #{{ number_format($payment->expect_pay) }}<br>
-                                    {{-- {{ $payment->expect_pay }} --}}
-                                @endif
-                            @endforeach
-                        </span></h3>
-                    </div>
-                    <div class="col-6 col-lg-3 text-center">
-                        <p class="f-14 text-success" style="margin-bottom: 0rem">Next Due Date</p>
-                        <h3 class="f-14 f-w-600">
-                            <span>
-                                {{ date('d,M Y', strtotime($unpaiddetails->next_due_date)) }} 
-                                {{-- {{ !is_null(date('d,M Y', strtotime($unpaiddetails->next_due_date))) ? date('d,M Y', strtotime($unpaiddetails->next_due_date)) : 'Not Available' }} --}}
-                            </span>
-                        </h3>
-                    </div>
-                @endif
                 </div>
-                @if ($loan->client->status == 'tenure extended')
-                    <div class="row g-3 mb-2 m-t-30">
-                        <div class="col-md-6 offset-md-3">
-                        <label class="form-label" for="amount">Amount</label>
-                        <div class="input-group input-group-air"><span class="input-group-text">#</span>
-                            <input class="form-control" type="number" name="amount_paid" value="{{ $payment->expect_pay}}"{{ old('amount_paid') }} required="">
-                            <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
+                @if ($loan->client->status == 'tenure extended' || $loan->client->status == 'in tenure' )
+                    @if(Auth::user()->role=='Branch Manager' || Auth::user()->role=='Super Admin' )
+                        <div class="row g-3 mb-2 m-t-30">
+                            <div class="col-md-6 offset-md-3">
+                            <label class="form-label" for="amount">Amount</label>
+                            <div class="input-group input-group-air"><span class="input-group-text">#</span>
+                                <input class="form-control" type="number" name="amount_paid" value="{{ $payment->expect_pay}}"{{ old('amount_paid') }} required="">
+                                <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
+                            </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Submit</button>
                         </div>
-                        </div>
-                        <button class="btn btn-primary" type="submit">Submit</button>
-                    </div>
-                @endif
-                @if ($loan->client->status == 'in tenure')
-                <div class="row g-3 mb-2 m-t-30">
-                    <div class="col-md-6 offset-md-3">
-                    <label class="form-label" for="amount">Amount</label>
-                    <div class="input-group input-group-air"><span class="input-group-text">#</span>
-                        <input class="form-control" type="number" name="amount_paid" value="{{$payment->expect_pay }}"{{ old('amount_paid') }} required="">
-                        <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
-                    </div>
-                    </div>
-                    <button class="btn btn-primary" type="submit">Submit</button>
-                </div>
+                    @endif
                 @endif
             </form>
           </div>

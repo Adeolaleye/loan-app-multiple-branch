@@ -26,6 +26,7 @@ Route::get('/adminuser', 'UserController@index')->name('adminuser');
 Route::post('createadmin', 'UserController@store')->name('createadmin');
 Route::post('destroyuser/{id}', 'UserController@destroy')->name('destroyuser');
 Route::post('update/{id}', 'UserController@update')->name('update');
+Route::get('adminprofile', 'UserController@show')->name('adminprofile');
 
 // clients
 Route::get('/clients', 'ClientController@index')->name('clients');
