@@ -34,7 +34,7 @@
                 </div>
               </div>
               <div class="card-body">
-                @include('includes.alerts')
+                {{-- @include('includes.alerts') --}}
                 <div class="table-responsive">
                     <table class="display" id="advance-1">
                       <thead>
@@ -121,5 +121,7 @@
         });
 </script>
 @include('adminuser.popup')
+@include('includes.toastr')
+
 @endsection
 
