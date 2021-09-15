@@ -13,12 +13,21 @@
     toastr.options =
     {
         "closeButton" : true,
-        "progressBar" : true
-    }
-    @foreach($errors->all() as $error)
-        toastr.error("{{ $error }}");
-    @endforeach
-    
+        "progressBar" : true,
+        "preventDuplicates": false,
+        "timeOut": "30000",
+        // "showDuration": "300",
+        // "hideDuration": "1000",
+        // "positionClass": "toast-bottom-right",
+        // "onclick": null,
+        // "extendedTimeOut": "60000",
+        // "showEasing": "swing",
+        // "hideEasing": "linear",
+        // "showMethod": "fadeIn",
+        // "hideMethod": "fadeOut"
+    }   
+        toastr.error("@foreach($errors->all() as $error){{ $error}}</br>@endforeach");
+
     @endif
 
     @if(Session::has('info'))
