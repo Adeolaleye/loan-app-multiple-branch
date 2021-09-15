@@ -8,22 +8,26 @@
             toastr.success("{{ session('message') }}");
     @endif
   
-    @if(Session::has('error'))
+
+    @if($errors->any())
     toastr.options =
     {
         "closeButton" : true,
         "progressBar" : true
     }
-            toastr.error("{{ session('error') }}");
+    @foreach($errors->all() as $error)
+        toastr.error("{{ $error }}");
+    @endforeach
+    
     @endif
-  
+
     @if(Session::has('info'))
     toastr.options =
     {
         "closeButton" : true,
         "progressBar" : true
     }
-            toastr.info("{{ session('info') }}");
+        toastr.info("{{ session('info') }}");
     @endif
   
     @if(Session::has('warning'))
@@ -32,7 +36,7 @@
         "closeButton" : true,
         "progressBar" : true
     }
-            toastr.warning("{{ session('warning') }}");
+        toastr.warning("{{ session('warning') }}");
     @endif
   </script>
    
