@@ -32,6 +32,7 @@ Route::get('adminprofile', 'UserController@show')->name('adminprofile');
 Route::get('/clients', 'ClientController@index')->name('clients');
 Route::post('createclient', 'ClientController@store')->name('createclient');
 Route::get('viewclient/{id}', 'ClientController@show')->name('viewclient');
+Route::get('printclient/{id}', 'ClientController@print')->name('printclient');
 Route::get('addclient', 'ClientController@create')->name('addclient');
 Route::post('updateclient/{id}', 'ClientController@update')->name('updateclient');
 Route::get('editclient/{id}', 'ClientController@edit')->name('editclient');

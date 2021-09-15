@@ -1,6 +1,14 @@
-@extends('layouts.main') 
+@extends('layouts.main2') 
 @section('title','View Details') 
 @section('content')
+<html>
+    <head>
+        <title>{{ $client->name }} Details</title>
+    </head>
+    <body>
+        
+    </body>
+</html>
 <div class="container-fluid">
     <div class="page-title">
         <div class="row">
@@ -17,9 +25,6 @@
                     </li>
                     <li class="breadcrumb-item">View Client</li>
                 </ol>
-                <a href="{{ route('printclient',$client->id) }}" class="pull-right m-t-10">
-                    <button class="btn btn-secondary" type="submit">Print Client Details</button>
-                </a>
             </div>
         </div>
     </div>
@@ -72,10 +77,10 @@
                                     <div class="span badge rounded-pill pill-badge-success">In Tenure</div>
                                     @endif
                                     @if ($client->status == 'out of tenure')
-                                    <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div>
+                                    <div class="span badge rounded-pill pill-badge-secondary" style="background-color: #f73164;">Out Of Tenure</div>
                                     @endif
                                     @if ($client->status == 'tenure extended')
-                                    <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
+                                    <div class="span badge rounded-pill pill-badge-info" >Tenure Extended</div>
                                     @endif
                         </a>
                         {{-- <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div> --}}
@@ -157,7 +162,7 @@
                 <div class="row" id="loanhistory">
                     <div class="col-md-8 col-sm-12">
                         <h5>Loan Time History</h5>
-                        <span>Here is the details of loan time history of this client, at the click of eye button, you get to see the payment history of each loan time.</span>
+                        <span>Here is the details of loan time history of this client.</span>
                     </div>
                 </div>
               </div>
@@ -171,9 +176,10 @@
                           <th>Tenure</th>
                           <th>Duration</th>
                           <th>Intrest(#)</th>
+                          <th>Total Payback (#)</th>
                           <th>Total Amount Paid(#)</th>
+                          <th>Payback Monthly (#)</th>
                           <th>Status</th>
-                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -185,7 +191,9 @@
                             <td>{{ date('M Y', strtotime($loan->disbursement_date)) }} - {{ date('M Y', strtotime($loan->loan_duration)) }}</td>
                             <td>{{ number_format($loan->intrest) }}<br>
                                 <span class="font-success f-12">5% per month</span></td>
+                            <td>{{ number_format($loan->total_payback) }}</td>
                             <td>{{ number_format($loan->sum_of_allpayback) }}</td>
+                            <td>{{ number_format($loan->monthly_payback) }}</td>
                             <td>
                                 @if ($loan->status == 0)
                                 <div class="span badge rounded-pill pill-badge-warning">In Review
@@ -195,28 +203,11 @@
                                 <div class="span badge rounded-pill pill-badge-success">In Tenure</div>
                                 @endif
                                 @if ($loan->status == 2)
-                                <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div>
+                                <div class="span badge rounded-pill pill-badge-secondary" style="background-color: #f73164;">Out Of Tenure</div>
                                 @endif
                                 @if ($loan->status == 3)
                                 <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
                                 @endif
-                            </td>
-                            <td>
-                                <div class="btn-group" role="group" aria-label="Basic example">
-                                    <a href="{{ route('clientpayhistory',$loan->id) }}" data-bs-toggle="tooltip" title="View Payment History">
-                                        <span>View Pay History</span>
-                                    </a>
-                                    @if ($loan->status == 3 || $loan->status == 1)
-                                        <form action="{{ route('makepayment', $loan->id) }}">
-                                            <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
-                                        </form> 
-                                    @endif
-                                    @if ($loan->status == 0 || $loan->status == 2)
-                                        <form action="{{ route('makepayment', $loan->id) }}">
-                                            <button class="btn btn-light text-secondary" type="submit">View More</button>
-                                        </form> 
-                                    @endif
-                                </div>
                             </td>
                         </tr>
                         @endforeach

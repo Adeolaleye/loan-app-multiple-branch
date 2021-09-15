@@ -106,8 +106,13 @@ class ClientController extends Controller
     public function show( $id)
     {
         $client = Client::with('loan')->where('id', $id)->first();
-        //dd($client);
         return view('clients.show',compact('client'));
+    }
+
+    public function print( $id)
+    {
+        $client = Client::with('loan')->where('id', $id)->first();
+        return view('clients.print',compact('client'));
     }
 
     /**

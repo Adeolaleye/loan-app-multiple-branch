@@ -1,5 +1,5 @@
 @extends('layouts.main') 
-@section('title','Edit {{ $client->name }} Details') 
+@section('title','Edit Client Details') 
 @section('content')
 <div class="container-fluid">
     <div class="page-title">
