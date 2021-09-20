@@ -77,7 +77,7 @@
                         <h3 class="f-14 f-w-600">
                             <span>
                                 #{{ number_format($loan->intrest)}}<br>
-                                <span class="font-success f-12 f-w-300">5% per month</span>   
+                                <span class="font-success f-12 f-w-300">{{$loan->intrest_percent}}% per month</span>   
                             </span>
                         </h3>
                     </div>

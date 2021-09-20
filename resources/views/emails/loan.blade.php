@@ -28,8 +28,10 @@
 <p>
     <h4>Loan Details</h4>
 <p>
+    <strong>Form Payment : </strong>#{{ number_format($data['formpayment']) }}<br>
     <strong>Tenure : </strong> {{ $data['tenure'] }} month<br>
     <strong>Loan Amount : </strong>#{{ number_format($data['loan_amount']) }}<br>
+    <strong>Intrest Rate : </strong>{{ number_format($data['intrest_percent'])  }}%<br>
     <strong>Calculated Intrest : </strong>#{{ number_format($data['intrest'])  }}<br>
     <strong>Calculated First Payment : </strong>#{{ number_format($data['fp_amount']) }}<br>
     <strong>Calculated Total Expected Payback : </strong>#{{ number_format($data['total_payback']) }}<br>
@@ -54,6 +56,7 @@
     <strong>Tenure : </strong> {{ $data['tenure'] }} month<br>
     <strong>Loan Amount : </strong>#{{ number_format($data['loan_amount']) }}<br>
     <strong>Calculated Intrest : </strong>#{{ number_format($data['intrest'])  }}<br>
+    <strong>Intrest Rate : </strong>{{ number_format($data['intrest_percent'])  }}%<br>
     <strong>Calculated Forward Payment : </strong>#{{ number_format($data['fp_amount']) }}(Unpaid)<br>
     <strong>Calculated Total Expected Payback : </strong>#{{ number_format($data['total_payback']) }}<br>
 </p>

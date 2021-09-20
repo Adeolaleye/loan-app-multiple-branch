@@ -79,12 +79,11 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="marital_status">Marital Status</label>
-                        <div class="valid-feedback">Looks good!</div>
                         <select class="form-control" name="marital_status">
                             <option>--Choose Option--</option>
-                            <option value="Married"{{ old('marital_status') }}>Married</option>
-                            <option value="Single" {{ old('marital_status') }}>Single</option>
-                            <option value="Divorced" {{ old('marital_status') }}>Divorced</option>
+                            <option value="Married"{{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married</option>
+                            <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single</option>
+                            <option value="Divorced" {{ old('marital_status') == 'Divorced' ? 'selected' : '' }}>Divorced</option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -113,11 +112,11 @@
                     <div class="col-md-6">
                         <label class="form-label" for="identity">Means Of Identity</label>
                         <select class="form-control" name="means_of_id">
-                            <option>--Choose Option--</option>
-                            <option value="National Identity Card"{{ old('means_of_id') }} >National Identity Card</option>
-                            <option value="Voters Card" {{ old('means_of_id') }}>Voters Card</option>
-                            <option value="International ID Card" {{ old('means_of_id') }}>International ID Card</option>
-                            <option value="Office ID Card" {{ old('means_of_id') }}>Office ID Card</option>
+                            <option value="">--Choose Option--</option>
+                            <option value="National Identity Card" {{ old('means_of_id') == 'National Identity Card' ? 'selected' : '' }} >National Identity Card</option>
+                            <option value="Voters Card" {{ old('means_of_id') == 'Voters Card' ? 'selected' : '' }}>Voters Card</option>
+                            <option value="International ID Card" {{ old('means_of_id') == 'International ID Card' ? 'selected' : '' }}>International ID Card</option>
+                            <option value="Office ID Card" {{ old('means_of_id') == 'Office ID Card' ? 'selected' : '' }}>Office ID Card</option>
                         </select>
                     </div>
                     <div class="col-md-6">

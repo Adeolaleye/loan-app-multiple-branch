@@ -50,10 +50,12 @@ class LoanController extends Controller
             'client_id' => 'required|int|max:255',
             'loan_amount' => 'required|int|min:0',
             'tenure' => 'required|string|min:1',
+            // 'intrest_percent' => 'required|string|min:1',
+            'formpayment' => 'required|int|min:0',
         ]);
         {
         $loan_amount = $request->loan_amount;
-        $intrest = ceil(5*$request->tenure /100 * $loan_amount);
+        $intrest = $request->intrest_percent*$request->tenure /100 * $loan_amount;
         $cal_payback = $intrest + $loan_amount;
         $monthly_payback = ceil($cal_payback / $request->tenure);
         $total_payback = $monthly_payback * $request->tenure;
@@ -66,10 +68,13 @@ class LoanController extends Controller
             'loan_amount' => $request->loan_amount,
             'tenure'=>$request->tenure,
             'intrest'=> $intrest,
+            'actual_profit'=>$request->formpayment,
+            'intrest_percent'=> $request->intrest_percent,
             'monthly_payback' => $monthly_payback,
             'total_payback'=> $total_payback,
             'fp_amount'=>$fp_amount,
             'fp_status'=>'Not paid',
+            'formpayment' =>$request->formpayment,
             'purpose'=>'loan',
             'admin_incharge' => Auth()->user()->name,
 
@@ -83,6 +88,8 @@ class LoanController extends Controller
             'name'=> $client->name,
             'phone'=> $client->phone,
             'loan_amount' => $request->loan_amount,
+            'intrest_percent' => $request->intrest_percent,
+            'formpayment' => $request->formpayment,
             'tenure'=>$request->tenure,
             'intrest'=> $intrest,
             'monthly_payback' => $monthly_payback,
@@ -93,8 +100,8 @@ class LoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-
+        Mail::to('graceadeola1@gmail.com')->send(new AgapeEmail($data));
+        // Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
         return redirect(route('loan'))->with('message', 'Loan Request Sent');
     
     
@@ -138,10 +145,10 @@ class LoanController extends Controller
         $loan->disbursement_date = Carbon::now();
         $loan->fp_status = (is_null($request->fp_status) ? 'Not paid' : 'Paid' );
         $loan->loan_duration = Carbon::now()->addMonth($loan->tenure);
-        $loan->expected_profit = $loan->intrest + $loan->fp_amount;
+        $loan->expected_profit = $loan->intrest + $loan->fp_amount + $loan->formpayment;
         $loan->sum_of_allpayback = 0;
         $loan->status= 1;
-        $loan->actual_profit = $loan->fp_amount;
+        $loan->actual_profit = $loan->fp_amount + $loan->formpayment;
         $loan->client->status= 'in tenure';
         $loan->admin_who_disburse = Auth()->user()->name;
         $loan->save();
@@ -199,10 +206,11 @@ class LoanController extends Controller
             'client_id' => 'required|int|max:255',
             'loan_amount' => 'required|int|min:10',
             'tenure' => 'required|string|max:10',
+            'intrest_percent' => 'required|string|min:1',
         ]);
         {
             $loan_amount = $request->loan_amount;
-            $intrest = ceil(5*$request->tenure /100 * $loan_amount);
+            $intrest = $request->intrest_percent*$request->tenure /100 * $loan_amount;
             $cal_payback = $intrest + $loan_amount;
             $monthly_payback = ceil($cal_payback / $request->tenure);
             $total_payback = $monthly_payback * $request->tenure;
@@ -214,6 +222,7 @@ class LoanController extends Controller
         $loan->loan_amount=$request->loan_amount;
         $loan->tenure=$request->tenure;
         $loan->intrest=$intrest;
+        $loan->intrest_percent=$request->intrest_percent;
         $loan->monthly_payback=$monthly_payback;
         $loan->total_payback=$total_payback;
         $loan->fp_amount=$fp_amount;
@@ -226,6 +235,8 @@ class LoanController extends Controller
             'loan_amount' => $request->loan_amount,
             'tenure'=>$request->tenure,
             'intrest'=> $intrest,
+            'intrest_percent' => $request->intrest_percent,
+            'formpayment' => $request->formpayment,
             'monthly_payback' => $monthly_payback,
             'total_payback'=> $total_payback,
             'fp_amount'=>$fp_amount,
@@ -234,7 +245,8 @@ class LoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+        Mail::to('graceadeola1@gmail.com')->send(new AgapeEmail($data));
+        //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
 
         return redirect(route('loan'))->with('message', 'Loan Request Updated');
     

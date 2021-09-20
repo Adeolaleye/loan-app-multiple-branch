@@ -27,7 +27,7 @@
                 <div class="col-4 col-lg-4 text-center">
                     <p class="f-14 text-info" style="margin-bottom: 0rem">Expected Intrest</p>
                     <h3 class="f-14 f-w-600"> <span id="intrest"></span><br>
-                        <span class="font-success f-12 f-w-300">5% per month</span></h3>
+                        <span class="font-success f-12 f-w-300"><span id="intrestper"></span>% per month</span></h3>
                 </div>
                 <div class="col-4 col-lg-4 text-center">
                     <p class="f-14 text-success" style="margin-bottom: 0rem">Total Payback</p>
@@ -36,6 +36,7 @@
             </div>
             <div class="dropdown-divider"></div>
                 <div class="card-body">
+                    <span>Form Payment: <strong id="formpayment"></strong>(<span>Paid</span>)</span><br>
                     <span>Tenure: <strong id="tenure"></strong></span><br>
                     <span>Date Of Disbursement: <strong id="dd"></strong></span><br>
                     <span>Expected Monthly Pay: <strong id="expected_pay"></strong></span><br>

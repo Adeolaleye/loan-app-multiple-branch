@@ -184,7 +184,7 @@
                             <td>{{ $loan->tenure }}</td>
                             <td>{{ date('M Y', strtotime($loan->disbursement_date)) }} - {{ date('M Y', strtotime($loan->loan_duration)) }}</td>
                             <td>{{ number_format($loan->intrest) }}<br>
-                                <span class="font-success f-12">5% per month</span></td>
+                                <span class="font-success f-12">{{$loan->intrest_percent}}% per month</span></td>
                             <td>{{ number_format($loan->sum_of_allpayback) }}</td>
                             <td>
                                 @if ($loan->status == 0)

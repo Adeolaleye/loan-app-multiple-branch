@@ -58,7 +58,22 @@
                           <option value="5">5 months</option>
                           <option value="6">6 months</option>
                         </select>
-                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label" for="Duration">Interest Rate</label>
+                      <select class="form-control" id="duration" name="intrest_percent" required>
+                        <option value="{{ $loan->intrest_percent }}">{{ $loan->intrest_percent }}%</option>
+                        <option value="4" {{ old('intrest_percent') == '4' ? 'selected' : '' }}>4%</option>
+                        <option value="4.5" {{ old('intrest_percent') == '4.5' ? 'selected' : '' }}>4.5%</option>
+                        <option value="5" {{ old('intrest_percent') == '5' ? 'selected' : '' }}>5%</option>
+                        <option value="5.5" {{ old('intrest_percent') == '5.5' ? 'selected' : '' }}>5.5%</option>
+                        <option value="6" {{ old('intrest_percent') == '6' ? 'selected' : '' }}>6%</option>
+                        <option value="7" {{ old('intrest_percent') == '7' ? 'selected' : '' }}>7%</option>
+                        <option value="8" {{ old('intrest_percent') == '8' ? 'selected' : '' }}>8%</option>
+                        <option value="9" {{ old('intrest_percent') == '9' ? 'selected' : '' }}>9%</option>
+                        <option value="10" {{ old('intrest_percent') == '10' ? 'selected' : '' }}>10%</option>
+                      </select>
+                    </div>
                     <button class="btn btn-primary" type="submit">Submit</button>
                 </div>
             </form>

@@ -172,6 +172,8 @@
             loanmodal.find('[name="loan_id"]').val(loan.id);
             loanmodal.find('#amount').text(loan.loan_amount);
             loanmodal.find('#intrest').text(loan.intrest);
+            loanmodal.find('#intrestper').text(loan.intrest_percent);
+            loanmodal.find('#formpayment').text(loan.formpayment);
             loanmodal.find('#payback').text(loan.total_payback);
             loanmodal.find('#fpamount').text(loan.fp_amount);
             loanmodal.find('#fpstatus').text(loan.fp_status);
