@@ -41,9 +41,9 @@
                   @include('includes.alerts')
                       <form class="f1" method="post" action="{{ route('filterpayment')}}">
                         @csrf
-                        <div class="row">
+                        <div class="row m-b-20">
                           <div class="col-md-5">
-                            <label class="form-label" for="year">Year</label>
+                            <label class="form-label" for="year">Years</label>
                             <select class="form-select" id="year" required="" name="year">
                                 <option value="">--Select year--</option>
                               @foreach($years as $key => $value)
@@ -54,7 +54,7 @@
                           <div class="col-md-5">
                             <label class="form-label" for="month">Months</label>
                             <select class="form-select" id="month" required="" name="month">
-                                <option value="">--Seect month--</option>
+                                <option value="">--Select month--</option>
                               @foreach($months as $month=>$value)
                                 <option value="{{ $value }}" {{ old('month') == $value ? 'selected' : '' }} {{ isset($selected_month) && $selected_month == $value ? 'selected' : '' }}>{{ $month }}</option>
                               @endforeach
@@ -65,14 +65,12 @@
                             <button class="btn btn-primary" type="submit"><i class="fa fa-random" aria-hidden="true"></i>
                             </button>
                           </div>
-                       
-                          </form>
                           <div class="col-md-1">
                             <label class="form-label">Reset</label>
                             <a href="{{ route('payment') }}" class="btn btn-danger"><i class="fa fa-undo" ></i></a>
                           </div>
                         </div>
-                </div>
+                      </form>
                 <div class="table-responsive">
                     <table class="display" id="advance-1">
                       <thead>

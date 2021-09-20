@@ -122,6 +122,5 @@
 </script>
 @include('adminuser.popup')
 @include('includes.toastr')
-
 @endsection
 

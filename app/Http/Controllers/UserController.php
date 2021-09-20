@@ -22,7 +22,7 @@ class UserController extends Controller
         if(Auth::user()->role=='Super Admin'){
           
         $users = User::where('status', '<>', 1)->get();
-        $counter = User::all()->count();
+        $counter = $users->count();
         return view('adminuser.index', [
             'users' => $users,
             'counter' => $counter,
@@ -144,10 +144,6 @@ class UserController extends Controller
             $user->save();
         }
         if(request()->has('profile_picture')){
-            //delete old one
-            if(isset($user->profile_picture)){
-                unlink(public_path($user->profile_picture));
-            }
             //save new image
             $imgName = time() . '-' .$request['profile_picture']->getClientOriginalName();
             $image = Image::make($request['profile_picture'])->resize(100, 100);

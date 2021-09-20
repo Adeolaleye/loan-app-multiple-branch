@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('includes.head')
-@section('title','Login') 
+<style>
+  .login-card {
+background: #322d70;
+padding: 30px 12px;
+}
+@media only screen and (max-width: 575.98px){
+.login-card .login-main {
+    width: 329px;
+    padding: 20px;
+}
+}
+</style>
+@section('title','Email') 
   <body>
     <!-- login page start-->
     <div class="container-fluid">
@@ -10,12 +22,12 @@
         <div class="col-xl-5 p-0">
           <div class="login-card">
             <div>
+                <div class="login-main">
                 <div>
                     <a class="logo text-start" href="">
                         <img class="img-fluid for-light center" src="{{ asset('assets/images/logo/logo.png') }}" alt="looginpage" style="height:90px;">
                     </a>
                 </div>
-                <div class="login-main">
                     @if (session('status'))
                     <div class="alert alert-success" role="alert">
                         {{ session('status') }}

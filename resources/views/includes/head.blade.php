@@ -12,20 +12,12 @@
   <link href="https://fonts.googleapis.com/css?family=Rubik:400,400i,500,500i,700,700i&amp;display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/font-awesome.css") }}">
-  <!-- ico-font-->
-  {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/icofont.css') }}"> --}}
-  <!-- Themify icon-->
+  
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/themify.css') }}">
-  <!-- Flag icon-->
-  {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/flag-icon.css') }}"> --}}
-  <!-- Feather icon-->
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/feather-icon.css') }}">
   <!-- Plugins css start-->
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/date-picker.css') }}">
-  {{-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/owlcarousel.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/prism.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/whether-icon.css') }}"> --}}
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/scrollbar.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/datatables.css') }}">
@@ -37,9 +29,7 @@
   <link id="color" rel="stylesheet" href="{{ asset('assets/css/color-1.css') }}" media="screen">
   <!-- Responsive css-->
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/responsive.css') }}">
-  {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet"> --}}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-	
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 </head>

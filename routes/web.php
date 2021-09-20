@@ -41,7 +41,6 @@ Route::post('destroy/{id}', 'ClientController@destroy')->name('destroy');
 // intenure
 Route::get('/clientsintenure', 'InTenureController@index')->name('clientsintenure');
 Route::get('viewclientintenure', 'InTenureController@show')->name('viewclientintenure');
-Route::get('filter', 'InTenureController@filter')->name('filter');
 Route::get('makepayment/{id}', 'InTenureController@makepayment')->name('makepayment');
 Route::post('paynow/{id}', 'InTenureController@paynow')->name('paynow');
 
