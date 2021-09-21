@@ -55,9 +55,8 @@
                                     <td>{{ $monthlyreport->expect_pay }}</td>
                                     <td>
                                         {{-- @foreach ($monthlyreport->loan as $loan )
-                                        {{ date('M Y', strtotime($loan->disbursement_date)) }} - {{ date('M Y', strtotime($loan->loan_duration)) }}
-                                        @endforeach
-                                        {{ $monthlyreport->loan }} --}}
+                                        {{ $loan->loan_duration }}
+                                        @endforeach --}}
                                     </td>
                                     <td>{{ date('d,M Y', strtotime($monthlyreport->next_due_date)) }}</td>
                                     <td>

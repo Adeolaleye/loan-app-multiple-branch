@@ -32,7 +32,7 @@
               <div class="card-body">
                   @include('includes.alerts')
                 <div class="table-responsive">
-                    <table class="display" id="basic-2">
+                    <table class="display" id="advance-1">
                       <thead>
                         <tr>
                             <th>Client ID #</th>
@@ -53,7 +53,8 @@
                             <td>{{ number_format($loan->loan_amount) }}</td>
                             <td>{{ number_format($loan->monthly_payback) }}</td>
                             <td>
-                                {{ date('M Y', strtotime($loan->disbursement_date)) }} - {{ date('M Y', strtotime($loan->loan_duration)) }}
+                                {{ $loan->loan_duration }}
+                                
                             </td>
                             <td>
                                 @foreach ($loan->payment as $payment)

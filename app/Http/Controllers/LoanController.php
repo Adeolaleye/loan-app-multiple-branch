@@ -144,7 +144,9 @@ class LoanController extends Controller
         $loan = Loan::with('client','payment')->whereId($request->loan_id)->first();
         $loan->disbursement_date = Carbon::now();
         $loan->fp_status = (is_null($request->fp_status) ? 'Not paid' : 'Paid' );
-        $loan->loan_duration = Carbon::now()->addMonth($loan->tenure);
+        $now = date('M, Y', strtotime(Carbon::now()->addDay(30)));
+        $then = Carbon::now()->addMonth($loan->tenure);
+        $loan->loan_duration = $now. ' to ' .$then->format('M, Y');
         $loan->expected_profit = $loan->intrest + $loan->fp_amount + $loan->formpayment;
         $loan->sum_of_allpayback = 0;
         $loan->status= 1;

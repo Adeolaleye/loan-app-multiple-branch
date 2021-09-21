@@ -104,6 +104,8 @@ class InTenureController extends Controller
         }
 
         if($payment->loan->tenure == $paymentcount && ($paymentdetail->sum('amount_paid') + $request->amount_paid < $payment->loan->total_payback)){
+            $duedate = Carbon::parse($payment->next_due_date);
+            $nextduedate = $duedate->addDay(30);
             $payment->amount_paid= $request->amount_paid;
             $payment->date_paid = Carbon::now();
             $payment->payment_purpose = 'loan payback';
@@ -124,7 +126,7 @@ class InTenureController extends Controller
             Payment::create([
                 'client_id' => $request->client_id,
                 'loan_id' => $id,
-                'next_due_date' => Carbon::now()->addDay(30),
+                'next_due_date' => $nextduedate,
                 'outstanding_payment' => $payment->outstanding_payment - $request->amount_paid,
                 'expect_pay' => $bb_forward,
                 'bb_forward' => $bb_forward,
@@ -151,7 +153,7 @@ class InTenureController extends Controller
                 'no_of_time_paid' => $paymentimes,
                 'outstanding' => $payment->outstanding_payment,
                 'bb_forward' => $payment->bb_forward,
-                'next_due_date' => $payment->next_due_date,
+                'next_due_date' => $nextduedate,
                 'subject'=> 'New Payment made, but Tenure Extended',
                 'type'=> 'payment extended',
                 'date_paid' => $payment->date_paid,
@@ -164,6 +166,9 @@ class InTenureController extends Controller
         }
 
         if($paymentdetail->sum('amount_paid') + $request->amount_paid < $payment->loan->total_payback){
+            
+            $duedate = Carbon::parse($payment->next_due_date);
+            $nextduedate = $duedate->addDay(30);
             $payment->amount_paid= $request->amount_paid;
             $payment->date_paid = Carbon::now();
             $payment->payment_purpose = 'loan payback';
@@ -177,11 +182,11 @@ class InTenureController extends Controller
             }
             $payment->save();
             $payment->loan->save();
-    
+          
             Payment::create([
                 'client_id' => $request->client_id,
                 'loan_id' => $id,
-                'next_due_date' => Carbon::now()->addDay(30),
+                'next_due_date' => $nextduedate,
                 'outstanding_payment' => $payment->outstanding_payment - $request->amount_paid,
                 'expect_pay' => $payment->loan->monthly_payback + $bb_forward,
                 'bb_forward' => $bb_forward,
@@ -207,7 +212,7 @@ class InTenureController extends Controller
                 'no_of_time_paid' => $paymentimes,
                 'outstanding' => $payment->outstanding_payment,
                 'bb_forward' => $payment->bb_forward,
-                'next_due_date' => $payment->next_due_date,
+                'next_due_date' => $nextduedate,
                 'subject'=> 'New Payment made',
                 'type'=> 'payment',
                 'date_paid' => $payment->date_paid,
