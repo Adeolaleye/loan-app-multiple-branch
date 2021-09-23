@@ -8,7 +8,8 @@
                 <h5>
                     <a href="{{ route('viewclient',$loanhistory->client->id) }}" data-bs-toggle="tooltip" title="View Client Details">
                         {{ $loanhistory->client->name }}</a>'s Loan Payment History <br> 
-                    <span class="f-14 font-bold text-warning">Payment made {{ $counter }} times</span></h5>
+                    <span class="f-14 font-bold text-warning">Payment made {{ $counter }} times</span>
+                </h5>
                     <div class="card-header-right">
                     </div>
             </div>

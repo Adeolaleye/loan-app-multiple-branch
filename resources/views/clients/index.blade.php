@@ -107,7 +107,8 @@
         const clientname = $(this).data('clientname');
         //set each form field on the modal
         const adminmodal = $("#deleteclient");
-        adminmodal.find('#todel').text(clientname); 
+        adminmodal.find('#todel').text(clientname);
+        adminmodal.find('#todel2').text(clientname); 
         const url = adminmodal.find('form').attr('action');
         let urlArray = url.split('/');
         urlArray[urlArray.length - 1] = clientid;

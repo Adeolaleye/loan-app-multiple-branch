@@ -37,7 +37,7 @@
                                         <div class="align-self-center text-center"><i data-feather="database"></i></div>
                                         <div class="media-body">
                                             <span class="m-0">Earnings</span>
-                                            <h4 class="mb-0">#{{ number_format($allprofits) }}</h4>
+                                            <h4 class="mb-0">&#x20A6;{{ number_format($allprofits) }}</h4>
                                             <i class="icon-bg" data-feather="database"></i>
                                         </div>
                                     </div>
@@ -47,7 +47,7 @@
                                         <div class="align-self-center text-center"><i data-feather="database"></i></div>
                                         <div class="media-body">
                                             <span class="m-0">Earnings</span>
-                                            <h4 class="mb-0">#2300</h4>
+                                            <h4 class="mb-0">&#x20A6;{{ number_format($yearlyprofit) }}</h4>
                                             <i class="icon-bg" data-feather="database"></i>
                                         </div>
                                     </div>
@@ -57,7 +57,7 @@
                                         <div class="align-self-center text-center"><i data-feather="database"></i></div>
                                         <div class="media-body">
                                             <span class="m-0">Earnings</span>
-                                            <h4 class="mb-0">#{{ number_format($monthlyprofit) }}</h4>
+                                            <h4 class="mb-0">&#x20A6;{{ number_format($monthlyprofit) }}</h4>
                                             <i class="icon-bg" data-feather="database"></i>
                                         </div>
                                     </div>
@@ -124,7 +124,7 @@
                                     <div class="align-self-center text-center"><i data-feather="layers"></i></div>
                                     <div class="media-body">
                                         <span class="m-0">Company Value</span>
-                                        <h4 class="mb-0">#{{ number_format($companyvalue) }}</h4>
+                                        <h4 class="mb-0">&#x20A6;{{ number_format($companyvalue) }}</h4>
                                         <i class="icon-bg" data-feather="layers"></i>
                                     </div>
                                 </div>
@@ -134,7 +134,7 @@
                                     <div class="align-self-center text-center"><i data-feather="layers"></i></div>
                                     <div class="media-body">
                                         <span class="m-0">All Savings</span>
-                                        <h4 class="mb-0">#{{ number_format($allsavings) }}</h4>
+                                        <h4 class="mb-0">&#x20A6;{{ number_format($allsavings) }}</h4>
                                         <i class="icon-bg" data-feather="layers"></i>
                                     </div>
                                 </div>

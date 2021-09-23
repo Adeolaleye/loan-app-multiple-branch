@@ -46,6 +46,10 @@
                     <div class="bg-secondary-light m-10 p-t-10 p-b-10 text-center b-r-6">
                       <span class="" >Applied&nbsp;<span id="applieddate"></span></span>
                     </div>
+                    <div class="col-md-12">
+                        <label class="form-label" for="disbursement">Disbursement Date</label>
+                          <input class="form-control" type="date" placeholder="" name="disbursement_date">
+                    </div>
                     <div class="form-check checkbox checkbox-primary mb-0">
                             <input class="form-check-input" id="checkbox-primary-1" type="checkbox" name="fp_status" required>
                             <label class="form-check-label" for="checkbox-primary-1">Forward Payment</label>

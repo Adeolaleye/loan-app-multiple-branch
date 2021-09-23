@@ -35,9 +35,9 @@
                     <table class="display" id="advance-1">
                       <thead>
                         <tr>
-                            <th>Client ID #</th>
+                            <th>Client ID &#x20A6;</th>
                             <th>Client Name</th>
-                            <th>Loan Amount (#)</th>
+                            <th>Loan Amount (&#x20A6;)</th>
                             <th>Monthly Pay</th>
                             <th>Duration</th>
                             <th>Next Due Date</th>

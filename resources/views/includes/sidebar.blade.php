@@ -78,6 +78,10 @@
             </li>
             @endif
             <li class="sidebar-list">
+              <a class="sidebar-link sidebar-title {{ Request::is('monthly') ? 'active' : 'link-nav'}}" href="{{ route('monthly') }}">
+              <i data-feather="calender"> </i><span>Monthly Report</span></a>
+            </li>
+            <li class="sidebar-list">
               <a class="sidebar-link sidebar-title link-nav" href="{{ route('logout') }}"
               onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">

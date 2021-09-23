@@ -161,7 +161,8 @@ class InTenureController extends Controller
                 'date'=> Carbon::now(),
 
             ];
-            Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+            Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+            //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
             return back()->with('message', 'Payment Made Successfully, But Payback not completed, Tenure Extended!');
         }
 
@@ -220,7 +221,8 @@ class InTenureController extends Controller
                 'date'=> Carbon::now(),
 
             ];
-            Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+            //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+            Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
             return back()->with('message', 'Payment Made Successfully');
         }
 
@@ -267,8 +269,8 @@ class InTenureController extends Controller
                 'date'=> Carbon::now(),
 
             ];
-            Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-
+            //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+            Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
             return back()->with('message', 'Payback Completed, Congratulations!');
         }
         

@@ -136,7 +136,7 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        $payhistorys = Payment::with('loan','client')->where('loan_id', $id)->where('payment_status',1)->Orderby('updated','asc')->get();
+        $payhistorys = Payment::with('loan','client')->where('loan_id', $id)->where('payment_status',1)->Orderby('updated_at','asc')->get();
         $loanhistory = Loan::with('client','payment')->where('id', $id)->first();
         $counter = $payhistorys->count();
         return view('payment.payhistory',compact('payhistorys','loanhistory','counter'));

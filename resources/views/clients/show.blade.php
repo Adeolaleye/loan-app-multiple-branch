@@ -163,7 +163,7 @@
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                    <table class="display" id="basic-2">
+                    <table class="display" id="advance-1">
                       <thead>
                         <tr>
                           <th>Loan Amount(#)</th>
@@ -177,7 +177,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        @foreach ( $client->loan as $loan )
+                        @foreach ( $client->loan->sortByDesc('updated_at') as $loan )
                         <tr>
                             <td>{{ number_format($loan->loan_amount) }}</td>
                             <td>{{ date('d,M Y', strtotime($loan->disbursement_date)) }}</td>

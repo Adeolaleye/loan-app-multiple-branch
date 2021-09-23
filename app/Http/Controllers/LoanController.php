@@ -100,8 +100,8 @@ class LoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        Mail::to('graceadeola1@gmail.com')->send(new AgapeEmail($data));
-        // Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+        //Mail::to('graceadeola1@gmail.com')->send(new AgapeEmail($data));
+         Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
         return redirect(route('loan'))->with('message', 'Loan Request Sent');
     
     
@@ -140,12 +140,17 @@ class LoanController extends Controller
      */
     public function disburse(Request $request)
     {
+        
         {
         $loan = Loan::with('client','payment')->whereId($request->loan_id)->first();
+        if($request['disbursement_date']){
+            $loan->disbursement_date = $request->disbursement_date;
+        }else{
         $loan->disbursement_date = Carbon::now();
+        }
         $loan->fp_status = (is_null($request->fp_status) ? 'Not paid' : 'Paid' );
-        $now = date('M, Y', strtotime(Carbon::now()->addDay(30)));
-        $then = Carbon::now()->addMonth($loan->tenure);
+        $now = date('M, Y', strtotime(Carbon::parse($loan->disbursement_date)->addDay(30)));
+        $then = Carbon::parse($loan->disbursement_date)->addMonth($loan->tenure);
         $loan->loan_duration = $now. ' to ' .$then->format('M, Y');
         $loan->expected_profit = $loan->intrest + $loan->fp_amount + $loan->formpayment;
         $loan->sum_of_allpayback = 0;
@@ -155,11 +160,14 @@ class LoanController extends Controller
         $loan->admin_who_disburse = Auth()->user()->name;
         $loan->save();
         $loan->client->save();
-        
+
+         
+        $duedate = Carbon::parse($loan->disbursement_date);
+        $nextduedate = $duedate->addDay(30);
         Payment::create([
             'client_id' => $loan->client_id,
             'loan_id' => $loan->id,
-            'next_due_date' => Carbon::now()->addDay(30),
+            'next_due_date' => $nextduedate,
             'outstanding_payment' => $loan->total_payback,
             'expect_pay' => $loan->monthly_payback,
             'bb_forward' => 0.00,
@@ -181,7 +189,7 @@ class LoanController extends Controller
             'fp_amount'=>$loan->fp_amount,
             'fp_status'=>$loan->fp_status,
             'expect_profit'=>$loan->expected_profit,
-            'next_due_date'=> $payment->next_due_date,
+            'next_due_date'=> $nextduedate,
            'expect_pay' => $payment->expect_pay,
            'subject'=> 'Loan Disbursed',
            'type'=> 'loan disbursement',
@@ -190,8 +198,8 @@ class LoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-
+        //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
         return redirect(route('loan'))->with('message', 'Loan Disbursed');
     }
 
@@ -247,7 +255,7 @@ class LoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        Mail::to('graceadeola1@gmail.com')->send(new AgapeEmail($data));
+        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
         //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
 
         return redirect(route('loan'))->with('message', 'Loan Request Updated');

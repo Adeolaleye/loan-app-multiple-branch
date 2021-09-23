@@ -68,7 +68,7 @@
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Loan Amount</p>
                         <h3 class="f-14 f-w-600">
                             <span>
-                                #{{ number_format($loan->loan_amount)}}   
+                                &#x20A6;{{ number_format($loan->loan_amount)}}   
                             </span>
                         </h3>
                     </div>
@@ -76,7 +76,7 @@
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Expected Intrest</p>
                         <h3 class="f-14 f-w-600">
                             <span>
-                                #{{ number_format($loan->intrest)}}<br>
+                                &#x20A6;{{ number_format($loan->intrest)}}<br>
                                 <span class="font-success f-12 f-w-300">{{$loan->intrest_percent}}% per month</span>   
                             </span>
                         </h3>
@@ -85,19 +85,19 @@
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Forward Payment Amount</p>
                         <h3 class="f-14 f-w-600">
                             <span>
-                                #{{ number_format($loan->fp_amount)}}   
+                                &#x20A6;{{ number_format($loan->fp_amount)}}   
                             </span>
                         </h3>
                     </div>
                     <div class="col-6 col-lg-3 text-center">
                         <p class="f-14 text-warning" style="margin-bottom: 0rem">Total Payback</p>
-                        <h3 class="f-14 f-w-600"><span>#{{ number_format($loan->total_payback) }}</span></h3>
+                        <h3 class="f-14 f-w-600"><span>&#x20A6;{{ number_format($loan->total_payback) }}</span></h3>
                     </div>
                     <div class="col-6 col-lg-3 text-center">
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Total Amount Paid</p>
                         <h3 class="f-14 f-w-600">
                             <span>
-                                #{{ number_format($loan->sum_of_allpayback) }}   
+                                &#x20A6;{{ number_format($loan->sum_of_allpayback) }}   
                             </span>
                         </h3>
                     </div>
@@ -123,7 +123,7 @@
                             <span>
                             @foreach ($loan->payment as $payment)
                                 @if ($payment->payment_status == 0 )
-                                    #{{ number_format($payment->outstanding_payment) }}
+                                    &#x20A6;{{ number_format($payment->outstanding_payment) }}
                                 @endif
                             @endforeach    
                             </span>
@@ -133,7 +133,7 @@
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Payback Per Month</p>
                         <h3 class="f-14 f-w-600">
                             <span>
-                                #{{ number_format($loan->monthly_payback) }}   
+                                &#x20A6;{{ number_format($loan->monthly_payback) }}   
                             </span>
                         </h3>
                     </div>
@@ -141,7 +141,7 @@
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Our Current Total Profit</p>
                         <h3 class="f-14 f-w-600">
                             <span>
-                                {{ !is_null( '#'.number_format($loan->actual_profit)) ? '#'. number_format($loan->actual_profit) : 'N/A' }}   
+                                &#x20A6;{{ !is_null( number_format($loan->actual_profit)) ? number_format($loan->actual_profit) : '0' }}   
                             </span>
                         </h3>
                     </div>
@@ -151,7 +151,7 @@
                         <h3 class="f-14 f-w-600"><span>
                             @foreach ($loan->payment as $payment)
                                 @if ($payment->payment_status == 0 )
-                                    {{ !is_null($payment->bb_forward) ? '#'.$payment->bb_forward : '0.00' }}
+                                &#x20A6;{{ !is_null($payment->bb_forward) ? $payment->bb_forward : '0.00' }}
                                 @endif
                             @endforeach
                         </span></h3>
@@ -161,7 +161,7 @@
                         <h3 class="f-14 f-w-600"><span>
                             @foreach ($loan->payment as $payment)
                                 @if ($payment->payment_status == 0 )
-                                    #{{ number_format($payment->expect_pay) }}<br>
+                                    &#x20A6;{{ number_format($payment->expect_pay) }}<br>
                                     {{-- {{ $payment->expect_pay }} --}}
                                 @endif
                             @endforeach
@@ -183,7 +183,7 @@
                         <div class="row g-3 mb-2 m-t-30">
                             <div class="col-md-6 offset-md-3">
                             <label class="form-label" for="amount">Amount</label>
-                            <div class="input-group input-group-air"><span class="input-group-text">#</span>
+                            <div class="input-group input-group-air"><span class="input-group-text">&#x20A6;</span>
                                 <input class="form-control" type="number" name="amount_paid" value="{{ $payment->expect_pay}}"{{ old('amount_paid') }} required="">
                                 <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
                             </div>

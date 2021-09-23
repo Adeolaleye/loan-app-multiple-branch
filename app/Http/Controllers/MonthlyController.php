@@ -17,7 +17,7 @@ class MonthlyController extends Controller
      */
     public function index()
     {
-        $monthlyreports = Payment::whereMonth('next_due_date', date('m'))->with('client','loan')->where('payment_status',0)->Orderby('created_at','desc')->get();
+        $monthlyreports = Payment::whereMonth('next_due_date', date('m'))->with('client','loan')->where('payment_status',0)->Orderby('next_due_date','ASC')->get();
         $counter = $monthlyreports->count();
         return view('monthly.index', [
             'monthlyreports' => $monthlyreports,

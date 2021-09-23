@@ -77,11 +77,11 @@
                         <tr>
                           <th>#</th>
                           <th>Made By</th>
-                          <th>Month</th>
+                          <th>Payment for Month</th>
                           <th>Amount</th>
                           <th>Purpose</th>
                           <th>Admin in Charge</th>
-                          <th>Date</th>
+                          <th>Date Paid</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -99,7 +99,7 @@
                                     By Admin in charge
                                 @endif
                             </td>
-                            <td>{{ date('F', strtotime($payment->date_paid)) }}</td>
+                            <td>{{ date('F', strtotime($payment->next_due_date)) }}</td>
                             <td>{{ number_format($payment->amount_paid) }}</td>
                             <td>{{ $payment->payment_purpose }}</td>
                             <td>{{ $payment->admin_incharge }}</td>
