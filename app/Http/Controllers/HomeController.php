@@ -42,6 +42,8 @@ class HomeController extends Controller
         $allprofits = $profit->sum('actual_profit');
         $companyvalue = $outstanding->sum('outstanding_payment') + $allprofits;
         $monthlyreports = Payment::whereMonth('next_due_date', date('m'))->with('client','loan')->where('payment_status',0)->take(3)->Orderby('next_due_date','ASC')->get();
+        $tenureextendeds = Loan::with('client','payment')->where('status',3)->take(3)->get();
+        $tenureextended_count = $tenureextendeds->count();
         $monthreportcounter = $monthlyreports->count();
         
         return view('dashboard', compact(
@@ -55,6 +57,8 @@ class HomeController extends Controller
             'yearlyprofit',
             'monthreportcounter',
             'clienttenurextended_count',
+            'tenureextendeds',
+            'tenureextended_count',
         ));
         return view('dashboard');
     }

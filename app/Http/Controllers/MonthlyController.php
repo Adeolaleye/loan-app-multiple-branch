@@ -52,9 +52,14 @@ class MonthlyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $tenureextendeds = Loan::with('client','payment')->where('status',3)->get();
+        $tenureextended_count = $tenureextendeds->count();
+        return view('monthly.show', compact(
+            'tenureextendeds',
+            'tenureextended_count',
+        ));
     }
 
     /**

@@ -69,6 +69,7 @@ class InTenureController extends Controller
             'unpaiddetails' => $unpaiddetails,
         ]);
     }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -87,6 +88,56 @@ class InTenureController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function partialpay(Request $request, $id)
+    {
+        $request->validate([
+            'amount_paid' => 'required|int|min:0',
+        ]);
+        $payment = Payment::with('client','loan')->where('loan_id',$id)->where('payment_status',0)->first();
+        if(($request->amount_paid) > $payment->expect_pay){
+            return back()->with('warning', 'Client cannot pay greater than expected pay as partial pay');
+        }
+        if(($request->amount_paid) == $payment->expect_pay){
+            return back()->with('error', 'Use direct make payment option instead to complete payment for the month');
+        }
+        $payment->amount_paid= $payment->amount_paid + $request->amount_paid;
+        $payment->partial_pay= $payment->partial_pay + $request->amount_paid;
+        $payment->date_paid = Carbon::now();
+        $payment->payment_purpose = 'partial payment';
+        $payment->outstanding_payment = $payment->outstanding_payment - $request->amount_paid;
+        $payment->expect_pay = $payment->expect_pay - $request->amount_paid;
+        $payment->loan->sum_of_allpayback = $payment->loan->sum_of_allpayback + $request->amount_paid;
+        $payment->save();
+        $payment->loan->save();
+
+        $data = [
+            'client_no'=> $payment->client->client_no,
+            'name'=> $payment->client->name,
+            'phone'=> $payment->client->phone,
+            'total_payback'=> $payment->loan->total_payback,
+            'loan_amount' => $payment->loan->loan_amount,
+            'amount_paid' => $request->amount_paid,
+            'next_pay' => $payment->expect_pay,
+            'partial_pay' => $payment->partial_pay,
+            'total_amountpaid' => $payment->loan->sum_of_allpayback,
+            'monthly_payback' => $payment->payback_permonth,
+            'outstanding' => $payment->outstanding_payment,
+            'next_due_date' => $payment->next_due_date,
+            'subject'=> 'Partial Payment Made',
+            'type'=> 'partial payment',
+            'date_paid' => $payment->date_paid,
+            'admin_incharge'=> Auth()->user()->name,
+            'date'=> Carbon::now(),
+
+        ];
+        //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+        return back()->with('message', 'Partial Payment Made Successfully!');
+        // $intrest_permonth = $payment->loan->intrest / $payment->loan->tenure;
+        // $last_intrest = $payment->loan->actual_profit + $intrest_permonth;
+    }
+
+
     public function paynow(Request $request, $id)
     {
         $request->validate([
@@ -105,8 +156,8 @@ class InTenureController extends Controller
 
         if($payment->loan->tenure == $paymentcount && ($paymentdetail->sum('amount_paid') + $request->amount_paid < $payment->loan->total_payback)){
             $duedate = Carbon::parse($payment->next_due_date);
-            $nextduedate = $duedate->addDay(30);
-            $payment->amount_paid= $request->amount_paid;
+            $nextduedate = $duedate->addDay(31);
+            $payment->amount_paid= $payment->amount_paid + $request->amount_paid;
             $payment->date_paid = Carbon::now();
             $payment->payment_purpose = 'loan payback';
             $payment->payment_status = 1;
@@ -117,7 +168,8 @@ class InTenureController extends Controller
             if($payment->client->status == 'in tenure' ){
                 $payment->loan->actual_profit = $last_intrest;
             }
-            $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
+            // $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
+            $payment->loan->sum_of_allpayback = $payment->loan->sum_of_allpayback + $request->amount_paid;
             $payment->client->status= 'tenure extended';
             $payment->save();
             $payment->loan->save();
@@ -169,13 +221,14 @@ class InTenureController extends Controller
         if($paymentdetail->sum('amount_paid') + $request->amount_paid < $payment->loan->total_payback){
             
             $duedate = Carbon::parse($payment->next_due_date);
-            $nextduedate = $duedate->addDay(30);
-            $payment->amount_paid= $request->amount_paid;
+            $nextduedate = $duedate->addDay(31);
+            $payment->amount_paid= $payment->amount_paid + $request->amount_paid;
             $payment->date_paid = Carbon::now();
             $payment->payment_purpose = 'loan payback';
             $payment->payment_status = 1;
             $payment->admin_incharge = Auth()->user()->name;
-            $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
+            // $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
+            $payment->loan->sum_of_allpayback = $payment->loan->sum_of_allpayback + $request->amount_paid;
             $intrest_permonth = $payment->loan->intrest / $payment->loan->tenure;
             $last_intrest = $payment->loan->actual_profit + $intrest_permonth;
             if($payment->client->status == 'in tenure' ){
@@ -228,7 +281,7 @@ class InTenureController extends Controller
 
         if($paymentdetail->sum('amount_paid') + $request->amount_paid == $payment->loan->total_payback){
              
-            $payment->amount_paid= $request->amount_paid;
+            $payment->amount_paid= $payment->amount_paid + $request->amount_paid;
             $payment->date_paid = Carbon::now();
             $payment->payment_purpose = 'loan payback';
             $payment->payment_status = 1;
@@ -239,7 +292,8 @@ class InTenureController extends Controller
             if($payment->client->status == 'in tenure' ){
                 $payment->loan->actual_profit = $last_intrest;
             }
-            $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
+            // $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
+            $payment->loan->sum_of_allpayback = $payment->loan->sum_of_allpayback + $request->amount_paid;
             $payment->client->status = 'out of tenure';
             $payment->save();
             $payment->loan->save();

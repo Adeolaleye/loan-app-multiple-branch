@@ -39,8 +39,8 @@
                             <tr>
                                 <th>Client ID #</th>
                                 <th>Client Name</th>
-                                <th>Outstanding (#)</th>
-                                <th>Expected Pay(#)</th>
+                                <th>Outstanding (&#x20A6;)</th>
+                                <th>Expected Pay(&#x20A6;)</th>
                                 <th>Duration</th>
                                 <th>Next Due Date</th>
                                 <th>Action</th>
@@ -51,8 +51,8 @@
                                 <tr>
                                     <td>{{ $monthlyreport->client->client_no }}</td>
                                     <td>{{ $monthlyreport->client->name }}</td>
-                                    <td>{{ $monthlyreport->outstanding_payment }}</td>
-                                    <td>{{ $monthlyreport->expect_pay }}</td>
+                                    <td>{{ number_format($monthlyreport->outstanding_payment) }}</td>
+                                    <td>{{ number_format($monthlyreport->expect_pay) }}</td>
                                     <td>
                                         {{-- @foreach ($monthlyreport->loan as $loan )
                                         {{ $loan->loan_duration }}

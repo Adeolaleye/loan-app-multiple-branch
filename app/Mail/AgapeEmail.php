@@ -56,6 +56,10 @@ class AgapeEmail extends Mailable
             return $this->markdown('emails.payment')
             ->subject($this->data['subject']);
         }
+        if(isset($this->data['type']) && $this->data['type'] == 'partial payment'){ 
+            return $this->markdown('emails.payment')
+            ->subject($this->data['subject']);
+        }
     }
     
 }

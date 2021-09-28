@@ -53,8 +53,6 @@
           </div>
           <div class="card-body">
             @include('includes.alerts')
-            <form class="f1" method="post" action="{{ route('paynow', $loan->id) }}">
-              @csrf
                 <div class="row">
                     <div class="col-7 col-sm-7 col-md-7 col-lg-7 padding-0">
                         <h5 class="text-left f-16" id="name" style="margin-bottom: 0rem"></h5>
@@ -151,7 +149,7 @@
                         <h3 class="f-14 f-w-600"><span>
                             @foreach ($loan->payment as $payment)
                                 @if ($payment->payment_status == 0 )
-                                &#x20A6;{{ !is_null($payment->bb_forward) ? $payment->bb_forward : '0.00' }}
+                                &#x20A6;{{ !is_null(number_format($payment->bb_forward)) ? number_format($payment->bb_forward) : '0.00' }}
                                 @endif
                             @endforeach
                         </span></h3>
@@ -178,24 +176,56 @@
                     </div>
                 @endif
                 </div>
+                <hr>
                 @if ($loan->client->status == 'tenure extended' || $loan->client->status == 'in tenure' )
                     @if(Auth::user()->role=='Branch Manager' || Auth::user()->role=='Super Admin' )
-                        <div class="row g-3 mb-2 m-t-30">
-                            <div class="col-md-6 offset-md-3">
-                            <label class="form-label" for="amount">Amount</label>
-                            <div class="input-group input-group-air"><span class="input-group-text">&#x20A6;</span>
-                                <input class="form-control" type="number" name="amount_paid" value="{{ $payment->expect_pay}}"{{ old('amount_paid') }} required="">
-                                <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
+                    <div class="text-center">
+                        <a class="f-18 text-muted" id="full" style="cursor:pointer">Make Payment</a><br>
+                        <a id="partial" class="f-12 text-info" style="cursor:pointer">Make Partial Payment Instead <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                        <form id="fullpay" class="f1" method="post" action="{{ route('paynow', $loan->id) }}">
+                        @csrf
+                            <div class="row g-3 mb-2 m-t-30">
+                                <div class="col-md-6 offset-md-3">
+                                <label class="form-label" for="amount">Amount</label>
+                                <div class="input-group input-group-air"><span class="input-group-text">&#x20A6;</span>
+                                    <input class="form-control" type="number" name="amount_paid" value="{{ $unpaiddetails->expect_pay}}"{{ old('amount_paid') }} required="">
+                                    <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
+                                </div>
+                                </div>
+                                <button class="btn btn-primary" type="submit">Make Payment</button>
                             </div>
-                            </div>
-                            <button class="btn btn-primary" type="submit">Submit</button>
-                        </div>
+                        </form>
+
+                        <form id="partialpay" class="f1" method="post" action="{{ route('partialpay', $loan->id) }}" style="display: none">
+                            @csrf
+                                <div class="row g-3 mb-2 m-t-30">
+                                    <div class="col-md-6 offset-md-3">
+                                    <label class="form-label" for="amount">Amount (<span class="f-12 text-warning">Amount Paid this month is &#x20A6;{{ number_format($unpaiddetails->amount_paid)}}</span>)</label>
+                                    <div class="input-group input-group-air"><span class="input-group-text">&#x20A6;</span>
+                                        <input class="form-control" type="number" placeholder="1000" name="amount_paid" value=""{{ old('amount_paid') }} required="">
+                                        <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
+                                    </div>
+                                    </div>
+                                    <button class="btn btn-primary" type="submit">Pay Partial Payment for the month</button>
+                                </div>
+                        </form>
                     @endif
                 @endif
-            </form>
           </div>
         </div>
       </div>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+      $("#partial").click(function(){
+        $("#fullpay").hide(1000);
+        $("#partialpay").show(1000);
+      });
+      $("#full").click(function(){
+        $("#fullpay").show(1000);
+        $("#partialpay").hide(1000);
+      });
+    });</script>
 @endsection

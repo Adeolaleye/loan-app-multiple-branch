@@ -49,6 +49,7 @@ Route::get('/clientsintenure', 'InTenureController@index')->name('clientsintenur
 Route::get('viewclientintenure', 'InTenureController@show')->name('viewclientintenure');
 Route::get('makepayment/{id}', 'InTenureController@makepayment')->name('makepayment');
 Route::post('paynow/{id}', 'InTenureController@paynow')->name('paynow');
+Route::post('partialpay/{id}', 'InTenureController@partialpay')->name('partialpay');
 
 // loan
 Route::get('/loan', 'LoanController@index')->name('loan');
@@ -68,4 +69,5 @@ Route::post('filterpayment', 'PaymentController@filter')->name('filterpayment');
 
 // monthly
 Route::get('/monthly', 'MonthlyController@index')->name('monthly');
+Route::get('/tenureextended', 'MonthlyController@show')->name('tenureextended');
 });

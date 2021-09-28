@@ -28,13 +28,13 @@
 <p>
     <h4>Loan Details</h4>
 <p>
-    <strong>Form Payment : </strong>#{{ number_format($data['formpayment']) }}<br>
+    <strong>Form Payment : </strong>&#x20A6;{{ number_format($data['formpayment']) }}<br>
     <strong>Tenure : </strong> {{ $data['tenure'] }} month<br>
-    <strong>Loan Amount : </strong>#{{ number_format($data['loan_amount']) }}<br>
+    <strong>Loan Amount : </strong>&#x20A6;{{ number_format($data['loan_amount']) }}<br>
     <strong>Intrest Rate : </strong>{{ number_format($data['intrest_percent'])  }}%<br>
-    <strong>Calculated Intrest : </strong>#{{ number_format($data['intrest'])  }}<br>
-    <strong>Calculated First Payment : </strong>#{{ number_format($data['fp_amount']) }}<br>
-    <strong>Calculated Total Expected Payback : </strong>#{{ number_format($data['total_payback']) }}<br>
+    <strong>Calculated Intrest : </strong>&#x20A6;{{ number_format($data['intrest'])  }}<br>
+    <strong>Calculated First Payment : </strong>&#x20A6;{{ number_format($data['fp_amount']) }}<br>
+    <strong>Calculated Total Expected Payback : </strong>&#x20A6;{{ number_format($data['total_payback']) }}<br>
 </p>
 <p>Note that this request is still in review, no disbursement has been made yet, click <a href="" target="_blank">here</a> to login and review.</p>
 
@@ -54,11 +54,11 @@
     <h4>Loan Details</h4>
 <p>
     <strong>Tenure : </strong> {{ $data['tenure'] }} month<br>
-    <strong>Loan Amount : </strong>#{{ number_format($data['loan_amount']) }}<br>
-    <strong>Calculated Intrest : </strong>#{{ number_format($data['intrest'])  }}<br>
+    <strong>Loan Amount : </strong>&#x20A6;{{ number_format($data['loan_amount']) }}<br>
+    <strong>Calculated Intrest : </strong>&#x20A6;{{ number_format($data['intrest'])  }}<br>
     <strong>Intrest Rate : </strong>{{ number_format($data['intrest_percent'])  }}%<br>
-    <strong>Calculated Forward Payment : </strong>#{{ number_format($data['fp_amount']) }}(Unpaid)<br>
-    <strong>Calculated Total Expected Payback : </strong>#{{ number_format($data['total_payback']) }}<br>
+    <strong>Calculated Forward Payment : </strong>&#x20A6;{{ number_format($data['fp_amount']) }}(Unpaid)<br>
+    <strong>Calculated Total Expected Payback : </strong>&#x20A6;{{ number_format($data['total_payback']) }}<br>
 </p>
 <p>Note that this request is still in review, no disbursement has been made yet, click <a href="" target="_blank">here</a> to login and review.</p>
 <span>Update was handled by  {{ $data['admin_incharge'] }},<br>
@@ -77,18 +77,18 @@
     <h4>Loan Details</h4>
 <p>
     <strong>Tenure : </strong> {{ $data['tenure'] }} month<br>
-    <strong>Loan Amount : </strong>#{{ number_format($data['loan_amount']) }}<br>
-    <strong>Intrest : </strong>#{{ number_format($data['intrest'])  }}<br>
-    <strong>Total Payback : </strong>#{{ number_format($data['total_payback']) }}<br>
+    <strong>Loan Amount : </strong>&#x20A6;{{ number_format($data['loan_amount']) }}<br>
+    <strong>Intrest : </strong>&#x20A6;{{ number_format($data['intrest'])  }}<br>
+    <strong>Total Payback : </strong>&#x20A6;{{ number_format($data['total_payback']) }}<br>
     <strong>Loan Duration : </strong>{{ date('M, Y', strtotime($data['disbursement_date'])) }} - {{ date('M, Y', strtotime($data['loan_duration'])) }}<br>
 </p>
 <h4>Payment Details</h4>
 <p>
-    <strong>Expected Profit : </strong>#{{ number_format($data['expect_profit']) }}<br>
-    <strong>Forward Payment : </strong>#{{ number_format($data['fp_amount']) }} <span>({{ $data['fp_status'] }})</span><br>
-    <strong>Monthly Payback : </strong>#{{ number_format($data['monthly_payback']) }}<br>
+    <strong>Expected Profit : </strong>&#x20A6;{{ number_format($data['expect_profit']) }}<br>
+    <strong>Forward Payment : </strong>&#x20A6;{{ number_format($data['fp_amount']) }} <span>({{ $data['fp_status'] }})</span><br>
+    <strong>Monthly Payback : </strong>&#x20A6;{{ number_format($data['monthly_payback']) }}<br>
     <strong>Next Due Date : </strong>{{ date('d, M Y', strtotime($data['next_due_date'])) }}<br>
-    <strong>Expected Payback : </strong>#{{ number_format($data['expect_pay']) }}<br>
+    <strong>Expected Payback : </strong>&#x20A6;{{ number_format($data['expect_pay']) }}<br>
 </p>
 <p>Click <a href="" target="_blank">here</a> to login and review, login on desktop for best review.</p>
 
