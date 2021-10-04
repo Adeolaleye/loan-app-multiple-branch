@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Client;
 use App\Loan;
+use App\Client;
 use App\Payment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -37,12 +38,21 @@ class HomeController extends Controller
         $allsavings = $savings->sum('outstanding_payment');
 
         $profit = Loan::all();
-        $monthlyprofit = Loan::whereMonth('created_at', date('m'))->sum('actual_profit');
-        $yearlyprofit = Loan::whereYear('created_at', date('Y'))->sum('actual_profit');
+        $monthlyprofit = Loan::whereMonth('updated_at', date('m'))->sum('actual_profit');
+        $yearlyprofit = Loan::whereYear('updated_at', date('Y'))->sum('actual_profit');
         $allprofits = $profit->sum('actual_profit');
         $companyvalue = $outstanding->sum('outstanding_payment') + $allprofits;
+     
         $monthlyreports = Payment::whereMonth('next_due_date', date('m'))->with('client','loan')->where('payment_status',0)->take(3)->Orderby('next_due_date','ASC')->get();
-        $tenureextendeds = Loan::with('client','payment')->where('status',3)->take(3)->get();
+        $tenureextendeds = Loan::with('client','payment')->get();
+        
+        $tenureextendeds = $tenureextendeds->filter(
+            function($items){
+                    if( Carbon::parse($items->disbursement_date)->addMonth($items->tenure)  <  Carbon::now() or $items->status == 3){
+                        return $items; 
+                    } 
+            });
+
         $tenureextended_count = $tenureextendeds->count();
         $monthreportcounter = $monthlyreports->count();
         

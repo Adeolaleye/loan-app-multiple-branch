@@ -258,13 +258,12 @@
                                     <td>{{ $tenureextended->client->client_no }}</td>
                                     <td>{{ $tenureextended->client->name }}</td>
                                         @foreach ($tenureextended->payment as $payment)
-                                        @if ($payment->payment_status == 0 )
                                     <td>
                                         {{ number_format($payment->outstanding_payment) }}
                                     </td>
                                     <td>{{ $payment->expect_pay }}</td>
                                     <td>{{ date('d,M Y', strtotime($payment->next_due_date)) }}</td>
-                                        @endif
+                            
                                         @endforeach 
                                     
                                     <td>{{ $tenureextended->loan_duration }}</td>

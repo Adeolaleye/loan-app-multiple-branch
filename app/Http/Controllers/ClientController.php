@@ -179,10 +179,8 @@ class ClientController extends Controller
     public function destroy($id)
     {
         $client = Client::with('loan','payment')->whereId($id)->first();
-        //dd($client->loan);
-        $client->loan->delete();
-        $client->payment->delete();
         $client->delete();
         return back()->with('message', 'Client Details Deleted');
+
     }
 }
