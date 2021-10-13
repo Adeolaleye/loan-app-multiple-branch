@@ -46,6 +46,7 @@
                     <div class="bg-secondary-light m-10 p-t-10 p-b-10 text-center b-r-6">
                       <span class="" >Applied&nbsp;<span id="applieddate"></span></span>
                     </div>
+                    @if (Auth::user()->role=='Super Admin')
                     <div class="col-md-12">
                         <label class="form-label" for="disbursement">Disbursement Date</label>
                           <input class="form-control" type="date" placeholder="" name="disbursement_date">
@@ -55,11 +56,14 @@
                             <label class="form-check-label" for="checkbox-primary-1">Forward Payment</label>
                             <input class="form-check-input" type="hidden" value="" name="loan_id">
                     </div>
+                    @endif
                 </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
-            <span id="disburse_button"></span>
+                    @if (Auth::user()->role=='Super Admin')
+                      <span id="disburse_button"></span>
+                    @endif
         </div>
         </form>
       </div>

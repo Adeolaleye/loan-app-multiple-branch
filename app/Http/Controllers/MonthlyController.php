@@ -54,11 +54,17 @@ class MonthlyController extends Controller
      */
     public function show()
     {
-        $tenureextendeds = Loan::with('client','payment')->where('status',3)->get();
+        $tenureextendeds = Loan::with('client','payment')->get();
+        $tenureextendeds = $tenureextendeds->filter(
+            function($items){
+                    if( Carbon::parse($items->disbursement_date)->addMonth($items->tenure)  <  Carbon::now() or $items->status == 3){
+                        return $items; 
+                    } 
+            });
         $tenureextended_count = $tenureextendeds->count();
         return view('monthly.show', compact(
             'tenureextendeds',
-            'tenureextended_count',
+            'tenureextended_count'
         ));
     }
 

@@ -117,5 +117,7 @@
         adminmodal.find('form').attr('action', newurl);
     });
 </script>
+@if ($counter > 0)  
 @include('clients.popup')
+@endif
 @endsection

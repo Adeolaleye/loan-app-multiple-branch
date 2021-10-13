@@ -75,6 +75,8 @@ class LoanController extends Controller
             'fp_amount'=>$fp_amount,
             'fp_status'=>'Not paid',
             'formpayment' =>$request->formpayment,
+            'monthly_profit' =>$request->formpayment,
+            'yearly_profit' =>$request->formpayment,
             'purpose'=>'loan',
             'admin_incharge' => Auth()->user()->name,
 
@@ -100,8 +102,8 @@ class LoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        //Mail::to('graceadeola1@gmail.com')->send(new AgapeEmail($data));
-         Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+         //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
         return redirect(route('loan'))->with('message', 'Loan Request Sent');
     
     
@@ -141,8 +143,10 @@ class LoanController extends Controller
     public function disburse(Request $request)
     {
         
-        {
         $loan = Loan::with('client','payment')->whereId($request->loan_id)->first();
+        if(date('d,M Y', strtotime($request->disbursement_date)) > date('d,M Y')){
+            return back()->with('error', 'Disbursement Date cannot be greater than present Date');
+        }
         if($request['disbursement_date']){
             $loan->disbursement_date = $request->disbursement_date;
         }else{
@@ -156,6 +160,16 @@ class LoanController extends Controller
         $loan->sum_of_allpayback = 0;
         $loan->status= 1;
         $loan->actual_profit = $loan->fp_amount + $loan->formpayment;
+        if($loan->updated_at->format('m,Y') == date('m,Y')){
+        $loan->monthly_profit = $loan->monthly_profit + $loan->fp_amount;
+        }else{
+            $loan->monthly_profit = $loan->fp_amount;
+        }
+        if($loan->updated_at->format('Y') == date('Y')){
+            $loan->yearly_profit = $loan->yearly_profit + $loan->fp_amount;
+            }else{
+                $loan->yearly_profit = $loan->fp_amount;
+            }
         $loan->client->status= 'in tenure';
         $loan->admin_who_disburse = Auth()->user()->name;
         $loan->save();
@@ -174,7 +188,6 @@ class LoanController extends Controller
             'payback_permonth' => $loan->monthly_payback,
             'payment_status' => 0,
         ]);
-        }
         $payment = Payment::with('client','loan')->where('loan_id',$request->loan_id)->where('payment_status',0)->first();
         $data = [
             'client_no'=> $loan->client->client_no,

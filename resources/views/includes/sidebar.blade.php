@@ -72,10 +72,6 @@
               <a class="sidebar-link sidebar-title {{ Request::is('loan') || Request::is('requestloan') ? 'active' : 'link-nav'}}" href="{{ route('loan') }}">
               <i data-feather="list"> </i><span>Loan History</span></a>
             </li>
-            <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title {{ Request::is('adminuser') ? 'active' : 'link-nav'}}" href="{{ route('adminuser') }}">
-              <i data-feather="layers"> </i><span>Admin Role</span></a>
-            </li>
             @endif
             <li class="sidebar-list">
               <a class="sidebar-link sidebar-title {{ Request::is('monthly') ? 'active' : 'link-nav'}}" href="{{ route('monthly') }}">

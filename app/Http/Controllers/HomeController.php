@@ -38,8 +38,8 @@ class HomeController extends Controller
         $allsavings = $savings->sum('outstanding_payment');
 
         $profit = Loan::all();
-        $monthlyprofit = Loan::whereMonth('updated_at', date('m'))->sum('actual_profit');
-        $yearlyprofit = Loan::whereYear('updated_at', date('Y'))->sum('actual_profit');
+        $monthlyprofit = Loan::whereMonth('updated_at', date('m'))->sum('monthly_profit');
+        $yearlyprofit = Loan::whereYear('updated_at', date('Y'))->sum('yearly_profit');
         $allprofits = $profit->sum('actual_profit');
         $companyvalue = $outstanding->sum('outstanding_payment') + $allprofits;
      
@@ -51,7 +51,7 @@ class HomeController extends Controller
                     if( Carbon::parse($items->disbursement_date)->addMonth($items->tenure)  <  Carbon::now() or $items->status == 3){
                         return $items; 
                     } 
-            });
+            })->take(5);
 
         $tenureextended_count = $tenureextendeds->count();
         $monthreportcounter = $monthlyreports->count();
