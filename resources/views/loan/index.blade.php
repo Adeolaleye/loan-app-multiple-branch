@@ -55,7 +55,7 @@
                       <tbody>
                         @foreach ($loans as $loan )
                         <tr>
-                            <td>123445</td>
+                            <td>{{ $loan->client->client_no }}</td>
                             <td>{{ $loan->client->name }}</td>
                             <td>{{ number_format($loan->loan_amount) }}</td>
                             <td>

@@ -44,7 +44,7 @@ class HomeController extends Controller
         $companyvalue = $outstanding->sum('outstanding_payment') + $allprofits;
      
         $monthlyreports = Payment::whereMonth('next_due_date', date('m'))->with('client','loan')->where('payment_status',0)->take(3)->Orderby('next_due_date','ASC')->get();
-        $tenureextendeds = Loan::with('client','payment')->get();
+        $tenureextendeds = Loan::with('client','payment')->where('status','<>',2)->get();
         
         $tenureextendeds = $tenureextendeds->filter(
             function($items){

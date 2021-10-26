@@ -54,7 +54,7 @@ class MonthlyController extends Controller
      */
     public function show()
     {
-        $tenureextendeds = Loan::with('client','payment')->get();
+        $tenureextendeds = Loan::with('client','payment')->where('status','<>',2)->get();
         $tenureextendeds = $tenureextendeds->filter(
             function($items){
                     if( Carbon::parse($items->disbursement_date)->addMonth($items->tenure)  <  Carbon::now() or $items->status == 3){
