@@ -180,7 +180,7 @@
                         @foreach ( $client->loan->sortByDesc('updated_at') as $loan )
                         <tr>
                             <td>{{ number_format($loan->loan_amount) }}</td>
-                            <td>{{ date('d,M Y', strtotime($loan->disbursement_date)) }}</td>
+                            <td>{{ !is_null($loan->disbursement_date) ? date('d,M Y', strtotime($loan->disbursement_date)) : 'N/A' }}</td>
                             <td>{{ $loan->tenure }}</td>
                             <td>{{ $loan->loan_duration }}</td>
                             <td>{{ number_format($loan->intrest) }}<br>

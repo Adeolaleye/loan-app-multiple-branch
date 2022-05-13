@@ -100,9 +100,9 @@
                             <label class="col-form-label">Role</label>
                             <select class="form-control" name="role" required>
                                 <option value=""></option>
-                                <option value="Super Admin"{{ old('role') == 'Super Admin' ? 'selected' : '' }} >Super Admin</option>
-                                <option value="Branch Manager"{{ old('role') == 'Branch Manager' ? 'selected' : '' }}>Branch Manager</option>
-                                <option value="Officer"{{ old('role') == 'Officer' ? 'selected' : '' }}>Officer</option>
+                                <option value="Super Admin"{{ old('role') }} >Super Admin</option>
+                                <option value="Branch Manager"{{ old('role') }}>Branch Manager</option>
+                                <option value="Officer"{{ old('role') }}>Officer</option>
                             </select>
                         </div>
                         <div class="mb-3">

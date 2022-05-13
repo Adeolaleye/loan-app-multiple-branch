@@ -8,8 +8,7 @@
                 <h5>
                     <a href="{{ route('viewclient',$loanhistory->client->id) }}" data-bs-toggle="tooltip" title="View Client Details">
                         {{ $loanhistory->client->name }}</a>'s Loan Payment History <br> 
-                    <span class="f-14 font-bold text-warning">Payment made {{ $counter }} times</span>
-                </h5>
+                    <span class="f-14 font-bold text-warning">Payment made {{ $counter }} times</span></h5>
                     <div class="card-header-right">
                     </div>
             </div>
@@ -53,8 +52,10 @@
                           <th>Date</th>
                           <th>Payment No</th>
                           <th>Balance Brought Forward</th>
-                          <th>Amount Paid</th>
+                          <th>Partial Pay</th>
+                          <th>Total Amount Paid</th>
                           <th>Outstanding</th>
+                          <th>For the month of</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -66,8 +67,10 @@
                               <td>{{ date('d,M Y', strtotime($payhistory->date_paid)) }}</td>
                               <td>{{ $i++ }}</td>
                               <td>{{ number_format($payhistory->bb_forward) }}</td>
+                              <td>{{ number_format($payhistory->partial_pay) }}</td>
                               <td>{{ number_format($payhistory->amount_paid) }}</td>
                               <td>{{ number_format($payhistory->outstanding_payment) }}</td>
+                              <td>{{ date('M', strtotime($payhistory->next_due_date)) }}</td>
                           </tr>
                           @endforeach
                       </tbody>

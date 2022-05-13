@@ -1,6 +1,16 @@
 @extends('layouts.main') 
 @section('title','Dashboard') 
 @section('content')
+<style>
+    .tabbed-card ul {
+    right: 46px;
+}
+@media only screen and (max-width: 767.98px){
+.tabbed-card ul.border-tab.nav-tabs {
+    right: 5px;
+}
+}
+</style>
 <div class="container-fluid">
     <div class="page-title">
         <div class="row">
@@ -27,17 +37,19 @@
                 <div class="card-body bg-secondary b-r-16">
                     <div class="tabbed-card">
                             <ul class="pull-right nav nav-tabs border-tab nav-primary" id="top-tab" role="tablist">
-                                <li class="nav-item"><a class="nav-link active" id="top-home-tab" data-bs-toggle="tab" href="#top-home" role="tab" aria-controls="top-home" aria-selected="false">Overall</a></li>
-                                <li class="nav-item"><a class="nav-link" id="profile-top-tab" data-bs-toggle="tab" href="#top-profile" role="tab" aria-controls="top-profile" aria-selected="true">Annual</a></li>
-                                <li class="nav-item"><a class="nav-link" id="contact-top-tab" data-bs-toggle="tab" href="#top-contact" role="tab" aria-controls="top-contact" aria-selected="false">A Month</a></li>
+                                <li class="nav-item"><a class="nav-link active" id="contact-top-tab" data-bs-toggle="tab" href="#top-contact" role="tab" aria-controls="top-contact" aria-selected="false">Monthly</a></li><li class="nav-item"><a class="nav-link" id="profile-top-tab" data-bs-toggle="tab" href="#top-profile" role="tab" aria-controls="top-profile" aria-selected="true">Annual</a></li>
+                                <li class="nav-item"><a class="nav-link" id="top-home-tab" data-bs-toggle="tab" href="#top-home" role="tab" aria-controls="top-home" aria-selected="false">Overall</a></li>
+                                
+                                
                             </ul>
                             <div class="tab-content" id="pills-clrtabContent1">
-                                <div class="tab-pane fade show active" id="top-home" role="tabpanel" aria-labelledby="top-home-tab">
+                                
+                                <div class="tab-pane fade show active" id="top-contact" role="tabpanel" aria-labelledby="contact-top-tab">
                                     <div class="media static-top-widget">
                                         <div class="align-self-center text-center"><i data-feather="database"></i></div>
                                         <div class="media-body">
                                             <span class="m-0">Earnings</span>
-                                            <h4 class="mb-0">&#x20A6;{{ number_format($allprofits) }}</h4>
+                                            <h4 class="mb-0">&#x20A6;{{ number_format($monthlyprofit) }}</h4>
                                             <i class="icon-bg" data-feather="database"></i>
                                         </div>
                                     </div>
@@ -52,12 +64,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="top-contact" role="tabpanel" aria-labelledby="contact-top-tab">
+                                <div class="tab-pane fade" id="top-home" role="tabpanel" aria-labelledby="top-home-tab">
                                     <div class="media static-top-widget">
                                         <div class="align-self-center text-center"><i data-feather="database"></i></div>
                                         <div class="media-body">
                                             <span class="m-0">Earnings</span>
-                                            <h4 class="mb-0">&#x20A6;{{ number_format($monthlyprofit) }}</h4>
+                                            <h4 class="mb-0">&#x20A6;{{ number_format($allprofits) }}</h4>
                                             <i class="icon-bg" data-feather="database"></i>
                                         </div>
                                     </div>
@@ -262,7 +274,7 @@
                                     <td>
                                         {{ number_format($payment->outstanding_payment) }}
                                     </td>
-                                    <td>{{ number_format($payment->expect_pay) }}</td>
+                                    <td>{{ $payment->expect_pay }}</td>
                                     <td>{{ date('d,M Y', strtotime($payment->next_due_date)) }}</td>
                                         @endif
                                         @endforeach 
@@ -277,7 +289,6 @@
                                 </tr>
                                 @endforeach
                             </tbody>
-
                         </table>
                     </div>
                     <hr>

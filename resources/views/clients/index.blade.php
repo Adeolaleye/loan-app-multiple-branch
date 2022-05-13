@@ -88,7 +88,7 @@
                                     <a href="{{ route('viewclient',$client->id) }}">
                                         <button class="btn btn-light" type="button"><i class="fas fa-eye text-warning"></i></button>
                                     </a>
-                                    <button type="button" class="btn btn-light delete-client" data-bs-toggle="modal" data-bs-target="#deleteclient" data-clientid="{{ $client->id }}" data-clientname="{{ $client->name }}"><i class="fas fa-trash-alt text-danger" data-bs-toggle="tooltip" title="Delete This Client?"></i></button>
+                                    <!--<button type="button" class="btn btn-light delete-client" data-bs-toggle="modal" data-bs-target="#deleteclient" data-clientid="{{ $client->id }}" data-clientname="{{ $client->name }}"><i class="fas fa-trash-alt text-danger" data-bs-toggle="tooltip" title="Delete This Client?"></i></button>-->
                                 </div>
                             </td>
                         </tr>
@@ -107,8 +107,7 @@
         const clientname = $(this).data('clientname');
         //set each form field on the modal
         const adminmodal = $("#deleteclient");
-        adminmodal.find('#todel').text(clientname);
-        adminmodal.find('#todel2').text(clientname); 
+        adminmodal.find('#todel').text(clientname); 
         const url = adminmodal.find('form').attr('action');
         let urlArray = url.split('/');
         urlArray[urlArray.length - 1] = clientid;

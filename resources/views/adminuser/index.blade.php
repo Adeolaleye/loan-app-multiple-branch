@@ -13,7 +13,7 @@
                     <li class="breadcrumb-item">
                         <a href="{{ route('home') }}"> <i data-feather="home"></i></a>
                     </li>
-                    <li class="breadcrumb-item">All Admins</li>
+                    <li class="breadcrumb-item">All admins</li>
                 </ol>
             </div>
         </div>
@@ -123,4 +123,3 @@
 @include('adminuser.popup')
 @include('includes.toastr')
 @endsection
-

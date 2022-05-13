@@ -75,6 +75,7 @@
                     <table class="display" id="advance-1">
                       <thead>
                         <tr>
+                             @if(Auth::user()->status == 1 )<th>l-id</th><th>p-id</th>@endif
                           <th>#</th>
                           <th>Made By</th>
                           <th>Payment for Month</th>
@@ -90,6 +91,7 @@
                         @endphp
                         @foreach ($payments as $payment)
                         <tr>
+                            @if(Auth::user()->status == 1 )<td>{{ $payment->loan_id }}</td><td>{{ $payment->id }}</td>@endif
                             <td>{{ $i++ }}</td>
                             <td>
                                 @if($payment->payment_purpose =='loan payback')
