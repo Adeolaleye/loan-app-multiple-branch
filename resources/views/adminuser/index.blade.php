@@ -13,7 +13,7 @@
                     <li class="breadcrumb-item">
                         <a href="{{ route('home') }}"> <i data-feather="home"></i></a>
                     </li>
-                    <li class="breadcrumb-item">All admins</li>
+                    <li class="breadcrumb-item">All Admins</li>
                 </ol>
             </div>
         </div>
