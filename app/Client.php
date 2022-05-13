@@ -35,17 +35,4 @@ class Client extends Model
     public function payment (){
         return $this->hasMany(Payment::class,'client_id');
     }
-    // this is the recommended way for declaring event handlers
-    public static function boot() {
-        parent::boot();
-        self::deleting(function($client) { // before delete() method call this
-             $client->loan()->each(function($l) {
-                $l->delete(); // <-- direct deletion
-             });
-             $client->payment()->each(function($p) {
-                $p->delete(); // <-- raise another deleting event on Post to delete comments
-             });
-             // do the rest of the cleanup...
-        });
-    }
 }

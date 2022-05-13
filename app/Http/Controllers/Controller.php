@@ -30,4 +30,3 @@ class Controller extends BaseController
         return $months;
     }
 }
-

@@ -68,7 +68,7 @@ class HomeController extends Controller
             'monthreportcounter',
             'clienttenurextended_count',
             'tenureextendeds',
-            'tenureextended_count',
+            'tenureextended_count'
         ));
         return view('dashboard');
     }

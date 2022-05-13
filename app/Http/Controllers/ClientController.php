@@ -106,6 +106,7 @@ class ClientController extends Controller
     public function show( $id)
     {
         $client = Client::with('loan')->where('id', $id)->first();
+        //dd($client);
         return view('clients.show',compact('client'));
     }
 
@@ -178,9 +179,8 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        $client = Client::with('loan','payment')->whereId($id)->first();
+        $client = Client::find($id);
         $client->delete();
-        return back()->with('message', 'Client Details Deleted');
-
+        return back()->with('message', 'Client Deleted');
     }
 }

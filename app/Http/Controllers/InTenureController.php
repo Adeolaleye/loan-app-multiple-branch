@@ -110,6 +110,9 @@ class InTenureController extends Controller
         $payment->payment_purpose = 'partial payment';
         $payment->outstanding_payment = $payment->outstanding_payment - $request->amount_paid;
         $payment->expect_pay = $payment->expect_pay - $request->amount_paid;
+        if($payment->loan->updated_at->format('m,Y') <> date('m,Y')){
+        $payment->loan->monthly_profit = 0;
+        }
         $payment->loan->sum_of_allpayback = $payment->loan->sum_of_allpayback + $request->amount_paid;
         $payment->save();
         $payment->loan->save();
@@ -134,8 +137,8 @@ class InTenureController extends Controller
             'date'=> Carbon::now(),
 
         ];
-        //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+        Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+        //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
         return back()->with('message', 'Partial Payment Made Successfully!');
     }
 // End of partial payment function
@@ -236,8 +239,8 @@ class InTenureController extends Controller
 
             ];
             Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
-            //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-            return back()->with('message', 'Payment Made Successfully, But Payback not completed, Tenure Extended!');
+            Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+            //return back()->with('message', 'Payment Made Successfully, But Payback not completed, Tenure Extended!');
         }
         // End of Condition for payment made but does not equivalent to payback, Tenure Extended
 
@@ -311,8 +314,8 @@ class InTenureController extends Controller
                 'date'=> Carbon::now(),
 
             ];
-            //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-            Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+            Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+            //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
             return back()->with('message', 'Payment Made Successfully');
         }
         // End of condition for payment, still In Tenure
@@ -320,7 +323,7 @@ class InTenureController extends Controller
         // Start of condition for completing payback, Out of Tenure
         if($paymentdetail->sum('amount_paid') + $request->amount_paid == $payment->loan->total_payback){
             $intrest_permonth = $payment->loan->intrest / $payment->loan->tenure;
-            if($request->amount_paid + $payment->partial_pay < $intrest_permonth && $payment->client->status == 'in tenure' ){
+            if($request->amount_paid + $payment->partial_pay < $intrest_permonth && $request->amount_paid + $payment->partial_pay <> $payment->outstanding_payment && $payment->client->status == 'in tenure' ){
                 return back()->with('error', 'Payment is too low for the month');
             }
                 $payment->amount_paid= $payment->amount_paid + $request->amount_paid;
@@ -375,8 +378,8 @@ class InTenureController extends Controller
                 'date'=> Carbon::now(),
 
             ];
-            //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-            Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+            Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+            //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
             return back()->with('message', 'Payback Completed, Congratulations!');
         }
         // End of condition for completing payback, Out of Tenure

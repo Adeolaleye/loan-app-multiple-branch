@@ -51,6 +51,7 @@ Route::get('makepayment/{id}', 'InTenureController@makepayment')->name('makepaym
 Route::post('paynow/{id}', 'InTenureController@paynow')->name('paynow');
 Route::post('partialpay/{id}', 'InTenureController@partialpay')->name('partialpay');
 
+
 // loan
 Route::get('/loan', 'LoanController@index')->name('loan');
 Route::get('requestloan', 'LoanController@create')->name('requestloan');
