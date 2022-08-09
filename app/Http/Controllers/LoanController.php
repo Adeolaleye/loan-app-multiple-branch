@@ -47,7 +47,7 @@ class LoanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'client_id' => 'required|int|max:255',
+            'client_id' => 'required|int',
             'loan_amount' => 'required|int|min:0',
             'tenure' => 'required|string|min:1',
             // 'intrest_percent' => 'required|string|min:1',
@@ -227,7 +227,7 @@ class LoanController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'client_id' => 'required|int|max:255',
+            'client_id' => 'required|int',
             'loan_amount' => 'required|int|min:10',
             'tenure' => 'required|string|max:10',
             'intrest_percent' => 'required|string|min:1',

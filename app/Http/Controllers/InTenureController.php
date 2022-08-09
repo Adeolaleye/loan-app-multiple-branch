@@ -169,6 +169,7 @@ class InTenureController extends Controller
             if($request->amount_paid + $payment->partial_pay < $intrest_permonth && $payment->client->status == 'in tenure' ){
                 return back()->with('error', 'Payment is too low for the month');
             }
+            else{
                 $duedate = Carbon::parse($payment->next_due_date);
                 $nextduedate = $duedate->addDay(31);
                 $payment->amount_paid= $payment->amount_paid + $request->amount_paid;
@@ -179,68 +180,69 @@ class InTenureController extends Controller
                 $payment->loan->status = 3;
                 // $payment->loan->sum_of_allpayback = $paymentdetail->sum('amount_paid') + $request->amount_paid;
                 $payment->loan->sum_of_allpayback = $payment->loan->sum_of_allpayback + $request->amount_paid;
-            if($payment->client->status == 'in tenure' ){
-                $payment->loan->actual_profit = $payment->loan->actual_profit + $intrest_permonth;
-                $payment->profit = $intrest_permonth;
+                if($payment->client->status == 'in tenure' ){
+                    $payment->loan->actual_profit = $payment->loan->actual_profit + $intrest_permonth;
+                    $payment->profit = $intrest_permonth;
+                }
+                if($payment->loan->updated_at->format('m,Y') == date('m,Y') && $payment->client->status == 'in tenure'){
+                    $payment->loan->monthly_profit = $payment->loan->monthly_profit + $intrest_permonth;
+                    }
+                elseif($payment->client->status == 'in tenure'){
+                        $payment->loan->monthly_profit = $intrest_permonth;
+                    }
+                if($payment->loan->updated_at->format('Y') == date('Y')){
+                    $payment->loan->yearly_profit = $payment->loan->yearly_profit + $intrest_permonth;
+                    }
+                else{
+                        $payment->loan->yearly_profit = $intrest_permonth;
+                    }
+                    $payment->client->status= 'tenure extended';
+                    $payment->save();
+                    $payment->loan->save();
+                    $payment->client->save();
+
+                Payment::create([
+                    'client_id' => $request->client_id,
+                    'loan_id' => $id,
+                    'next_due_date' => $nextduedate,
+                    'outstanding_payment' => $payment->outstanding_payment - $request->amount_paid,
+                    'expect_pay' => $bb_forward,
+                    'bb_forward' => $bb_forward,
+                    'payback_permonth' => $payment->payback_permonth,
+                    'payment_status' => 0,
+                ]);
+
+                $paymentimes = Payment::where('loan_id',$id)->where('payment_status',1)->count();
+                $data = [
+                    'client_no'=> $payment->client->client_no,
+                    'name'=> $payment->client->name,
+                    'phone'=> $payment->client->phone,
+                    'total_payback'=> $payment->loan->total_payback,
+                    'tenure'=> $payment->loan->tenure,
+                    'loan_amount' => $payment->loan->loan_amount,
+                    'loan_duration' => $payment->loan->loan_duration,
+                    'intrest' => $payment->loan->intrest, 
+                    'disbursement_date' => $payment->loan->disbursement_date, 
+                    'total_amountpaid' => $payment->loan->sum_of_allpayback,
+                    'actual_profit' => $payment->loan->actual_profit,
+                    'amount_paid' => $request->amount_paid,
+                    'next_pay' => $payment->expect_pay,
+                    'monthly_payback' => $payment->payback_permonth,
+                    'no_of_time_paid' => $paymentimes,
+                    'outstanding' => $payment->outstanding_payment,
+                    'bb_forward' => $payment->bb_forward,
+                    'next_due_date' => $nextduedate,
+                    'subject'=> 'New Payment made, but Tenure Extended',
+                    'type'=> 'payment extended',
+                    'date_paid' => $payment->date_paid,
+                    'admin_incharge'=> Auth()->user()->name,
+                    'date'=> Carbon::now(),
+
+                ];
+                Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+                //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+                return back()->with('message', 'Payment Made Successfully, But Payback not completed, Tenure Extended!');
             }
-            if($payment->loan->updated_at->format('m,Y') == date('m,Y') && $payment->client->status == 'in tenure'){
-                $payment->loan->monthly_profit = $payment->loan->monthly_profit + $intrest_permonth;
-                }
-            elseif($payment->client->status == 'in tenure'){
-                    $payment->loan->monthly_profit = $intrest_permonth;
-                }
-            if($payment->loan->updated_at->format('Y') == date('Y')){
-                $payment->loan->yearly_profit = $payment->loan->yearly_profit + $intrest_permonth;
-                }
-            else{
-                    $payment->loan->yearly_profit = $intrest_permonth;
-                }
-                $payment->client->status= 'tenure extended';
-                $payment->save();
-                $payment->loan->save();
-                $payment->client->save();
-
-            Payment::create([
-                'client_id' => $request->client_id,
-                'loan_id' => $id,
-                'next_due_date' => $nextduedate,
-                'outstanding_payment' => $payment->outstanding_payment - $request->amount_paid,
-                'expect_pay' => $bb_forward,
-                'bb_forward' => $bb_forward,
-                'payback_permonth' => $payment->payback_permonth,
-                'payment_status' => 0,
-            ]);
-
-            $paymentimes = Payment::where('loan_id',$id)->where('payment_status',1)->count();
-            $data = [
-                'client_no'=> $payment->client->client_no,
-                'name'=> $payment->client->name,
-                'phone'=> $payment->client->phone,
-                'total_payback'=> $payment->loan->total_payback,
-                'tenure'=> $payment->loan->tenure,
-                'loan_amount' => $payment->loan->loan_amount,
-                'loan_duration' => $payment->loan->loan_duration,
-                'intrest' => $payment->loan->intrest, 
-                'disbursement_date' => $payment->loan->disbursement_date, 
-                'total_amountpaid' => $payment->loan->sum_of_allpayback,
-                'actual_profit' => $payment->loan->actual_profit,
-                'amount_paid' => $request->amount_paid,
-                'next_pay' => $payment->expect_pay,
-                'monthly_payback' => $payment->payback_permonth,
-                'no_of_time_paid' => $paymentimes,
-                'outstanding' => $payment->outstanding_payment,
-                'bb_forward' => $payment->bb_forward,
-                'next_due_date' => $nextduedate,
-                'subject'=> 'New Payment made, but Tenure Extended',
-                'type'=> 'payment extended',
-                'date_paid' => $payment->date_paid,
-                'admin_incharge'=> Auth()->user()->name,
-                'date'=> Carbon::now(),
-
-            ];
-            Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
-            Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-            //return back()->with('message', 'Payment Made Successfully, But Payback not completed, Tenure Extended!');
         }
         // End of Condition for payment made but does not equivalent to payback, Tenure Extended
 
@@ -250,6 +252,7 @@ class InTenureController extends Controller
             if($request->amount_paid + $payment->partial_pay < $intrest_permonth && $payment->client->status == 'in tenure' ){
                 return back()->with('error', 'Payment is too low for the month');
             }
+            else{
                 $duedate = Carbon::parse($payment->next_due_date);
                 $nextduedate = $duedate->addDay(31);
                 $payment->amount_paid= $payment->amount_paid + $request->amount_paid;
@@ -258,65 +261,65 @@ class InTenureController extends Controller
                 $payment->payment_status = 1;
                 $payment->admin_incharge = Auth()->user()->name;
                 $payment->loan->sum_of_allpayback = $payment->loan->sum_of_allpayback + $request->amount_paid;
-            if($payment->client->status == 'in tenure' ){
+                if($payment->client->status == 'in tenure' ){
                 $payment->loan->actual_profit = $payment->loan->actual_profit + $intrest_permonth;
                 $payment->profit = $intrest_permonth;
-            }
-            if($payment->loan->updated_at->format('m,Y') == date('m,Y')){
+                }
+                if($payment->loan->updated_at->format('m,Y') == date('m,Y')){
                 $payment->loan->monthly_profit = $payment->loan->monthly_profit + $intrest_permonth;
                 }
-            else{
+                else{
                 $payment->loan->monthly_profit = $intrest_permonth;
                 }
-            if($payment->loan->updated_at->format('Y') == date('Y')){
+                if($payment->loan->updated_at->format('Y') == date('Y')){
                 $payment->loan->yearly_profit = $payment->loan->yearly_profit + $intrest_permonth;
                 }
-            else{
+                else{
                     $payment->loan->yearly_profit = $intrest_permonth;
                 }
                 $payment->save();
                 $payment->loan->save();
-          
-            Payment::create([
-                'client_id' => $request->client_id,
-                'loan_id' => $id,
-                'next_due_date' => $nextduedate,
-                'outstanding_payment' => $payment->outstanding_payment - $request->amount_paid,
-                'expect_pay' => $payment->loan->monthly_payback + $bb_forward,
-                'bb_forward' => $bb_forward,
-                'payback_permonth' => $payment->payback_permonth,
-                'payment_status' => 0,
-            ]);
-            $paymentimes = Payment::where('loan_id',$id)->where('payment_status',1)->count();
-            $data = [
-                'client_no'=> $payment->client->client_no,
-                'name'=> $payment->client->name,
-                'phone'=> $payment->client->phone,
-                'total_payback'=> $payment->loan->total_payback,
-                'tenure'=> $payment->loan->tenure,
-                'loan_amount' => $payment->loan->loan_amount,
-                'loan_duration' => $payment->loan->loan_duration,
-                'intrest' => $payment->loan->intrest, 
-                'disbursement_date' => $payment->loan->disbursement_date, 
-                'total_amountpaid' => $payment->loan->sum_of_allpayback,
-                'actual_profit' => $payment->loan->actual_profit,
-                'amount_paid' => $request->amount_paid,
-                'next_pay' => $payment->expect_pay,
-                'monthly_payback' => $payment->payback_permonth,
-                'no_of_time_paid' => $paymentimes,
-                'outstanding' => $payment->outstanding_payment,
-                'bb_forward' => $payment->bb_forward,
-                'next_due_date' => $nextduedate,
-                'subject'=> 'New Payment made',
-                'type'=> 'payment',
-                'date_paid' => $payment->date_paid,
-                'admin_incharge'=> Auth()->user()->name,
-                'date'=> Carbon::now(),
+                Payment::create([
+                    'client_id' => $request->client_id,
+                    'loan_id' => $id,
+                    'next_due_date' => $nextduedate,
+                    'outstanding_payment' => $payment->outstanding_payment - $request->amount_paid,
+                    'expect_pay' => $payment->loan->monthly_payback + $bb_forward,
+                    'bb_forward' => $bb_forward,
+                    'payback_permonth' => $payment->payback_permonth,
+                    'payment_status' => 0,
+                ]);
+                $paymentimes = Payment::where('loan_id',$id)->where('payment_status',1)->count();
+                $data = [
+                    'client_no'=> $payment->client->client_no,
+                    'name'=> $payment->client->name,
+                    'phone'=> $payment->client->phone,
+                    'total_payback'=> $payment->loan->total_payback,
+                    'tenure'=> $payment->loan->tenure,
+                    'loan_amount' => $payment->loan->loan_amount,
+                    'loan_duration' => $payment->loan->loan_duration,
+                    'intrest' => $payment->loan->intrest, 
+                    'disbursement_date' => $payment->loan->disbursement_date, 
+                    'total_amountpaid' => $payment->loan->sum_of_allpayback,
+                    'actual_profit' => $payment->loan->actual_profit,
+                    'amount_paid' => $request->amount_paid,
+                    'next_pay' => $payment->expect_pay,
+                    'monthly_payback' => $payment->payback_permonth,
+                    'no_of_time_paid' => $paymentimes,
+                    'outstanding' => $payment->outstanding_payment,
+                    'bb_forward' => $payment->bb_forward,
+                    'next_due_date' => $nextduedate,
+                    'subject'=> 'New Payment made',
+                    'type'=> 'payment',
+                    'date_paid' => $payment->date_paid,
+                    'admin_incharge'=> Auth()->user()->name,
+                    'date'=> Carbon::now(),
 
-            ];
-            Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-            //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
-            return back()->with('message', 'Payment Made Successfully');
+                ];
+                //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+                Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+                return back()->with('message', 'Payment Made Successfully');
+            }
         }
         // End of condition for payment, still In Tenure
 
@@ -326,6 +329,7 @@ class InTenureController extends Controller
             if($request->amount_paid + $payment->partial_pay < $intrest_permonth && $request->amount_paid + $payment->partial_pay <> $payment->outstanding_payment && $payment->client->status == 'in tenure' ){
                 return back()->with('error', 'Payment is too low for the month');
             }
+            else{
                 $payment->amount_paid= $payment->amount_paid + $request->amount_paid;
                 $payment->date_paid = Carbon::now();
                 $payment->payment_purpose = 'loan payback';
@@ -333,54 +337,55 @@ class InTenureController extends Controller
                 $payment->admin_incharge = Auth()->user()->name;
                 $payment->loan->status = 2;
                 $payment->loan->sum_of_allpayback = $payment->loan->sum_of_allpayback + $request->amount_paid;
-            if($payment->client->status == 'in tenure' ){
-                $payment->loan->actual_profit = $payment->loan->actual_profit + $intrest_permonth;
-                $payment->profit = $intrest_permonth;
+                if($payment->client->status == 'in tenure' ){
+                    $payment->loan->actual_profit = $payment->loan->actual_profit + $intrest_permonth;
+                    $payment->profit = $intrest_permonth;
+                }
+                if($payment->loan->updated_at->format('m,Y') == date('m,Y')){
+                    $payment->loan->monthly_profit = $payment->loan->monthly_profit + $intrest_permonth;
+                    }
+                else{
+                    $payment->loan->monthly_profit = $intrest_permonth;
+                    }
+                if($payment->loan->updated_at->format('Y') == date('Y')){
+                    $payment->loan->yearly_profit = $payment->loan->yearly_profit + $intrest_permonth;
+                    }
+                else{
+                        $payment->loan->yearly_profit = $intrest_permonth;
+                    }
+                    $payment->client->status = 'out of tenure';
+                    $payment->save();
+                    $payment->loan->save();
+                    $payment->client->save();
+
+                $paymentimes = Payment::where('loan_id',$id)->where('payment_status',1)->count();
+
+                $data = [
+                    'client_no'=> $payment->client->client_no,
+                    'name'=> $payment->client->name,
+                    'phone'=> $payment->client->phone,
+                    'total_payback'=> $payment->loan->total_payback,
+                    'tenure'=> $payment->loan->tenure,
+                    'loan_amount' => $payment->loan->loan_amount,
+                    'loan_duration' => $payment->loan->loan_duration,
+                    'intrest' => $payment->loan->intrest, 
+                    'disbursement_date' => $payment->loan->disbursement_date, 
+                    'total_amountpaid' => $payment->loan->sum_of_allpayback,
+                    'actual_profit' => $payment->loan->actual_profit,
+                    'amount_paid' => $request->amount_paid,
+                    'monthly_payback' => $payment->payback_permonth,
+                    'no_of_time_paid' => $paymentimes,
+                    'subject'=> 'New/Last Payment made,',
+                    'type'=> 'payment completed',
+                    'date_paid' => $payment->date_paid,
+                    'admin_incharge'=> Auth()->user()->name,
+                    'date'=> Carbon::now(),
+
+                ];
+                Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+                //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+                return back()->with('message', 'Payback Completed, Congratulations!');
             }
-            if($payment->loan->updated_at->format('m,Y') == date('m,Y')){
-                $payment->loan->monthly_profit = $payment->loan->monthly_profit + $intrest_permonth;
-                }
-            else{
-                $payment->loan->monthly_profit = $intrest_permonth;
-                }
-            if($payment->loan->updated_at->format('Y') == date('Y')){
-                $payment->loan->yearly_profit = $payment->loan->yearly_profit + $intrest_permonth;
-                }
-            else{
-                    $payment->loan->yearly_profit = $intrest_permonth;
-                }
-                $payment->client->status = 'out of tenure';
-                $payment->save();
-                $payment->loan->save();
-                $payment->client->save();
-
-            $paymentimes = Payment::where('loan_id',$id)->where('payment_status',1)->count();
-
-            $data = [
-                'client_no'=> $payment->client->client_no,
-                'name'=> $payment->client->name,
-                'phone'=> $payment->client->phone,
-                'total_payback'=> $payment->loan->total_payback,
-                'tenure'=> $payment->loan->tenure,
-                'loan_amount' => $payment->loan->loan_amount,
-                'loan_duration' => $payment->loan->loan_duration,
-                'intrest' => $payment->loan->intrest, 
-                'disbursement_date' => $payment->loan->disbursement_date, 
-                'total_amountpaid' => $payment->loan->sum_of_allpayback,
-                'actual_profit' => $payment->loan->actual_profit,
-                'amount_paid' => $request->amount_paid,
-                'monthly_payback' => $payment->payback_permonth,
-                'no_of_time_paid' => $paymentimes,
-                'subject'=> 'New/Last Payment made,',
-                'type'=> 'payment completed',
-                'date_paid' => $payment->date_paid,
-                'admin_incharge'=> Auth()->user()->name,
-                'date'=> Carbon::now(),
-
-            ];
-            Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-            //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
-            return back()->with('message', 'Payback Completed, Congratulations!');
         }
         // End of condition for completing payback, Out of Tenure
         

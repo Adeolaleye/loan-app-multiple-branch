@@ -66,6 +66,7 @@
                         <option value="5" {{ old('intrest_percent') == '5' ? 'selected' : '' }}>5%</option>
                         <option value="5.5" {{ old('intrest_percent') == '5.5' ? 'selected' : '' }}>5.5%</option>
                         <option value="6" {{ old('intrest_percent') == '6' ? 'selected' : '' }}>6%</option>
+                        <option value="6.5" {{ old('intrest_percent') == '6.5' ? 'selected' : '' }}>6.5%</option>
                         <option value="7" {{ old('intrest_percent') == '7' ? 'selected' : '' }}>7%</option>
                         <option value="8" {{ old('intrest_percent') == '8' ? 'selected' : '' }}>8%</option>
                         <option value="9" {{ old('intrest_percent') == '9' ? 'selected' : '' }}>9%</option>

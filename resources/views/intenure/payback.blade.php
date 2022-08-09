@@ -161,6 +161,7 @@
                                 @if ($payment->payment_status == 0 )
                                     &#x20A6;{{ number_format($payment->expect_pay) }}<br>
                                     {{-- {{ $payment->expect_pay }} --}}
+                                    {{ isset($payment->expect_pay) ? date('d,M Y', strtotime($payment->expect_pay)) : 'Not Available' }}
                                 @endif
                             @endforeach
                         </span></h3>
@@ -169,8 +170,7 @@
                         <p class="f-14 text-success" style="margin-bottom: 0rem">Next Due Date</p>
                         <h3 class="f-14 f-w-600">
                             <span>
-                                {{ date('d,M Y', strtotime($unpaiddetails->next_due_date)) }} 
-                                {{-- {{ !is_null(date('d,M Y', strtotime($unpaiddetails->next_due_date))) ? date('d,M Y', strtotime($unpaiddetails->next_due_date)) : 'Not Available' }} --}}
+                                {{ isset($unpaiddetails->next_due_date) ? date('d,M Y', strtotime($unpaiddetails->next_due_date)) : 'Not Available' }}
                             </span>
                         </h3>
                     </div>
