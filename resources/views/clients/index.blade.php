@@ -40,7 +40,8 @@
                     <table class="display" id="advance-1">
                       <thead>
                         <tr>
-                          <th>Client ID #</th>
+                          <th>#</th>
+                          <th>Client ID</th>
                           <th>Picture</th>
                           <th>Name</th>
                           <th>Phone No</th>
@@ -56,6 +57,7 @@
                         @endphp
                         @foreach ($clients as $client)                
                         <tr>
+                            <td>{{ $i++ }}</td>
                             <td>{{ $client->client_no }}</td>
                             <td>
                                 @if($client->profile_picture)
