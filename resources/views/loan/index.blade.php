@@ -40,7 +40,8 @@
                     <table class="display" id="advance-1">
                       <thead>
                         <tr>
-                          <th>Client ID #</th>
+                          <th>#</th>
+                          <th>Client ID</th>
                           <th>Name</th>
                           <th>Loan Amount</th>
                           <th>Outstanding</th>
@@ -53,8 +54,12 @@
                         </tr>
                       </thead>
                       <tbody>
+                      @php 
+                        $i = 1;
+                        @endphp
                         @foreach ($loans as $loan )
                         <tr>
+                            <td>{{ $i++ }}</td>
                             <td>{{ $loan->client->client_no }}</td>
                             <td>{{ $loan->client->name }}</td>
                             <td>{{ number_format($loan->loan_amount) }}</td>

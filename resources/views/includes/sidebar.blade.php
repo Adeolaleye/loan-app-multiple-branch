@@ -40,9 +40,17 @@
                 <a class="sidebar-link sidebar-title {{ Request::is('clientsintenure') ? 'active' : 'link-nav'}}" href="{{ route('clientsintenure') }}">
                 <i data-feather="user"> </i><span>Clients in Tenure</span></a>
             </li>
-            <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('payout') ? 'active' : 'link-nav'}}" href="{{ route('payment') }}">
-              <i data-feather="file-text"> </i><span>Payment History</span></a>
+            <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="#"><i data-feather="file-text"> </i><span>Payment History</span></a>
+                    <ul class="sidebar-submenu">
+                      <li>
+                        <a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('payout') ? 'active' : 'link-nav'}}" href="{{ route('payment') }}">Pay In</a>
+                      </li>
+                      <li>
+                        <a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('payout') ? 'active' : 'link-nav'}}" href="{{ route('payout') }}">Pay Out(Disbursed)</a>
+                      </li>
+                      <li><a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('forwardpay') ? 'active' : 'link-nav'}}" href="{{ route('forwardpay') }}" href="">Forward Payments</a></li>
+                      <li><a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('formpay') ? 'active' : 'link-nav'}}" href="{{ route('formpay') }}" href="">Form Payments</a></li>
+                    </ul>
             </li>
             <li class="sidebar-list">
               <a class="sidebar-link sidebar-title {{ Request::is('loan') || Request::is('requestloan') ? 'active' : 'link-nav'}}" href="{{ route('loan') }}">

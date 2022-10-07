@@ -17,7 +17,7 @@ class PaymentController extends Controller
      */
     public function index()
     {
-       $payments = Payment::with('client','loan')->where('payment_status',1)->get();
+       $payments = Payment::with('client','loan')->where('payment_status',1)->orderBy('updated_at', 'desc')->get();
        $allData = $this->getFilterData($payments);
     //    $loans = Loan::where('fp_status','Paid')->get();
     //    $payment_counter = $payments->count();
@@ -41,10 +41,30 @@ class PaymentController extends Controller
      */
     public function payout()
     {
-        $payouts = Loan::with('client')->where('status', '<>' ,0)->get();
+        $payouts = Loan::with('client')->where('status', '<>' ,0)->orderBy('disbursement_date', 'desc')->get();
         $counter = $payouts->count();
         return view('payment.payout', [
          'payouts' => $payouts,
+         'counter' => $counter,
+         ]);
+
+    }
+    public function forwardPayment()
+    {
+        $forwardPayRecords = Loan::with('client','payment')->where('fp_status','Paid')->orderBy('disbursement_date', 'desc')->get();
+        $counter = $forwardPayRecords->count();
+        return view('payment.forwardpayment', [
+         'forwardPayRecords' => $forwardPayRecords,
+         'counter' => $counter,
+         ]);
+
+    }
+    public function formPayment()
+    {
+        $formPayRecords = Loan::with('client','payment')->whereNotNull('formpayment')->orderBy('created_at', 'desc')->get();
+        $counter = $formPayRecords->count();
+        return view('payment.formpayment', [
+         'formPayRecords' => $formPayRecords,
          'counter' => $counter,
          ]);
 
@@ -101,7 +121,6 @@ class PaymentController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      *

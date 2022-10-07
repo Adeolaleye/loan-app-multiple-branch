@@ -63,6 +63,8 @@ Route::post('updateloan/{id}', 'LoanController@update')->name('updateloan');
 // payment
 Route::get('/payment', 'PaymentController@index')->name('payment');
 Route::get('/payout', 'PaymentController@payout')->name('payout');
+Route::get('/forwardpayment', 'PaymentController@forwardPayment')->name('forwardpay');
+Route::get('/formpayment', 'PaymentController@formPayment')->name('formpay');
 Route::get('viewclientintenure', 'InTenureController@show')->name('viewclientintenure');
 Route::post('savemoney', 'PaymentController@store')->name('savemoney');
 Route::get('clientpayhistory/{id}', 'PaymentController@show')->name('clientpayhistory');

@@ -25,7 +25,11 @@
               <div class="card-header">
                 <div class="row">
                     <div class="col-md-8 col-sm-12">
-                        <span>Here is the details of all clients that are in tenure,</span><br><span>Note that clients in tenure cannot be given loan unti the end of a tenure.</span>
+                        <span>Here is the details of all clients that are in tenure,</span>
+                        <br>
+                        <span>Note that clients in tenure cannot be given loan until the end of a tenure.</span>
+                        <br>
+                        <span>By default you have those oweing for a longtime, to have the recent debtors, filter with <b>#</b> arrow.</span>
                     </div>
                 </div>
               </div>
@@ -35,7 +39,8 @@
                     <table class="display" id="advance-1">
                       <thead>
                         <tr>
-                            <th>Client ID &#x20A6;</th>
+                           <th>#</th>
+                            <th>Client ID</th>
                             <th>Client Name</th>
                             <th>Loan Amount (&#x20A6;)</th>
                             <th>Monthly Pay</th>
@@ -46,8 +51,12 @@
                         </tr>
                       </thead>
                       <tbody>
+                      @php 
+                        $i = 1;
+                        @endphp
                         @foreach ($loans as $loan )
                         <tr>
+                            <td>{{ $i++ }}</td>
                             <td>{{ $loan->client->client_no }}</td>
                             <td>{{ $loan->client->name }}</td>
                             <td>{{ number_format($loan->loan_amount) }}</td>

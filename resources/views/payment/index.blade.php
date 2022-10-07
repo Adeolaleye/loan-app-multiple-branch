@@ -75,7 +75,7 @@
                     <table class="display" id="advance-1">
                       <thead>
                         <tr>
-                             @if(Auth::user()->status == 1 )<th>l-id</th><th>p-id</th>@endif
+                             <!-- @if(Auth::user()->status == 1 )<th>l-id</th><th>p-id</th>@endif -->
                           <th>#</th>
                           <th>Made By</th>
                           <th>Payment for Month</th>
@@ -91,7 +91,7 @@
                         @endphp
                         @foreach ($payments as $payment)
                         <tr>
-                            @if(Auth::user()->status == 1 )<td>{{ $payment->loan_id }}</td><td>{{ $payment->id }}</td>@endif
+                            <!-- @if(Auth::user()->status == 1 )<td>{{ $payment->loan_id }}</td><td>{{ $payment->id }}</td>@endif -->
                             <td>{{ $i++ }}</td>
                             <td>
                                 @if($payment->payment_purpose =='loan payback')
@@ -106,46 +106,6 @@
                             <td>{{ $payment->payment_purpose }}</td>
                             <td>{{ $payment->admin_incharge }}</td>
                             <td>{{ date('d, M Y', strtotime($payment->date_paid)) }}</td>
-                        </tr>
-                        @endforeach
-                      </tbody>
-                    </table>
-                </div>
-              </div>
-
-              {{-- forward payments --}}
-              <div class="card-header">
-                <div class="row">
-                    <div class="col-md-6 col-sm-12">
-                        <h5>Here are forward payments</h5>
-                    </div>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                    <table class="display" id="advance-7">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Made By</th>
-                          <th>Month</th>
-                          <th>Amount Paid</th>
-                          <th>Admin who disbursed(in charge)</th>
-                          <th>Date</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @php 
-                        $i = 1;
-                        @endphp
-                        @foreach ($loans as $loan)
-                        <tr>
-                            <td>{{ $i++ }}</td>
-                            <td>Admin who disbursed</td>
-                            <td>{{ date('F', strtotime($loan->disbursement_date)) }}</td>
-                            <td>{{ number_format($loan->fp_amount) }}</td>
-                            <td>{{ $loan->admin_who_disburse }}</td>
-                            <td>{{ date('d, M Y', strtotime($loan->disbursement_date)) }}</td>
                         </tr>
                         @endforeach
                       </tbody>

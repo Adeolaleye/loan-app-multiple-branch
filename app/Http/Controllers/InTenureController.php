@@ -21,8 +21,7 @@ class InTenureController extends Controller
 // Start of intenure view 
     public function index()
     {
-        $loans = Loan::with('client','payment')->where('status', 1)->orwhere('status', 3)->Orderby('created_at','desc')->get();
-        // dd($loans);
+        $loans = Loan::with('client','payment')->where('status', 1)->orwhere('status', 3)->orderBy('updated_at', 'asc')->get();
         $counter =$loans->count();
         return view('intenure.index', [
             'loans' => $loans,
