@@ -53,7 +53,7 @@
                             <td>{{ $i++ }}</td>
                             <td>{{ $formPayRecord->client->name }}</td>
                             <td>{{ date('F', strtotime($formPayRecord->disbursement_date)) }}</td>
-                            <td>{{ number_format($formPayRecord->fp_amount) }}</td>
+                            <td>{{ number_format($formPayRecord->formpayment) }}</td>
                             <td>{{ $formPayRecord->admin_incharge }}</td>
                             <td>{{ date('d, M Y', strtotime($formPayRecord->created_at)) }}</td>
                         </tr>

@@ -80,6 +80,7 @@
                           <th>Made By</th>
                           <th>Payment for Month</th>
                           <th>Amount</th>
+                          <th>Profit</th>
                           <th>Purpose</th>
                           <th>Admin in Charge</th>
                           <th>Date Paid</th>
@@ -103,6 +104,7 @@
                             </td>
                             <td>{{ date('F', strtotime($payment->next_due_date)) }}</td>
                             <td>{{ number_format($payment->amount_paid) }}</td>
+                            <td>{{ number_format($payment->profit) }}</td>
                             <td>{{ $payment->payment_purpose }}</td>
                             <td>{{ $payment->admin_incharge }}</td>
                             <td>{{ date('d, M Y', strtotime($payment->date_paid)) }}</td>
