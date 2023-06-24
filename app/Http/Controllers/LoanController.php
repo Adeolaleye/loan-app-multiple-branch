@@ -48,10 +48,11 @@ class LoanController extends Controller
     {
         $request->validate([
             'client_id' => 'required|int',
-            'loan_amount' => 'required|int|min:0',
+            'loan_amount' => 'required|numeric|min:0',
             'tenure' => 'required|string|min:1',
             // 'intrest_percent' => 'required|string|min:1',
             'formpayment' => 'required|int|min:0',
+            'forward_payment' => 'required|numeric|min:1',
         ]);
         {
         $loan_amount = $request->loan_amount;
@@ -59,7 +60,7 @@ class LoanController extends Controller
         $cal_payback = $intrest + $loan_amount;
         $monthly_payback = ceil($cal_payback / $request->tenure);
         $total_payback = $monthly_payback * $request->tenure;
-        $fp_amount = ceil(5.99/100 * $loan_amount + 1000);
+        $fp_amount = ceil($request->forward_payment/100 * $loan_amount + 1000);
         $profit = $intrest + $fp_amount;
         $intrest_permonth = $intrest / $request->tenure;
 
@@ -73,6 +74,7 @@ class LoanController extends Controller
             'monthly_payback' => $monthly_payback,
             'total_payback'=> $total_payback,
             'fp_amount'=>$fp_amount,
+            'forward_payment'=>$request->forward_payment,
             'fp_status'=>'Not paid',
             'formpayment' =>$request->formpayment,
             'monthly_profit' =>$request->formpayment,
@@ -103,7 +105,7 @@ class LoanController extends Controller
             'date'=> Carbon::now(),
         ];
         //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
-         Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+        Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
         return redirect(route('loan'))->with('message', 'Loan Request Sent');
     
     
@@ -213,7 +215,7 @@ class LoanController extends Controller
             'date'=> Carbon::now(),
         ];
         Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-        // Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+       // Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
         return redirect(route('loan'))->with('message', 'Loan Disbursed');
     }
 
@@ -228,9 +230,10 @@ class LoanController extends Controller
     {
         $request->validate([
             'client_id' => 'required|int',
-            'loan_amount' => 'required|int|min:10',
+            'loan_amount' => 'required|numeric|min:10',
             'tenure' => 'required|string|max:10',
             'intrest_percent' => 'required|string|min:1',
+            'forward_payment' => 'required|numeric|min:1',
         ]);
         {
             $loan_amount = $request->loan_amount;
@@ -238,7 +241,7 @@ class LoanController extends Controller
             $cal_payback = $intrest + $loan_amount;
             $monthly_payback = ceil($cal_payback / $request->tenure);
             $total_payback = $monthly_payback * $request->tenure;
-            $fp_amount = ceil(5.99/100 * $loan_amount + 1000);
+            $fp_amount = ceil($request->forward_payment/100 * $loan_amount + 1000);
             $profit = $intrest + $fp_amount;
             $intrest_permonth = $intrest / $request->tenure;
 
@@ -250,6 +253,7 @@ class LoanController extends Controller
         $loan->monthly_payback=$monthly_payback;
         $loan->total_payback=$total_payback;
         $loan->fp_amount=$fp_amount;
+        $loan->forward_payment=$request->forward_payment;
         $loan->save();
         
         $data = [
@@ -269,8 +273,8 @@ class LoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        // Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
-        Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+        //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
 
         return redirect(route('loan'))->with('message', 'Loan Request Updated');
     

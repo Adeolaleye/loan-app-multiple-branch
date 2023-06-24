@@ -40,7 +40,7 @@
                     <table class="display" id="advance-1">
                       <thead>
                         <tr>
-                          <th>#</th>
+                            <th>#</th>
                           <th>Client ID</th>
                           <th>Picture</th>
                           <th>Name</th>

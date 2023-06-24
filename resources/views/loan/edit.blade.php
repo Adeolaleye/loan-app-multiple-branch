@@ -43,14 +43,14 @@
                     </div>
                     <div class="col-md-6">
                       <label class="form-label" for="amount">Loan Amount</label>
-                      <div class="input-group input-group-air"><span class="input-group-text">#</span>
+                      <div class="input-group input-group-air"><span class="input-group-text">&#8358;</span>
                         <input class="form-control" type="number" placeholder="50000" name="loan_amount" value="{{ $loan->loan_amount }}" required="">
                       </div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="Duration">Loan Duration</label>
                         <select class="form-control" id="duration" name="tenure">
-                          <option value="{{ $loan->tenure }}">{{ $loan->tenure }} months</option>
+                          <option value="{{ $loan->tenure }}">{{ $loan->tenure }} month(s)</option>
                           <option value="1">1 month</option>
                           <option value="2">2 months</option>
                           <option value="3">3 months</option>
@@ -70,10 +70,15 @@
                         <option value="6" {{ old('intrest_percent') == '6' ? 'selected' : '' }}>6%</option>
                         <option value="6.5" {{ old('intrest_percent') == '6.5' ? 'selected' : '' }}>6.5%</option>
                         <option value="7" {{ old('intrest_percent') == '7' ? 'selected' : '' }}>7%</option>
+                        <option value="7.5" {{ old('intrest_percent') == '7.5' ? 'selected' : '' }}>7.5%</option>
                         <option value="8" {{ old('intrest_percent') == '8' ? 'selected' : '' }}>8%</option>
                         <option value="9" {{ old('intrest_percent') == '9' ? 'selected' : '' }}>9%</option>
                         <option value="10" {{ old('intrest_percent') == '10' ? 'selected' : '' }}>10%</option>
                       </select>
+                    </div>
+                    <div class="col-md-6"> 
+                      <label class="form-label" for="Duration">Forward Payment (%)</label>
+                      <input type="text" class="form-control" placeholder="" name="forward_payment" value="{{ $loan->forward_payment }}" min="1">
                     </div>
                     <button class="btn btn-primary" type="submit">Submit</button>
                 </div>
