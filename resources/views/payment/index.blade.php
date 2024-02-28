@@ -107,7 +107,7 @@
                             <td>{{ number_format($payment->profit) }}</td>
                             <td>{{ $payment->payment_purpose }}</td>
                             <td>{{ $payment->admin_incharge }}</td>
-                            <td>{{ date('d, M Y', strtotime($payment->date_paid)) }}</td>
+                            <td>{{ date('d, M Y h:i A', strtotime($payment->date_paid)) }}</td>
                         </tr>
                         @endforeach
                       </tbody>

@@ -105,7 +105,7 @@ class LoanController extends Controller
             'date'=> Carbon::now(),
         ];
         //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
-        Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+        //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
         return redirect(route('loan'))->with('message', 'Loan Request Sent');
     
     
@@ -214,7 +214,7 @@ class LoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+       // Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
        // Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
         return redirect(route('loan'))->with('message', 'Loan Disbursed');
     }
@@ -273,7 +273,7 @@ class LoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+        //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
         //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
 
         return redirect(route('loan'))->with('message', 'Loan Request Updated');

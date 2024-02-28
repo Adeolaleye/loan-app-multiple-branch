@@ -49,23 +49,23 @@
               <fieldset>
                 <div class="row g-3 mb-2">
                     <div class="col-md-6">
-                      <label class="form-label" for="clientno">Client ID #</label>
+                      <label class="form-label" for="clientno">Client ID # <span class="text-danger">*</span> </label>
                       <input class="form-control" id="clientno" name="client_no" type="number" value="{{ old('client_no') }}" required="">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label" for="fullname">Fullname</label>
+                      <label class="form-label" for="fullname">Fullname <span class="text-danger">*</span></label>
                       <input class="form-control" id="fullname" name="name" type="text" value="{{ old('name') }}" required="">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label" for="phone">Phone Number</label>
+                      <label class="form-label" for="phone">Phone Number <span class="text-danger">*</span></label>
                       <input class="form-control" id="phone" type="text" name="phone" value="{{ old('phone') }}" required="">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="dob">Date Of Birth</label>
+                        <label class="form-label" for="dob">Date Of Birth <span class="text-danger">*</span></label>
                         <input class="form-control" id="dob" type="date" name="dob" value="{{ old('dob') }}" required="">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="phone">Gender</label>
+                        <label class="form-label" for="phone">Gender <span class="text-danger">*</span></label>
                         <div class="m-t-15 m-checkbox-inline custom-radio-ml">
                             <div class="form-check form-check-inline radio radio-primary">
                               <input class="form-check-input" id="female" type="radio" name="gender" value="female">
@@ -78,16 +78,16 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="marital_status">Marital Status</label>
+                        <label class="form-label" for="marital_status">Marital Status <span class="text-danger">*</span></label>
                         <select class="form-control" name="marital_status">
-                            <option>--Choose Option--</option>
+                            <option value=""{{ old('marital_status') ? '' : ' selected' }} disabled>Select Option</option>
                             <option value="Married"{{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married</option>
                             <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single</option>
                             <option value="Divorced" {{ old('marital_status') == 'Divorced' ? 'selected' : '' }}>Divorced</option>
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="occupation">Occupation</label>
+                        <label class="form-label" for="occupation">Occupation <span class="text-danger">*</span></label>
                         <input class="form-control" name="occupation" id="occupation" type="text" value="{{ old('occupation') }}" required="">
                     </div>
                     <div class="col-md-6">
@@ -102,17 +102,17 @@
               <fieldset>
                 <div class="row g-3 mb-2">
                     <div class="col-md-6">
-                      <label class="form-label" for="residential_address">Residential Address</label>
-                      <input class="form-control" name="residential_address" id="residential_address" type="address" value="{{ old('residential_address') }}" required="">
+                      <label class="form-label" for="residential_address">Residential Address <span class="text-danger">*</span></label>
+                      <input class="form-control" name="residential_address" id="residential_address" type="text" value="{{ old('residential_address') }}" required="">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label" for="office_address">Office Address</label>
-                      <input class="form-control" name="office_address" id="office_address" type="address" value="{{ old('office_address') }}" required="">
+                      <label class="form-label" for="office_address">Office Address <span class="text-danger">*</span></label>
+                      <input class="form-control" name="office_address" id="office_address" type="text" value="{{ old('office_address') }}" required="">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="identity">Means Of Identity</label>
+                        <label class="form-label" for="identity">Means Of Identity <span class="text-danger">*</span></label>
                         <select class="form-control" name="means_of_id">
-                            <option value="">--Choose Option--</option>
+                            <option value=""{{ old('role') ? '' : ' selected' }} disabled>Select Option</option>
                             <option value="National Identity Card" {{ old('means_of_id') == 'National Identity Card' ? 'selected' : '' }} >National Identity Card</option>
                             <option value="Voters Card" {{ old('means_of_id') == 'Voters Card' ? 'selected' : '' }}>Voters Card</option>
                             <option value="International ID Card" {{ old('means_of_id') == 'International ID Card' ? 'selected' : '' }}>International ID Card</option>
@@ -120,7 +120,7 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="qualification">Qualification</label>
+                        <label class="form-label" for="qualification">Qualification <span class="text-danger">*</span></label>
                         <input class="form-control" name="qualification" id="qualification" type="text" value="{{ old('qualification') }}" required="">
                     </div>
                 </div>
@@ -132,19 +132,19 @@
               <fieldset>
                 <div class="row g-3 mb-2">
                     <div class="col-md-6">
-                      <label class="form-label" for="guarantor_name">Guarantor's Name</label>
+                      <label class="form-label" for="guarantor_name">Guarantor's Name <span class="text-danger">*</span></label>
                       <input class="form-control" name="g_name" id="guarantor_name" type="text" value="{{ old('g_name') }}" required="">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="guarantor_name">Guarantor's Phone</label>
-                        <input class="form-control" name="g_phone" id="guarantor_phone" type="text" value="{{ old('g_phone') }}" required="">
+                        <label class="form-label" for="guarantor_name">Guarantor's Phone <span class="text-danger">*</span></label>
+                        <input class="form-control" name="g_phone" id="guarantor_phone" type="number" value="{{ old('g_phone') }}" required="">
                       </div>
                     <div class="col-md-6">
-                      <label class="form-label" for="guarantor_address">Residential Address</label>
-                      <input class="form-control" name="g_address" id="g_address" type="address" value="{{ old('g_address') }}" required="">
+                      <label class="form-label" for="guarantor_address">Residential Address <span class="text-danger">*</span></label>
+                      <input class="form-control" name="g_address" id="g_address" type="text" value="{{ old('g_address') }}" required="">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="qualification">Relationship</label>
+                        <label class="form-label" for="qualification">Relationship <span class="text-danger">*</span></label>
                         <input class="form-control" name="g_relationship" id="relationship" type="text" value="{{ old('g_relationship') }}" required="">
                     </div>
                 </div>

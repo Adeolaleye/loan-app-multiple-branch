@@ -64,7 +64,7 @@
                         @endphp
                           @foreach ($payhistorys as $payhistory )
                           <tr>
-                              <td>{{ date('d,M Y', strtotime($payhistory->date_paid)) }}</td>
+                              <td>{{ date('d,M Y h:i A', strtotime($payhistory->date_paid)) }}</td>
                               <td>{{ $i++ }}</td>
                               <td>{{ number_format($payhistory->bb_forward) }}</td>
                               <td>{{ number_format($payhistory->partial_pay) }}</td>

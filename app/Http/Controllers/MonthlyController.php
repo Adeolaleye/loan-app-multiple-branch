@@ -74,9 +74,21 @@ class MonthlyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function defaulter()
     {
-        //
+        $defaulters = Loan::with(['client', 'payment'])
+            ->whereHas('payment', function ($query) {
+                $query->whereRaw('MONTH(next_due_date) > MONTH(CURRENT_DATE())')
+                    ->where('payment_status', 0)->Orderby('next_due_date','ASC');
+            })
+            ->whereHas('client', function ($query) {
+                $query->where('status', 'in tenure');
+            })->get();
+        $defaulter_count = $defaulters->count();
+            return view('monthly.defaulter', compact(
+                'defaulters',
+                'defaulter_count'
+            ));
     }
 
     /**

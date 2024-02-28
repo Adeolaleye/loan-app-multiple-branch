@@ -10,26 +10,32 @@
                 @csrf
                 <div class="modal-body">
                         <div class="mb-3">
-                            <label class="col-form-label" for="fullname">Fullname</label>
+                            <label class="col-form-label" for="fullname">Fullname <span class="text-danger">*</span></label>
                             <input class="form-control" type="text" name="name" value="{{ old('name') }}">
                         </div>
                         <div class="mb-3">
-                            <label class="col-form-label" for="phone">Phone No</label>
+                            <label class="col-form-label" for="phone">Phone No <span class="text-danger">*</span></label>
                             <input class="form-control" type="text" name="phone" value="{{ old('phone') }}">
                         </div>
                         <div class="mb-3">
-                            <label class="col-form-label" for="email">Email Address</label>
+                            <label class="col-form-label" for="email">Email Address <span class="text-danger">*</span></label>
                             <input class="form-control" type="email" value="{{ old('email') }}" name="email">
                         </div>
                         <div class="mb-3">
-                            <label class="col-form-label" for="password">Password</label>
-                            <input class="form-control" type="password" value="{{ old('password') }}" name="password">
+                            <label class="col-form-label" for="password">Password <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input class="form-control" type="password" value="{{ old('password') }}" name="password" id="password">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label class="col-form-label" for="Role">Role</label>
-                            <select class="form-control" name="role">
-                                <option>-- Choose Option --</option>
+                            <label class="col-form-label" for="Role">Role <span class="text-danger">*</span></label>
+                            <select class="form-control" name="role" required>
+                                <option value=""{{ old('role') ? '' : ' selected' }} disabled>Select Role</option>
                                 <option value="Super Admin"{{ old('role') }} >Super Admin</option>
+                                <option value="Supervisor"{{ old('role') }} >Supervisor</option>
                                 <option value="Branch Manager"{{ old('role') }}>Branch Manager</option>
                                 <option value="Officer"{{ old('role') }}>Officer</option>
                             </select>
@@ -78,35 +84,40 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title f-16">Edit Admin</h5>
+            <h5 class="modal-title f-16">Edit Admin </h5>
             <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="post" action="{{ route('update', $user->id) }}" enctype="multipart/form-data">
                 @csrf
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="col-form-label" for="fullname">Fullname</label>
+                            <label class="col-form-label" for="fullname">Fullname <span class="text-danger">*</span></label>
                             <input class="form-control" type="text" name="name" value="" required>
                         </div>
                         <div class="mb-3">
-                            <label class="col-form-label" for="phone">Phone No</label>
+                            <label class="col-form-label" for="phone">Phone No <span class="text-danger">*</span></label>
                             <input class="form-control" type="text" name="phone" value="" required>
                         </div>
                         <div class="mb-3">
-                            <label class="col-form-label" for="email">Email Address</label>
+                            <label class="col-form-label" for="email">Email Address <span class="text-danger">*</span></label>
                             <input class="form-control" type="email" value="" name="email" required>
                         </div>
                         <div class="mb-3">
-                            <label class="col-form-label">Role</label>
+                            <label class="col-form-label">Role <span class="text-danger">*</span></label>
                             <select class="form-control" name="role" required>
-                                <option value=""></option>
+                                <option value="{{ $user->role }}">{{ $user->role }}</option>
                                 <option value="Super Admin"{{ old('role') }} >Super Admin</option>
                                 <option value="Branch Manager"{{ old('role') }}>Branch Manager</option>
                                 <option value="Officer"{{ old('role') }}>Officer</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="col-form-label" for="profile_picture">Profile Picture (Optional)</label>
+                            <label class="col-form-label" for="profile_picture">Profile Picture</label>
+                            <div class="avatar">
+                                @if($user->profile_picture)
+                                    <img width="40px" src="{{ "/".$user->profile_picture }}" class="b-r-half"> 
+                                @endif
+                            </div>
                             <input class="form-control" type="file" name="profile_picture">
                         </div>
                     </div>

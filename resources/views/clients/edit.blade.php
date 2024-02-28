@@ -50,19 +50,19 @@
               <fieldset>
                 <div class="row g-3 mb-2">
                     <div class="col-md-6">
-                      <label class="form-label" for="fullname">Fullname</label>
+                      <label class="form-label" for="fullname">Fullname <span class="text-danger">*</span></label>
                       <input class="form-control" id="fullname" name="name" type="text" value="{{ $client->name }}" required="">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label" for="phone">Phone Number</label>
+                      <label class="form-label" for="phone">Phone Number <span class="text-danger">*</span></label>
                       <input class="form-control" id="phone" type="text" name="phone" value="{{ $client->phone }}" required="">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="dob">Date Of Birth</label>
+                        <label class="form-label" for="dob">Date Of Birth <span class="text-danger">*</span></label>
                         <input class="form-control" id="dob" type="date" name="dob" value="{{ $client->dob }}" required="">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="phone">Gender</label>
+                        <label class="form-label" for="phone">Gender <span class="text-danger">*</span></label>
                         <div class="m-t-15 m-checkbox-inline custom-radio-ml">
                             <div class="form-check form-check-inline radio radio-primary">
                               <input class="form-check-input" id="female" type="radio" name="gender" value="Female">
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="marital_status">Marital Status</label>
+                        <label class="form-label" for="marital_status">Marital Status <span class="text-danger">*</span></label>
                         <div class="valid-feedback">Looks good!</div>
                         <select class="form-control" name="marital_status">
                             <option value="{{ $client->marital_status }}">{{ $client->marital_status }}</option>
@@ -85,11 +85,16 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="occupation">Occupation</label>
+                        <label class="form-label" for="occupation">Occupation <span class="text-danger">*</span></label>
                         <input class="form-control" name="occupation" id="occupation" type="text" value="{{ $client->occupation }}" required="">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label" for="profile_picture">Profile Picture (Optional)</label>
+                      <label class="form-label" for="profile_picture">Profile Picture</label>
+                      <div class="avatar">
+                      @if($client->profile_picture)
+                          <img src="{{ "/".$client->profile_picture }}" class="b-r-half"> 
+                      @endif
+                    </div>
                       <input class="form-control" type="file" value="{{ $client->profile_picture }}" name="profile_picture">
                     </div>
                 </div>
@@ -100,15 +105,15 @@
               <fieldset>
                 <div class="row g-3 mb-2">
                     <div class="col-md-6">
-                      <label class="form-label" for="residential_address">Residential Address</label>
-                      <input class="form-control" name="residential_address" id="residential_address" type="address" value="{{ $client->residential_address }}" required="">
+                      <label class="form-label" for="residential_address">Residential Address <span class="text-danger">*</span></label>
+                      <input class="form-control" name="residential_address" id="residential_address" type="text" value="{{ $client->residential_address }}" required="">
                     </div>
                     <div class="col-md-6">
-                      <label class="form-label" for="office_address">Office Address</label>
-                      <input class="form-control" name="office_address" id="office_address" type="address" value="{{ $client->office_address }}" required="">
+                      <label class="form-label" for="office_address">Office Address <span class="text-danger">*</span></label>
+                      <input class="form-control" name="office_address" id="office_address" type="text" value="{{ $client->office_address }}" required="">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="identity">Means Of Identity</label>
+                        <label class="form-label" for="identity">Means Of Identity <span class="text-danger">*</span></label>
                         <select class="form-control" name="means_of_id">
                             <option value="{{ $client->means_of_id }}">{{ $client->means_of_id }}</option>
                             <option value="National Identity Card">National Identity Card</option>
@@ -118,7 +123,7 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="qualification">Qualification</label>
+                        <label class="form-label" for="qualification">Qualification <span class="text-danger">*</span></label>
                         <input class="form-control" name="qualification" id="qualification" type="text" value="{{ $client->qualification }}" required="">
                     </div>
                 </div>
@@ -130,19 +135,19 @@
               <fieldset>
                 <div class="row g-3 mb-2">
                     <div class="col-md-6">
-                      <label class="form-label" for="guarantor_name">Guarantor's Name</label>
+                      <label class="form-label" for="guarantor_name">Guarantor's Name <span class="text-danger">*</span></label>
                       <input class="form-control" name="g_name" id="guarantor_name" type="text" value="{{ $client->g_name }}" required="">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="guarantor_name">Guarantor's Phone</label>
+                        <label class="form-label" for="guarantor_name">Guarantor's Phone <span class="text-danger">*</span></label>
                         <input class="form-control" name="g_phone" id="guarantor_phone" type="text" value="{{ $client->g_phone }}" required="">
                       </div>
                     <div class="col-md-6">
-                      <label class="form-label" for="guarantor_address">Residential Address</label>
-                      <input class="form-control" name="g_address" id="g_address" type="address" value="{{ $client->g_address }}" required="">
+                      <label class="form-label" for="guarantor_address">Residential Address <span class="text-danger">*</span></label>
+                      <input class="form-control" name="g_address" id="g_address" type="text" value="{{ $client->g_address }}" required="">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="qualification">Relationship</label>
+                        <label class="form-label" for="qualification">Relationship <span class="text-danger">*</span></label>
                         <input class="form-control" name="g_relationship" id="relationship" type="text" value="{{ $client->g_relationship }}" required="">
                     </div>
                 </div>

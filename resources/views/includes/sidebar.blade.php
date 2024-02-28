@@ -52,6 +52,19 @@
                       <li><a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('formpay') ? 'active' : 'link-nav'}}" href="{{ route('formpay') }}" href="">Form Payments</a></li>
                     </ul>
             </li>
+            <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="#"><i data-feather="file-text"> </i><span>Reports</span></a>
+                    <ul class="sidebar-submenu">
+                      <li>
+                        <a class="sidebar-link sidebar-title {{ Request::is('monthly') ? 'active' : 'link-nav'}}" href="{{ route('monthly') }}">Monthly Report</a>
+                      </li>
+                      <li>
+                        <a class="sidebar-link sidebar-title {{ Request::is('defaulter') ? 'active' : 'link-nav'}}" href="{{ route('defaulter') }}">Defaulters</a>
+                      </li>
+                      <li>
+                        <a class="sidebar-link sidebar-title {{ Request::is('tenureextended') ? 'active' : 'link-nav'}}" href="{{ route('tenureextended') }}">Tenure Extended</a>
+                      </li>
+                    </ul>
+            </li>
             <li class="sidebar-list">
               <a class="sidebar-link sidebar-title {{ Request::is('loan') || Request::is('requestloan') ? 'active' : 'link-nav'}}" href="{{ route('loan') }}">
               <i data-feather="list"> </i><span>Loan History</span></a>
@@ -81,10 +94,6 @@
               <i data-feather="list"> </i><span>Loan History</span></a>
             </li>
             @endif
-            <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title {{ Request::is('monthly') ? 'active' : 'link-nav'}}" href="{{ route('monthly') }}">
-              <i data-feather="calender"> </i><span>Monthly Report</span></a>
-            </li>
             <li class="sidebar-list">
               <a class="sidebar-link sidebar-title link-nav" href="{{ route('logout') }}"
               onclick="event.preventDefault();

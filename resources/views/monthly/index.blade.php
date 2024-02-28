@@ -41,7 +41,6 @@
                                 <th>Client Name</th>
                                 <th>Outstanding (&#x20A6;)</th>
                                 <th>Expected Pay(&#x20A6;)</th>
-                                <th>Duration</th>
                                 <th>Next Due Date</th>
                                 <th>Action</th>
                             </tr>
@@ -53,11 +52,6 @@
                                     <td>{{ $monthlyreport->client->name }}</td>
                                     <td>{{ number_format($monthlyreport->outstanding_payment) }}</td>
                                     <td>{{ number_format($monthlyreport->expect_pay) }}</td>
-                                    <td>
-                                        {{-- @foreach ($monthlyreport->loan as $loan )
-                                        {{ $loan->loan_duration }}
-                                        @endforeach --}}
-                                    </td>
                                     <td>{{ date('d,M Y', strtotime($monthlyreport->next_due_date)) }}</td>
                                     <td>
                                         <div class="btn-group" role="group" aria-label="Basic example">

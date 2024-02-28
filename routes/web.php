@@ -73,4 +73,5 @@ Route::post('filterpayment', 'PaymentController@filter')->name('filterpayment');
 // monthly
 Route::get('/monthly', 'MonthlyController@index')->name('monthly');
 Route::get('/tenureextended', 'MonthlyController@show')->name('tenureextended');
+Route::get('/defaulter', 'MonthlyController@defaulter')->name('defaulter');
 });

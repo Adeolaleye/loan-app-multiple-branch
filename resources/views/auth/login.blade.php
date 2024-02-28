@@ -29,7 +29,7 @@
                   <div class="form-group">
                     <label class="col-form-label">{{ __('E-Mail Address') }}</label>
                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="user@gmail.com">
-
+                
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -39,8 +39,12 @@
                   <div class="form-group">
                     <label class="col-form-label">{{ __('Password') }}</label>
                     <div class="form-input position-relative">
+                        <div class="input-group">
                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="*******">
-
+                                <button class="btn btn-outline-light" style="background-color: #f3f3ff;" type="button" id="togglePassword">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                        </div>
                         @error('password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

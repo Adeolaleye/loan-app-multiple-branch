@@ -88,7 +88,7 @@ class UserController extends Controller
             'role'=> $user->role,
             'email'=> $user->email,
         ];
-        Mail::to($user->email)->send(new AgapeEmail($data));
+        //Mail::to($user->email)->send(new AgapeEmail($data));
         return redirect(route('adminuser'))->with('message', 'User Added Successfully');
     
     
@@ -127,22 +127,15 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {   
-       
         $user= User::find($id);
-       
         $data = $this->validate($request, [
             'profile_picture' => 'nullable|max:250|mimes:jpg,jpeg,png',
             'email' => 'unique:users,email,' . $user->id,
-            'password' => 'unique:users,password,' . $user->id,
             'phone' => 'required',
             'name' => 'required|max:70|min:3',
             'role' => 'required'
 
         ]);
-        if($request['password']){
-            $user->password = bcrypt($request['password']);
-            $user->save();
-        }
         if(request()->has('profile_picture')){
             //save new image
             $imgName = time() . '-' .$request['profile_picture']->getClientOriginalName();
@@ -156,7 +149,7 @@ class UserController extends Controller
         $user->phone=$data['phone'];
         $user->role=$data['role'];
         $user->save();
-        return back()->with('message', 'Updated');
+        return back()->with('message', $user->name.' details Updated');
     }
 
     /**

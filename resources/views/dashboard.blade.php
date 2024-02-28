@@ -33,14 +33,12 @@
     <div class="row">
         <div class="col-sm-6 col-xl-3 col-lg-6">
             <div class="card">
-                @if(Auth::user()->role=='Super Admin' )
+                @if(Auth::user()->role=='Super Admin' || Auth::user()->role=='Supervisor' )
                 <div class="card-body bg-secondary b-r-16">
                     <div class="tabbed-card">
                             <ul class="pull-right nav nav-tabs border-tab nav-primary" id="top-tab" role="tablist">
                                 <li class="nav-item"><a class="nav-link active" id="contact-top-tab" data-bs-toggle="tab" href="#top-contact" role="tab" aria-controls="top-contact" aria-selected="false">Monthly</a></li><li class="nav-item"><a class="nav-link" id="profile-top-tab" data-bs-toggle="tab" href="#top-profile" role="tab" aria-controls="top-profile" aria-selected="true">Annual</a></li>
-                                <li class="nav-item"><a class="nav-link" id="top-home-tab" data-bs-toggle="tab" href="#top-home" role="tab" aria-controls="top-home" aria-selected="false">Overall</a></li>
-                                
-                                
+                                <li class="nav-item"><a class="nav-link" id="top-home-tab" data-bs-toggle="tab" href="#top-home" role="tab" aria-controls="top-home" aria-selected="false">Overall</a></li>   
                             </ul>
                             <div class="tab-content" id="pills-clrtabContent1">
                                 
@@ -196,7 +194,7 @@
         <div class="col-xl-6 xl-100 box-col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Monthly Report <br> <span class="f-14 font-bold text-warning">{{ $monthreportcounter }} Clients to pay in {{ date('F') }}</span></h5>
+                    <h5>Monthly Report</h5>
                     <div class="card-header-right">
                     </div>
                 </div>
@@ -209,7 +207,6 @@
                                   <th>Client Name</th>
                                   <th>Outstanding (&#x20A6;)</th>
                                   <th>Expected Pay(&#x20A6;)</th>
-                                  <th>Duration</th>
                                   <th>Next Due Date</th>
                                   <th>Action</th>
                               </tr>
@@ -219,14 +216,8 @@
                                 <tr>
                                     <td>{{ $monthlyreport->client->client_no }}</td>
                                     <td>{{ $monthlyreport->client->name }}</td>
-                                    <td>{{ $monthlyreport->outstanding_payment }}</td>
-                                    <td>{{ $monthlyreport->expect_pay }}</td>
-                                    <td>
-                                        {{-- @foreach ($monthlyreport->loan as $loan )
-                                        {{ date('M Y', strtotime($loan->disbursement_date)) }} - {{ date('M Y', strtotime($loan->loan_duration)) }}
-                                        @endforeach
-                                        {{ $monthlyreport->loan }} --}}
-                                    </td>
+                                    <td>{{ number_format($monthlyreport->outstanding_payment) }}</td>
+                                    <td>{{ number_format($monthlyreport->expect_pay) }}</td>
                                     <td>{{ date('d,M Y', strtotime($monthlyreport->next_due_date)) }}</td>
                                     <td>
                                         <form action="{{ route('makepayment', $monthlyreport->loan_id) }}">
@@ -246,7 +237,7 @@
         <div class="col-xl-6 xl-100 box-col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Tenure Extended Clients<br> <span class="f-14 font-bold text-warning">{{ $tenureextended_count }} Total clients tenure was extended </span></h5>
+                    <h5>Tenure Extended Clients</h5>
                     <div class="card-header-right">
                     </div>
                 </div>
@@ -274,7 +265,7 @@
                                     <td>
                                         {{ number_format($payment->outstanding_payment) }}
                                     </td>
-                                    <td>{{ $payment->expect_pay }}</td>
+                                    <td>{{ number_format($payment->expect_pay) }}</td>
                                     <td>{{ date('d,M Y', strtotime($payment->next_due_date)) }}</td>
                                         @endif
                                         @endforeach 
@@ -293,6 +284,66 @@
                     </div>
                     <hr>
                     <a href="{{ route('tenureextended') }}">View All</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 xl-100 box-col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Defaulters in past months</h5>
+                    <div class="card-header-right">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="user-status table-responsive">
+                        <table class="table table-bordernone">
+                            <thead>
+                              <tr>
+                                  <th>Client ID #</th>
+                                  <th>Client Name</th>
+                                  <th>Outstanding (&#x20A6;)</th>
+                                  <th>Expected Pay(&#x20A6;)</th>
+                                  <th>Next Due Date</th>
+                                  <th>Duration</th>
+                                  <th>Status</th>
+                                  <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($defaulters as $defaulter)
+                                <tr>
+                                    <td>{{ $defaulter->client->client_no }}</td>
+                                    <td>{{ $defaulter->client->name }}</td>
+                                        @foreach ($defaulter->payment as $payment)
+                                        @if ($payment->payment_status == 0 )
+                                    <td>
+                                        {{ number_format($payment->outstanding_payment) }}
+                                    </td>
+                                    <td>{{ number_format($payment->expect_pay) }}</td>
+                                    <td>{{ date('d,M Y', strtotime($payment->next_due_date)) }}</td>
+                                        @endif
+                                        @endforeach 
+                                    
+                                    <td>{{ $defaulter->loan_duration }}</td>
+                                    <td>
+                                    @if ($defaulter->client->status == 'in tenure')
+                                    <div class="span badge rounded-pill pill-badge-success pull-right">In Tenure</div>
+                                    @else
+                                    <div class="span badge rounded-pill pill-badge-dark pull-right">Unknown</div>
+                                    @endif
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('makepayment', $defaulter->id) }}">
+                                            <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr>
+                    <a href="{{ route('defaulter') }}">View All</a>
                 </div>
             </div>
         </div>

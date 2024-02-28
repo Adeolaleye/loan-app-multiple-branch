@@ -32,21 +32,27 @@
        const time = new Date().getHours();
                 let greeting;
                 if (time < 12) {
-                  greeting = "Morning";
+                  greeting = "Good Morning";
                 } else if (time < 15) {
-                  greeting = "Afternoon";
+                  greeting = "Good Afternoon";
                 } else {
-                  greeting = "Evening";
+                  greeting = "Good Evening";
                 }
             document.getElementById("greeting").innerHTML = greeting;
-        const togglePassword = document.querySelector('#togglePassword');
-        const password = document.querySelector('#password');
-        togglePassword.addEventListener('click', function (e) {
-            // toggle the type attribute
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            // toggle the eye / eye slash icon
-            this.classList.toggle('bi-eye');
  </script>
+ <script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+    
+    togglePassword.addEventListener('click', function (e) {
+        // toggle the type attribute
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        // toggle icon
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+</script>
+
  <!-- login js-->
  <!-- Plugin used-->

@@ -45,17 +45,21 @@ class HomeController extends Controller
      
         $monthlyreports = Payment::whereMonth('next_due_date', date('m'))->with('client','loan')->where('payment_status',0)->take(3)->Orderby('next_due_date','ASC')->get();
         $tenureextendeds = Loan::with('client','payment')->where('status','<>',2)->get();
-        
+        $defaulters = Loan::with(['client', 'payment'])
+            ->whereHas('payment', function ($query) {
+                $query->whereRaw('MONTH(next_due_date) > MONTH(CURRENT_DATE())')
+                    ->where('payment_status', 0)->Orderby('next_due_date','ASC');
+            })
+            ->whereHas('client', function ($query) {
+                $query->where('status', 'in tenure');
+            })
+            ->take(5)->get();
         $tenureextendeds = $tenureextendeds->filter(
             function($items){
                     if( Carbon::parse($items->disbursement_date)->addMonth($items->tenure)  <  Carbon::now() or $items->status == 3){
                         return $items; 
                     } 
             })->take(5);
-
-        $tenureextended_count = $tenureextendeds->count();
-        $monthreportcounter = $monthlyreports->count();
-        
         return view('dashboard', compact(
             'allclients_count',
             'clientintenure_count',
@@ -65,10 +69,9 @@ class HomeController extends Controller
             'monthlyreports',
             'monthlyprofit',
             'yearlyprofit',
-            'monthreportcounter',
             'clienttenurextended_count',
             'tenureextendeds',
-            'tenureextended_count'
+            'defaulters'
         ));
         return view('dashboard');
     }
