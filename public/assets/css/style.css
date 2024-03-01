@@ -32236,7 +32236,6 @@ body[class*="dark-"] .for-light {
     align-items: center;
     -webkit-box-pack: end;
     -ms-flex-pack: end;
-    justify-content: flex-end;
 }
 .page-wrapper .page-header .header-wrapper .nav-right > ul > li {
     padding: 6px 10px;
@@ -33051,7 +33050,7 @@ body[class*="dark-"] .for-light {
 }
 .page-wrapper.compact-wrapper .page-header {
     margin-left: 243px;
-    width: calc(100% - 210px);
+    width: calc(100% - 88px);
 }
 .page-wrapper.compact-wrapper .page-header.close_icon {
     margin-left: 90px;

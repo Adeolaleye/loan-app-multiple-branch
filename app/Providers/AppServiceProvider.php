@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Branch;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        View::composer('*', function ($view) {
+            $branches = Branch::all();
+            $view->with('branches', $branches);
+        });
     }
 }

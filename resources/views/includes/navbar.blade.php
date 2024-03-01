@@ -26,32 +26,14 @@
               <a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize"></i></a>
           </li>
           <li class="onhover-dropdown">
-              <div class="notification-box">
-                  <i data-feather="bell"> </i>
-                  {{-- <span class="badge rounded-pill badge-secondary">4</span> --}}
-              </div>
-              {{-- <ul class="notification-dropdown onhover-show-div">
-                  <li>
-                      <i data-feather="bell"></i>
-                      <h6 class="f-18 mb-0">Notitications</h6>
-                  </li>
-                  <li>
-                      <p>
-                          <i class="fa fa-circle-o me-3 font-primary"> </i>
-                          Disbursement
-                          <span class="pull-right">10 min.</span>
-                      </p>
-                  </li>
-                  <li>
-                      <p><i class="fa fa-circle-o me-3 font-success"></i>
-                          Payment
-                          <span class="pull-right">1 hr</span>
-                      </p>
-                  </li>
-                  <li>
-                      <a class="btn btn-primary" href="#">Check all notification</a>
-                  </li>
-              </ul> --}}
+              <a href="">
+                <button class="btn btn-primary pull-right" type="button">Switch To Business Office</button>
+              </a>
+              <ul class="profile-dropdown onhover-show-div">
+                @foreach ($branches as $branch)
+                  <li><a href="">{{$branch->name}}</li>
+                @endforeach          
+              </ul>
           </li>
           <li class="profile-nav onhover-dropdown p-0 me-0">
               <div class="media profile-media">
@@ -65,9 +47,11 @@
               </div>
               <ul class="profile-dropdown onhover-show-div">
               <li><a href="{{ route('adminprofile') }}"><i data-feather="user"></i><span>Profile </span></a></li>
-              <li><a href="{{ route('logout') }}"
+              <li>
+                <a href="{{ route('logout') }}"
                 onclick="event.preventDefault();
-                              document.getElementById('logout-form').submit();"><i data-feather="log-out"> </i><span>Log Out</span></a>
+                              document.getElementById('logout-form').submit();"><i data-feather="log-out"> </i><span>Log Out</span>
+                </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
                 </form>              
