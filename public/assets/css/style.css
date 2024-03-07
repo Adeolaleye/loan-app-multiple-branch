@@ -32255,7 +32255,7 @@ body[class*="dark-"] .for-light {
 .page-wrapper .page-header .header-wrapper .nav-right > ul > li span ul {
     left: inherit;
     right: -10px;
-    width: 130px;
+    width: 100px;
 }
 .page-wrapper .page-header .header-wrapper .nav-right > ul > li span ul:before,
 .page-wrapper .page-header .header-wrapper .nav-right > ul > li span ul:after {
@@ -32494,6 +32494,15 @@ body[class*="dark-"] .for-light {
     padding: 0 10px;
 }
 .page-wrapper .page-header .header-wrapper .nav-right .profile-dropdown li {
+    padding: 10px !important;
+}
+.page-wrapper .page-header .header-wrapper .left-header .profile-dropdown {
+    width: 160px;
+    top: 43px;
+    left: -12px;
+    padding: 0 10px;
+}
+.page-wrapper .page-header .header-wrapper .left-header .profile-dropdown li {
     padding: 10px !important;
 }
 .page-wrapper .page-header .header-wrapper .nav-right .profile-dropdown li:hover a span {
@@ -38602,9 +38611,9 @@ html[dir="rtl"] body.dark-only .page-wrapper .page-body-wrapper .page-body .card
     margin-right: auto;
     width: auto;
   }
-  .col-8 {
+  /* .col-8 {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 auto;
     flex: 0 0 auto;
     width: 85% !important;
-    }
+    } */

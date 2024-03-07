@@ -77,5 +77,5 @@ Route::get('/tenureextended', 'MonthlyController@show')->name('tenureextended');
 Route::get('/defaulter', 'MonthlyController@defaulter')->name('defaulter');
 
 //business office
-Route::get('/business-office-dashboard', 'BusinessOfficerController@index')->name('business-office-dashboard');
+Route::get('/business-office-dashboard{id?}', 'BusinessOfficeController@index')->name('business-office-dashboard');
 });

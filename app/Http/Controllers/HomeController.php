@@ -9,6 +9,10 @@ use App\Payment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+interface ViewTypes {
+	const BusinessOffice = "BusinessOffice";
+	const HeadQuarter = "HeadQuarter";
+}
 class HomeController extends Controller
 {
     /**
@@ -46,6 +50,7 @@ class HomeController extends Controller
      
         $monthlyreports = Payment::whereMonth('next_due_date', date('m'))->with('client','loan')->where('payment_status',0)->take(3)->Orderby('next_due_date','ASC')->get();
         $tenureextendeds = Loan::with('client','payment')->where('status','<>',2)->get();
+        $viewType = ViewTypes::HeadQuarter;
         $defaulters = Loan::with(['client', 'payment'])
             ->whereHas('payment', function ($query) {
                 $query->whereRaw('MONTH(next_due_date) > MONTH(CURRENT_DATE())')
@@ -72,8 +77,8 @@ class HomeController extends Controller
             'yearlyprofit',
             'clienttenurextended_count',
             'tenureextendeds',
-            'defaulters'
+            'defaulters',
+            'viewType'
         ));
-        return view('dashboard');
     }
 }

@@ -25,4 +25,8 @@ class Branch extends Model
         'name','logo', 'address','email', 'phone_number','is_active',
     ];
 
+    public function getBranchNameAttribute(){
+        return $this->name;
+    }
+
 }
