@@ -40,7 +40,7 @@
                 @endif
               </div>
               <div class="icon-wrapper" data-bs-toggle="tooltip" title="Edit Client">
-                <a href="{{ route('editclient', $client->id) }}"><i class="fas fa-edit text-mute"></i></a>  
+                <a href="{{ route('editclient', ['id' => $client->id, 'branchID' => $branchID, 'viewType' => $viewType]) }}"><i class="fas fa-edit text-mute"></i></a>  
                 </div>
             </div>
             <div class="info">

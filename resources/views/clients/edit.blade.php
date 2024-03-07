@@ -13,7 +13,7 @@
                         <a href="{{ route('home')  }}"> <i data-feather="home"></i></a>
                     </li>
                     <li class="breadcrumb-item"><a href="{{ route('clients') }}">All Clients</a></li>
-                    <li class="breadcrumb-item">Add Client</li>
+                    <li class="breadcrumb-item">Edit Client</li>
                 </ol>
             </div>
         </div>
@@ -149,6 +149,8 @@
                     <div class="col-md-6">
                         <label class="form-label" for="qualification">Relationship <span class="text-danger">*</span></label>
                         <input class="form-control" name="g_relationship" id="relationship" type="text" value="{{ $client->g_relationship }}" required="">
+                        <input type="text" name="branch_id" value="{{$branchID}}">
+                        <input type="text" name="viewType" value="{{$viewType}}">
                     </div>
                 </div>
                 <div class="f1-buttons">

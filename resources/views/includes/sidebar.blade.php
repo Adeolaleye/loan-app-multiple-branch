@@ -37,8 +37,9 @@
               </a>
             </li>
             <li class="sidebar-list">
-                <a class="sidebar-link sidebar-title {{ Request::is('clients') || Request::is('addclient') ? 'active' : 'link-nav'}}" href="{{ route('clients') }}">
+                <a class="sidebar-link sidebar-title {{ Request::is('clients') || Request::is('addclient') ? 'active' : 'link-nav'}}" href="{{ route('clients',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}">
                 <i data-feather="users"> </i><span>All Clients</span></a>
+                {{dump($branchID)}}
             </li>
             <li class="sidebar-list">
                 <a class="sidebar-link sidebar-title {{ Request::is('clientsintenure') ? 'active' : 'link-nav'}}" href="{{ route('clientsintenure') }}">
@@ -86,7 +87,7 @@
               </a>
             </li>
             <li class="sidebar-list">
-                <a class="sidebar-link sidebar-title {{ Request::is('clients') || Request::is('addclient') ? 'active' : 'link-nav'}}" href="{{ route('clients') }}">
+                <a class="sidebar-link sidebar-title {{ Request::is('clients') || Request::is('addclient') ? 'active' : 'link-nav'}}" href="{{ route('clients',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}">
                 <i data-feather="users"> </i><span>All Clients</span></a>
             </li>
             <li class="sidebar-list">
@@ -122,7 +123,7 @@
                 </div>
             </li>
             <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title {{ Request::is('adminprofile*') ? 'active' : 'link-nav'}}" href="{{ route('adminprofile', ['viewType' => 'HeadQuarter'])}}">
+              <a class="sidebar-link sidebar-title {{ Request::is('adminprofile*') ? 'active' : 'link-nav'}}" href="{{ route('adminprofile', ['id' => $branchID ?? null, 'viewType' => 'HeadQuarter'])}}">
                   <span class="">Your Profile</span>
               </a>
             </li>
@@ -134,8 +135,10 @@
               </a>
             </li>
             <li class="sidebar-list">
-                <a class="sidebar-link sidebar-title {{ Request::is('clients') || Request::is('addclient') ? 'active' : 'link-nav'}}" href="{{ route('clients') }}">
-                <i data-feather="users"> </i><span>All Clients</span></a>
+                <a class="sidebar-link sidebar-title {{ Request::is('clients') || Request::is('addclient') ? 'active' : 'link-nav'}}" href="{{ route('clients', ['id' => $branchID ?? null]) }}">
+                  <i data-feather="users"></i>
+                  <span>All Clients</span>
+                </a>
             </li>
             <li class="sidebar-list">
                 <a class="sidebar-link sidebar-title {{ Request::is('clientsintenure') ? 'active' : 'link-nav'}}" href="{{ route('clientsintenure') }}">
@@ -183,7 +186,7 @@
               </a>
             </li>
             <li class="sidebar-list">
-                <a class="sidebar-link sidebar-title {{ Request::is('clients') || Request::is('addclient') ? 'active' : 'link-nav'}}" href="{{ route('clients') }}">
+                <a class="sidebar-link sidebar-title {{ Request::is('clients') || Request::is('addclient') ? 'active' : 'link-nav'}}" href="{{ route('clients', ['id' => $branchID ?? null]) }}">
                 <i data-feather="users"> </i><span>All Clients</span></a>
             </li>
             <li class="sidebar-list">

@@ -33,12 +33,12 @@ Route::get('/adminuser', 'UserController@index')->name('adminuser');
 Route::post('createadmin', 'UserController@store')->name('createadmin');
 Route::post('destroyuser/{id}', 'UserController@destroy')->name('destroyuser');
 Route::post('update/{id}', 'UserController@update')->name('update');
-Route::get('adminprofile', 'UserController@show')->name('adminprofile');
+Route::get('/adminprofile', 'UserController@show')->name('adminprofile');
 
 // clients
 Route::get('/clients', 'ClientController@index')->name('clients');
 Route::post('createclient', 'ClientController@store')->name('createclient');
-Route::get('viewclient/{id}', 'ClientController@show')->name('viewclient');
+Route::get('/viewclient/{id}', 'ClientController@show')->name('viewclient');
 Route::get('printclient/{id}', 'ClientController@print')->name('printclient');
 Route::get('addclient', 'ClientController@create')->name('addclient');
 Route::post('updateclient/{id}', 'ClientController@update')->name('updateclient');

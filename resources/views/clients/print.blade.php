@@ -44,9 +44,6 @@
                     <img src="/profile_pictures/avater.png"> 
                 @endif
               </div>
-              <div class="icon-wrapper" data-bs-toggle="tooltip" title="Edit Client">
-                <a href="{{ route('editclient', $client->id) }}"><i class="fas fa-edit text-mute"></i></a>  
-                </div>
             </div>
             <div class="info">
                 <div class="row">

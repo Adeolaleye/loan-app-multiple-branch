@@ -5,7 +5,9 @@
     <div class="page-title">
         <div class="row">
             <div class="col-6">
-                <h3>All Registered Clients <br> <span class="f-14 font-bold text-warning">{{ $counter }} total clients</span></h3>
+                <h3>All Registered Clients in 
+                    @if (isset($viewType) &&  $viewType == 'BusinessOffice') {{$branchName}} @else Headquarters @endif    
+                <br> <span class="f-14 font-bold text-warning">{{ $counter }} total clients</span></h3>
             </div>
             <div class="col-6">
                 <ol class="breadcrumb">
@@ -28,7 +30,7 @@
                         <span>Here is the details of all clients record in the database</span><br><span>Click on the eye button to view full details of client, and basket icon to trash client.</span>
                     </div>
                     <div class="col-md-4 col-sm-12">
-                        <a href="{{ route('addclient') }}">
+                        <a href="{{ route('addclient',['id' => $branchID ?? null,'viewType' => $viewType]) }}">
                             <button class="btn btn-primary pull-right" type="button" data-bs-toggle="tooltip" title="Add new creditor">Add New Client</button>
                         </a>
                     </div>
@@ -87,7 +89,7 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <a href="{{ route('viewclient',$client->id) }}">
+                                    <a href="{{ route('viewclient', ['viewType' => $viewType, 'id' => $client->id]) }}">
                                         <button class="btn btn-light" type="button"><i class="fas fa-eye text-warning"></i></button>
                                     </a>
                                     <!--<button type="button" class="btn btn-light delete-client" data-bs-toggle="modal" data-bs-target="#deleteclient" data-clientid="{{ $client->id }}" data-clientname="{{ $client->name }}"><i class="fas fa-trash-alt text-danger" data-bs-toggle="tooltip" title="Delete This Client?"></i></button>-->

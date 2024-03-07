@@ -28,6 +28,7 @@ class Client extends Model
         'status',
         'client_no',
         'admin_incharge',
+        'branch_id'
     ];
     public function loan (){
         return $this->hasMany(Loan::class,'client_id');
