@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\BranchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,4 +75,7 @@ Route::post('filterpayment', 'PaymentController@filter')->name('filterpayment');
 Route::get('/monthly', 'MonthlyController@index')->name('monthly');
 Route::get('/tenureextended', 'MonthlyController@show')->name('tenureextended');
 Route::get('/defaulter', 'MonthlyController@defaulter')->name('defaulter');
+
+//business office
+Route::get('/business-office-dashboard{id?}', 'BusinessOfficeController@index')->name('business-office-dashboard');
 });

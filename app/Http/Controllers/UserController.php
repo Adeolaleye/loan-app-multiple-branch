@@ -20,12 +20,13 @@ class UserController extends Controller
     public function index()
     {
         if(Auth::user()->role=='Super Admin'){
-          
+        
         $users = User::where('status', '<>', 1)->get();
         $counter = $users->count();
+        //$viewType = "HeadQuarter";
         return view('adminuser.index', [
             'users' => $users,
-            'counter' => $counter,
+            'counter' => $counter
         ]);  
         
         } 
@@ -103,6 +104,7 @@ class UserController extends Controller
      */
     public function show()
     {
+        //$viewType = "HeadQuarter";
         return view('adminuser.show');
     }
 
