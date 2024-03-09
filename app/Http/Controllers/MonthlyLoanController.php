@@ -14,7 +14,7 @@ class MonthlyLoanController extends Controller
         $branchID  = $request->id;
         $monthlyLoans = MonthlyLoan::with('client')->where('branch_id',$branchID)->Orderby('created_at','desc')->get();
         $counter = $monthlyLoans->count();
-        return view('monthlytenure.index', 
+        return view('monthlyloan.index', 
         [
             'monthlyLoans' => $monthlyLoans,
             'counter' => $counter,
@@ -29,7 +29,7 @@ class MonthlyLoanController extends Controller
                      $query->whereIn('status',['out of tenure', '0']);
                  })->where('branch_id', $branchID)
                  ->get();
-        return view('monthlytenure.create', 
+        return view('monthlyloan.create', 
         [
             'clients' => $clients,
             'branchID' => $branchID
@@ -102,7 +102,7 @@ class MonthlyLoanController extends Controller
         $branchID = request()->query('branchID');
         $viewType = request()->query('viewType');
         $monthlyloan = MonthlyLoan::with('client')->where('id', $id)->first();
-        return view('monthlytenure.edit',['monthlyloan' => $monthlyloan,'viewType' => $viewType,'branchID' => $branchID]);
+        return view('monthlyloan.edit',['monthlyloan' => $monthlyloan,'viewType' => $viewType,'branchID' => $branchID]);
     }
 
     public function update(Request $request, $id)
