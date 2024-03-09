@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\MonthlyPayment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,7 +22,12 @@ class MonthlyLoan extends Model
     public function client (){
         return $this->belongsTo(Client::class);
     }
-    // public function payment (){
-    //     return $this->hasMany(Payment::class);
+    // public function monthlypayment()
+    // {
+    //     return $this->hasMany(MonthlyPayment::class);
     // }
+    public function monthlyPayment()
+    {
+        return $this->hasMany(MonthlyPayment::class);
+    }
 }

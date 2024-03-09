@@ -59,6 +59,7 @@ Route::get('requestmonthlyloan', 'MonthlyLoanController@create')->name('requestm
 Route::post('createmonthlyloan', 'MonthlyLoanController@store')->name('createmonthlyloan');
 Route::get('editmonthlyloan/{id}', 'MonthlyLoanController@edit')->name('editmonthlyloan');
 Route::post('updatemonthlyloan/{id}', 'MonthlyLoanController@update')->name('updatemonthlyloan');
+Route::post('disbursemonthlyloan', 'MonthlyLoanController@disburse')->name('disbursemonthlyloan');
 
 
 // loan

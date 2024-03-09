@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Client;
 use Carbon\Carbon;
 use App\MonthlyLoan;
+use App\MonthlyPayment;
 use Illuminate\Http\Request;
 
 class MonthlyLoanController extends Controller
@@ -12,7 +13,7 @@ class MonthlyLoanController extends Controller
     public function index(Request $request)
     {
         $branchID  = $request->id;
-        $monthlyLoans = MonthlyLoan::with('client')->where('branch_id',$branchID)->Orderby('created_at','desc')->get();
+        $monthlyLoans = MonthlyLoan::with('client','monthlypayment')->where('branch_id',$branchID)->Orderby('created_at','desc')->get();
         $counter = $monthlyLoans->count();
         return view('monthlyloan.index', 
         [
@@ -115,39 +116,110 @@ class MonthlyLoanController extends Controller
         ]);
         {
            
-        $loan_amount = $request->loan_amount;
-        $interest = ($loan_amount * $request->interest_percent) / 100;
-        $amount_disburse = $loan_amount - $interest;
-        $daily_payback = $loan_amount/20;
-        $branchID = $request->branchID;
-        $viewType = $request->viewType;
+            $loan_amount = $request->loan_amount;
+            $interest = ($loan_amount * $request->interest_percent) / 100;
+            $amount_disburse = $loan_amount - $interest;
+            $daily_payback = $loan_amount/20;
+            $branchID = $request->branchID;
+            $viewType = $request->viewType;
 
-        $loan= MonthlyLoan::find($id);
-        $loan->loan_amount=$request->loan_amount;
-        $loan->interest=$interest;
-        $loan->interest_percent=$request->interest_percent;
-        $loan->daily_payback=$daily_payback;
-        $loan->amount_disburse=$amount_disburse;
-        $loan->purpose='Monthly Loan';
+            $loan= MonthlyLoan::find($id);
+            $loan->loan_amount=$request->loan_amount;
+            $loan->interest=$interest;
+            $loan->interest_percent=$request->interest_percent;
+            $loan->daily_payback=$daily_payback;
+            $loan->amount_disburse=$amount_disburse;
+            $loan->purpose='Monthly Loan';
+            $loan->save();
+            
+            $data = [
+                'client_no'=> $loan->client->client_no,
+                'name'=> $loan->client->name,
+                'phone'=> $loan->client->phone,
+                'loan_amount' => $request->loan_amount,
+                'duration_in_days'=>$request->duration_in_days,
+                'interest'=> $interest,
+                'intrest_percent' => $request->interest_percent,
+                'daily_payback' => $daily_payback,
+                'subject'=> 'Monthly Loan Request Updated',
+                'type'=> 'update loan request',
+                'admin_incharge'=> Auth()->user()->name,
+                'date'=> Carbon::now(),
+            ];
+            //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+            //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+            return redirect(route('viewmonthlyloan', ['id' => $branchID,'viewType' => $viewType]))->with('message', 'Monthly Loan Request Updated');
+        }
+    }
+
+    public function disburse(Request $request)
+    {
+        $branchID = $request->branch_id;
+        $viewType = $request->viewType;
+        if(is_null($request->disbursement_date)){
+            $disbursement_date = Carbon::now();
+        }else{
+            $disbursement_date = $request->disbursement_date;
+        }
+        if(date('d,M Y', strtotime($disbursement_date)) > date('d,M Y')){
+            return back()->with('error', 'Disbursement Date cannot be greater than present Date');
+        }
+        //dd($request->loan_id);
+        $loan = MonthlyLoan::with('client')->whereId($request->loan_id)->first();
+        $now = Carbon::parse($disbursement_date);
+        $startpaymentdate = $now->nextWeekday();
+        $endpaymentdate = $startpaymentdate->copy()->addWeekdays(20);
+        $loan->pay_back_days = $startpaymentdate->format('d,M, Y'). ' to ' .$endpaymentdate->format('d,M, Y');
+        $loan->is_in_tenure= 1;
+        $loan->client->status= 'in tenure';
+        $loan->admin_who_disburse = Auth()->user()->name;
         $loan->save();
+        $loan->client->save();
+        MonthlyPayment::create([
+            'client_id' => $loan->client_id,
+            'monthly_loan_id' => $loan->id,
+            'branch_id' =>$branchID,
+            'next_due_date' => $startpaymentdate,
+            'outstanding_payment' => $loan->amount_disburse,
+            'expect_pay' => $loan->daily_payback,
+            'bb_forward' => 0.00,
+            'payback_perday' => $loan->daily_payback,
+            'payment_status' => 0,
+        ]);
         
+        $payment =  MonthlyPayment::with('client','monthlyloan')->where('monthly_loan_id',$request->loan_id)->where('branch_id',$branchID)->where('payment_status',0)->first();
         $data = [
             'client_no'=> $loan->client->client_no,
             'name'=> $loan->client->name,
             'phone'=> $loan->client->phone,
-            'loan_amount' => $request->loan_amount,
-            'duration_in_days'=>$request->duration_in_days,
-            'interest'=> $interest,
-            'intrest_percent' => $request->interest_percent,
-            'daily_payback' => $daily_payback,
-            'subject'=> 'Monthly Loan Request Updated',
-            'type'=> 'update loan request',
+            'loan_amount' => $loan->loan_amount,
+            'daily_payback' => $loan->daily_payback,
+           'interest'=> $loan->interest,
+            'outstanding'=> $payment->outstanding_payment,
+            'next_due_date'=> $startpaymentdate,
+           'subject'=> 'Loan Disbursed',
+           'type'=> 'loan disbursement',
+            'disbursement_date' => $disbursement_date,
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
-        //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
-        //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-       return redirect(route('viewmonthlyloan', ['id' => $branchID,'viewType' => $viewType]))->with('message', 'Monthly Loan Request Updated');
-    }
+       // Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+       // Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+        return redirect(route('viewmonthlyloan', ['id' => $branchID,'viewType' => $viewType]))->with('message', 'Monthly Loan Disbursed');
     }
 }
+
+
+// $table->string('client_id')->nullable();
+//             $table->string('loan_id')->nullable();
+//             $table->string('branch_id')->nullable();
+//             $table->timestamp('next_due_date')->nullable();
+//             $table->string('outstanding_payment')->nullable();
+//             $table->string('bb_forward')->nullable();
+//             $table->string('expect_pay')->nullable();
+//             $table->string('payment_status')->nullable();
+//             $table->string('amount_paid')->nullable();
+//             $table->timestamp('date_paid')->nullable();
+//             $table->string('payback_perday')->nullable();
+//             $table->string('partial_pay')->default(0);
+//             $table->string('admin_incharge')->nullable();
