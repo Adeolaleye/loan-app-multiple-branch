@@ -6,6 +6,7 @@
             <h5 class="modal-title f-16">Delete Client</h5>
             <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            @if (isset($client->id))
             <form method="post" action="{{ route('destroy', $client->id) }}">
                 @csrf
                     <div class="modal-body text-center">
@@ -19,6 +20,7 @@
                       <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">No take me back</button>
                     </div>
                 </form>
+            @endif
         </div>
     </div>
 </div>

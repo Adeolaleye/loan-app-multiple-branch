@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
+use App\MonthlyLoan;
 use Illuminate\Http\Request;
 
 interface ViewTypes {

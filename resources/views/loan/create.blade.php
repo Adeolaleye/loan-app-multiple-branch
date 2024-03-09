@@ -48,7 +48,7 @@
                     <div class="col-md-6">
                         <label class="form-label" for="Duration">Loan Duration</label>
                         <select class="form-control" id="duration" name="tenure">
-                          <option value="">--Choose Option--</option>
+                          <option value=""{{ old('tenure') ? '' : ' selected' }} disabled>Loan Duration</option>
                           <option value="1"{{ old('tenure') == '1' ? 'selected' : '' }}>1 month</option>
                           <option value="2"{{ old('tenure') == '2' ? 'selected' : '' }}>2 months</option>
                           <option value="3"{{ old('tenure') == '3' ? 'selected' : '' }}>3 months</option>
@@ -60,7 +60,7 @@
                     <div class="col-md-6">
                       <label class="form-label" for="Duration">Interest Rate</label>
                       <select class="form-control" id="duration" name="intrest_percent" required>
-                        <option value="">--Choose Option--</option>
+                        <option value=""{{ old('intrest_percent') ? '' : ' selected' }} disabled>Select Interest</option>
                         <option value="4" {{ old('intrest_percent') == '4' ? 'selected' : '' }}>4%</option>
                         <option value="4.5" {{ old('intrest_percent') == '4.5' ? 'selected' : '' }}>4.5%</option>
                         <option value="5" {{ old('intrest_percent') == '5' ? 'selected' : '' }}>5%</option>

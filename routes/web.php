@@ -33,12 +33,12 @@ Route::get('/adminuser', 'UserController@index')->name('adminuser');
 Route::post('createadmin', 'UserController@store')->name('createadmin');
 Route::post('destroyuser/{id}', 'UserController@destroy')->name('destroyuser');
 Route::post('update/{id}', 'UserController@update')->name('update');
-Route::get('adminprofile', 'UserController@show')->name('adminprofile');
+Route::get('/adminprofile', 'UserController@show')->name('adminprofile');
 
 // clients
 Route::get('/clients', 'ClientController@index')->name('clients');
 Route::post('createclient', 'ClientController@store')->name('createclient');
-Route::get('viewclient/{id}', 'ClientController@show')->name('viewclient');
+Route::get('/viewclient/{id}', 'ClientController@show')->name('viewclient');
 Route::get('printclient/{id}', 'ClientController@print')->name('printclient');
 Route::get('addclient', 'ClientController@create')->name('addclient');
 Route::post('updateclient/{id}', 'ClientController@update')->name('updateclient');
@@ -51,6 +51,14 @@ Route::get('viewclientintenure', 'InTenureController@show')->name('viewclientint
 Route::get('makepayment/{id}', 'InTenureController@makepayment')->name('makepayment');
 Route::post('paynow/{id}', 'InTenureController@paynow')->name('paynow');
 Route::post('partialpay/{id}', 'InTenureController@partialpay')->name('partialpay');
+
+// Business tenure client
+Route::get('viewmonthlytenureclient', 'inMonthlyTenureController@index')->name('viewmonthlytenureclient');
+Route::get('viewmonthlyloan', 'MonthlyLoanController@index')->name('viewmonthlyloan');
+Route::get('requestmonthlyloan', 'MonthlyLoanController@create')->name('requestmonthlyloan');
+Route::post('createmonthlyloan', 'MonthlyLoanController@store')->name('createmonthlyloan');
+Route::get('editmonthlyloan/{id}', 'MonthlyLoanController@edit')->name('editmonthlyloan');
+Route::post('updatemonthlyloan/{id}', 'MonthlyLoanController@update')->name('updatemonthlyloan');
 
 
 // loan

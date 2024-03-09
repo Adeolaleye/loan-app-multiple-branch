@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 use App\Loan;
+use App\Branch;
 use App\Client;
 use App\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Providers\AppServiceProvider;
 use Intervention\Image\Facades\Image as Image;
 
 class ClientController extends Controller
@@ -16,13 +18,15 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $clients = Client::with('loan','payment')->Orderby('created_at','desc')->get();
-        $counter = Client::all()->count();
+        $branchID  = $request->query('id');
+        $clients = Client::with('loan','payment')->where('branch_id', $branchID)->Orderby('created_at','desc')->get();
+        $counter = Client::where('branch_id', $branchID)->count();
         return view('clients.index', [
             'clients' => $clients,
             'counter' => $counter,
+            'branchID' => $branchID,
         ]); 
     }
 
@@ -72,7 +76,8 @@ class ClientController extends Controller
             return back()->with('error', 'Client name exist, Seems it is desame user !');
         }else{
         $clientno = 50000000 + $request->client_no;
-       // dd($clientno);
+        $branchID = $request->branch_id;
+        $viewType = $request->viewType;
         $clients = Client::create([
             'client_no' => $clientno,
             'name' => $request->name,
@@ -91,9 +96,10 @@ class ClientController extends Controller
             'g_relationship'=>$request->g_relationship,
             'profile_picture' => isset($imgName) ? 'profile_pictures/'.$imgName: NULL,
             'admin_incharge' => Auth()->user()->name,
+            'branch_id' => $branchID,
 
         ]);
-        return redirect(route('addclient'))->with('message', 'Client Added Successfully');
+        return redirect(route('addclient', ['viewType' => $viewType,'id' => $branchID]))->with('message', 'Client Added Successfully');
     }
     }
 
@@ -103,17 +109,26 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show( $id)
+    public function show($id)
     {
         $client = Client::with('loan')->where('id', $id)->first();
-        //dd($client);
-        return view('clients.show',compact('client'));
+        $branchID = Branch::where('id', $client->branch_id)->value('id');
+        app()->register(AppServiceProvider::class, ['branchID' => $branchID]);
+        $viewType = !is_null($branchID) ? 'BusinessOffice' : 'HeadQuarter';
+        return view('clients.show', ['client' => $client, 'branchID' => $branchID, 'viewType' => $viewType ]);
     }
 
-    public function print( $id)
+    public function print($id)
     {
+        
         $client = Client::with('loan')->where('id', $id)->first();
-        return view('clients.print',compact('client'));
+        $branchID = Branch::where('id', $client->branch_id)->value('id');
+       
+        if(!is_null($branchID)){
+            $viewType = 'BusinessOffice'; 
+        }
+        app()->register(AppServiceProvider::class, ['branchID' => $branchID, 'viewType' => $viewType]);
+        return view('clients.print',['client' => $client, 'branchID' => $branchID, 'viewType' =>$viewType ]);
     }
 
     /**
@@ -124,8 +139,15 @@ class ClientController extends Controller
      */
     public function edit($id)
     {
+        
+        $branchID = request()->query('branchID');
+        $viewType = request()->query('viewType');
         $client = Client::where('id', $id)->first();
-        return view('clients.edit',compact('client'));
+        return view('clients.edit', [
+            'client' => $client,
+            'branchID' => $branchID,
+            'viewType' => $viewType
+        ]); 
     }
 
     /**
@@ -137,6 +159,9 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
+        $branchID = $request->branch_id;
+        $viewType = $request->viewType;
         $data =$this->validate($request, [
             'name' => 'required|string|max:100',
             'phone' => 'required|string|min:5',
@@ -168,7 +193,11 @@ class ClientController extends Controller
             $data['profile_picture'] = 'profile_pictures/'.$imgName;
         }
          $client->update($data);
-            return back()->with('message', 'Client Details Updated');
+         return back()->with([
+            'message' => 'Client Details Updated',
+            'viewType' => $viewType,
+            'branchID' => $branchID
+        ]);
     }
 
     /**

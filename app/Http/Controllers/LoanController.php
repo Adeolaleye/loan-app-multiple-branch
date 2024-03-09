@@ -34,7 +34,9 @@ class LoanController extends Controller
      */
     public function create()
     {
-        $clients = Client::where('status', '=','out of tenure')->orwhere('status', Null)->get();
+        $clients = Client::where(function ($query) {
+            $query->whereIn('status',['out of tenure', '0']);
+        })->get();
         return view('loan.create', compact('clients'));
     }
 
