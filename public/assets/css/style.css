@@ -33260,7 +33260,7 @@ body[class*="dark-"] .for-light {
 .page-wrapper.compact-wrapper .page-body-wrapper div.sidebar-wrapper .sidebar-main .sidebar-links .simplebar-wrapper .simplebar-mask .simplebar-content-wrapper .simplebar-content > li {
     display: block;
     width: 100%;
-    padding: 0 20px;
+    padding: 0 15px;
     position: relative;
 }
 .page-wrapper.compact-wrapper .page-body-wrapper div.sidebar-wrapper .sidebar-main .sidebar-links .simplebar-wrapper .simplebar-mask .simplebar-content-wrapper .simplebar-content > li .sidebar-link a.active {

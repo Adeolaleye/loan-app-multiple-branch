@@ -113,9 +113,9 @@ class ClientController extends Controller
     {
         $client = Client::with('loan')->where('id', $id)->first();
         $branchID = Branch::where('id', $client->branch_id)->value('id');
-
         app()->register(AppServiceProvider::class, ['branchID' => $branchID]);
-        return view('clients.show', ['client' => $client, 'branchID' => $branchID ]);
+        $viewType = !is_null($branchID) ? 'BusinessOffice' : 'HeadQuarter';
+        return view('clients.show', ['client' => $client, 'branchID' => $branchID, 'viewType' => $viewType ]);
     }
 
     public function print($id)

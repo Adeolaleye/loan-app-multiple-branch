@@ -89,7 +89,7 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <a href="{{ route('viewclient', ['viewType' => $viewType, 'id' => $client->id]) }}">
+                                    <a href="{{ route('viewclient', ['id' => $client->id, 'branchID' => $branchID, 'viewType' => $viewType]) }}">
                                         <button class="btn btn-light" type="button"><i class="fas fa-eye text-warning"></i></button>
                                     </a>
                                     <!--<button type="button" class="btn btn-light delete-client" data-bs-toggle="modal" data-bs-target="#deleteclient" data-clientid="{{ $client->id }}" data-clientname="{{ $client->name }}"><i class="fas fa-trash-alt text-danger" data-bs-toggle="tooltip" title="Delete This Client?"></i></button>-->

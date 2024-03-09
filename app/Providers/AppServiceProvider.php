@@ -48,7 +48,6 @@ class AppServiceProvider extends ServiceProvider
                 $branchName ='Headquaters';
                 $branchID = null;
             }
-        
             // Pass the $branchName, $branches, $viewType, and $branchID to the view
             $view->with([
                 'branchName' => $branchName,

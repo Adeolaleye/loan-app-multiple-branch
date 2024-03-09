@@ -42,8 +42,12 @@
                 {{dump($branchID)}}
             </li>
             <li class="sidebar-list">
-                <a class="sidebar-link sidebar-title {{ Request::is('clientsintenure') ? 'active' : 'link-nav'}}" href="{{ route('clientsintenure') }}">
-                <i data-feather="user"> </i><span>Clients in Tenure</span></a>
+                <a class="sidebar-link sidebar-title {{ Request::is('viewmonthlytenureclient') ? 'active' : 'link-nav'}}" href="{{ route('viewmonthlytenureclient',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}">
+                <i data-feather="user"> </i><span>Monthly Tenure Client</span></a>
+            </li>
+            <li class="sidebar-list">
+              <a class="sidebar-link sidebar-title {{ Request::is('viewmonthlyloan') || Request::is('requestmonthlyloan') ? 'active' : 'link-nav'}}" href="{{ route('viewmonthlyloan',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}">
+              <i data-feather="list"> </i><span>Monthly Loan History</span></a>
             </li>
             <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="#"><i data-feather="file-text"> </i><span>Payment History</span></a>
                     <ul class="sidebar-submenu">
@@ -69,10 +73,6 @@
                         <a class="sidebar-link sidebar-title {{ Request::is('tenureextended') ? 'active' : 'link-nav'}}" href="{{ route('tenureextended') }}">Tenure Extended</a>
                       </li>
                     </ul>
-            </li>
-            <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title {{ Request::is('loan') || Request::is('requestloan') ? 'active' : 'link-nav'}}" href="{{ route('loan') }}">
-              <i data-feather="list"> </i><span>Loan History</span></a>
             </li>
             <li class="sidebar-list">
               <a class="sidebar-link sidebar-title {{ Request::is('adminuser') ? 'active' : 'link-nav'}}" href="{{ route('adminuser') }}">
