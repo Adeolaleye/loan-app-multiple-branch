@@ -148,7 +148,7 @@ class InTenureController extends Controller
         $request->validate([
             'amount_paid' => 'required|int|min:0',
         ]);
-        $paymentdetails = Payment::with('client','loan')->where('loan_id',$id)->where('payment_status',0);
+        $paymentdetails = Payment::with('client','loan')->where('loan_id',$id)->where('payment_status','0');
        
         $paymentdetail = Payment::with('client','loan')->where('loan_id',$id);
         $payment = $paymentdetails->first();

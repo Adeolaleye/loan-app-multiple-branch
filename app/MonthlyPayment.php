@@ -19,7 +19,7 @@ class MonthlyPayment extends Model
     protected $guarded = [];
     
     public function monthlyloan (){
-        return $this->belongsTo(Loan::class,'loan_id');
+        return $this->belongsTo(MonthlyLoan::class,'monthly_loan_id');
     }
     public function client (){
         return $this->belongsTo(Client::class,'client_id');

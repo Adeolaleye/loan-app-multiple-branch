@@ -52,8 +52,7 @@ Route::get('makepayment/{id}', 'InTenureController@makepayment')->name('makepaym
 Route::post('paynow/{id}', 'InTenureController@paynow')->name('paynow');
 Route::post('partialpay/{id}', 'InTenureController@partialpay')->name('partialpay');
 
-// Business tenure client
-Route::get('viewmonthlytenureclient', 'inMonthlyTenureController@index')->name('viewmonthlytenureclient');
+// Business loan
 Route::get('viewmonthlyloan', 'MonthlyLoanController@index')->name('viewmonthlyloan');
 Route::get('requestmonthlyloan', 'MonthlyLoanController@create')->name('requestmonthlyloan');
 Route::post('createmonthlyloan', 'MonthlyLoanController@store')->name('createmonthlyloan');
@@ -61,6 +60,11 @@ Route::get('editmonthlyloan/{id}', 'MonthlyLoanController@edit')->name('editmont
 Route::post('updatemonthlyloan/{id}', 'MonthlyLoanController@update')->name('updatemonthlyloan');
 Route::post('disbursemonthlyloan', 'MonthlyLoanController@disburse')->name('disbursemonthlyloan');
 
+
+// Business intenure
+Route::get('viewmonthlytenureclient', 'inMonthlyTenureController@index')->name('viewmonthlytenureclient');
+Route::get('makemonthlypayment/{id}', 'InMonthlyTenureController@makepayment')->name('makemonthlypayment');
+Route::post('monthlypaynow/{id}', 'InMonthlyTenureController@paynow')->name('monthlypaynow');
 
 // loan
 Route::get('/loan', 'LoanController@index')->name('loan');

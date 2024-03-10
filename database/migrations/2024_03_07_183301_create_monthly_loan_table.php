@@ -24,7 +24,9 @@ class CreateMonthlyLoanTable extends Migration
             $table->string('daily_payback')->nullable();
             $table->string('duration_in_days')->nullable();
             $table->string('pay_back_days')->nullable();
+            $table->string('status')->default(0);
             $table->string('amount_disburse')->nullable();
+            $table->string('sum_of_allpayback')->nullable();
             $table->string('actual_profit')->default(0);
             $table->string('monthly_profit')->default(0);
             $table->string('yearly_profit')->default(0);

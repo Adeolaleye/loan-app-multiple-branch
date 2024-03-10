@@ -50,7 +50,7 @@ class MonthlyLoanController extends Controller
         $loan_amount = $request->loan_amount;
         $interest = ($loan_amount * $request->interest_percent) / 100;
         $amount_disburse = $loan_amount - $interest;
-        $daily_payback = $loan_amount/20;
+        $daily_payback = $loan_amount/$request->duration_in_days;
         $branchID = $request->id;
         $viewType = $request->viewType;
 
@@ -164,13 +164,12 @@ class MonthlyLoanController extends Controller
         if(date('d,M Y', strtotime($disbursement_date)) > date('d,M Y')){
             return back()->with('error', 'Disbursement Date cannot be greater than present Date');
         }
-        //dd($request->loan_id);
         $loan = MonthlyLoan::with('client')->whereId($request->loan_id)->first();
         $now = Carbon::parse($disbursement_date);
         $startpaymentdate = $now->nextWeekday();
         $endpaymentdate = $startpaymentdate->copy()->addWeekdays(20);
-        $loan->pay_back_days = $startpaymentdate->format('d,M, Y'). ' to ' .$endpaymentdate->format('d,M, Y');
-        $loan->is_in_tenure= 1;
+        $loan->pay_back_days = $startpaymentdate->format('d,M Y'). ' to ' .$endpaymentdate->format('d,M Y');
+        $loan->status= 1;
         $loan->client->status= 'in tenure';
         $loan->admin_who_disburse = Auth()->user()->name;
         $loan->save();
@@ -208,18 +207,3 @@ class MonthlyLoanController extends Controller
         return redirect(route('viewmonthlyloan', ['id' => $branchID,'viewType' => $viewType]))->with('message', 'Monthly Loan Disbursed');
     }
 }
-
-
-// $table->string('client_id')->nullable();
-//             $table->string('loan_id')->nullable();
-//             $table->string('branch_id')->nullable();
-//             $table->timestamp('next_due_date')->nullable();
-//             $table->string('outstanding_payment')->nullable();
-//             $table->string('bb_forward')->nullable();
-//             $table->string('expect_pay')->nullable();
-//             $table->string('payment_status')->nullable();
-//             $table->string('amount_paid')->nullable();
-//             $table->timestamp('date_paid')->nullable();
-//             $table->string('payback_perday')->nullable();
-//             $table->string('partial_pay')->default(0);
-//             $table->string('admin_incharge')->nullable();

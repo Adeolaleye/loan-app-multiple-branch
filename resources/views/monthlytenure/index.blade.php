@@ -43,7 +43,7 @@
                             <th>Client ID</th>
                             <th>Client Name</th>
                             <th>Loan Amount (&#x20A6;)</th>
-                            <th>Monthly Pay</th>
+                            <th>Daily Pay</th>
                             <th>Duration</th>
                             <th>Next Due Date</th>
                             <th>Status</th>
@@ -54,19 +54,19 @@
                       @php 
                         $i = 1;
                         @endphp
-                        @foreach ($loans as $loan )
+                        @foreach ($monthlyloans as $loan )
                         <tr>
                             <td>{{ $i++ }}</td>
                             <td>{{ $loan->client->client_no }}</td>
                             <td>{{ $loan->client->name }}</td>
                             <td>{{ number_format($loan->loan_amount) }}</td>
-                            <td>{{ number_format($loan->monthly_payback) }}</td>
+                            <td>{{ number_format($loan->daily_payback) }}</td>
                             <td>
-                                {{ $loan->loan_duration }}
+                                {{ $loan->pay_back_days }}
                                 
                             </td>
                             <td>
-                                @foreach ($loan->payment as $payment)
+                                @foreach ($loan->monthlypayment as $payment)
                                 @if ($payment->payment_status == 0 )
                                 {{ date('d,M Y', strtotime($payment->next_due_date)) }}
                                 @endif
@@ -76,7 +76,7 @@
                                 @if ($loan->status == 3)
                                     <div class="span badge rounded-pill pill-badge-info pull-right">Tenure Extended</div>
                                 @endif
-                                @if ($loan->status == 2)
+                                @if ($loan->status == 0)
                                     <div class="span badge rounded-pill pill-badge-secondary pull-right">Payment Completed</div>
                                 @endif
                                 @if ($loan->status == 1)
@@ -85,7 +85,9 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <form action="{{ route('makepayment', $loan->id) }}">
+                                    <form action="{{ route('makemonthlypayment', $loan->id) }}">
+                                        <input type="hidden" name="branchID" value="{{$branchID}}">
+                                        <input type="hidden" name="viewType" value="{{$viewType}}">
                                         <button class="btn btn-light text-warning" type="submit" data-bs-toggle="tooltip" title="View Full Details"> 
                                             <i class="fas fa-eye text-warning"></i>
                                         </button>

@@ -79,11 +79,11 @@
                             </td>
                             <td>{{ number_format($loan->amount_disburse) }}</td>
                             <td>
-                                @if ($loan->is_in_tenure == 0)
+                                @if ($loan->status == 0)
                                 <div class="span badge rounded-pill pill-badge-warning">In Review
                                 </div>
                                 @endif
-                                @if ($loan->is_in_tenure == 1)
+                                @if ($loan->status == 1)
                                 <div class="span badge rounded-pill pill-badge-secondary">Disbursed</div>
                                 @endif
                                 @if ($loan->status == 2)
@@ -105,15 +105,15 @@
                                             data-name="{{ $loan->client->name }}" 
                                             data-phone="{{ $loan->client->phone }}"
                                             data-disabled ='
-                                            @if ($loan->is_in_tenure == 0)
+                                            @if ($loan->status == 0)
                                             <button class="btn btn-primary" type="submit">Disburse</button>
                                             @endif'
                                             data-date="{{ $loan->created_at->format('d, M Y') }}"
                                             data-status= '
-                                            @if ($loan->is_in_tenure == 0)
+                                            @if ($loan->status == 0)
                                             <div class="span badge rounded-pill pill-badge-warning">In Review
                                             </div>
-                                            @elseif ($loan->is_in_tenure == 1)
+                                            @elseif ($loan->status == 1)
                                             <div class="span badge rounded-pill pill-badge-secondary">Disbursed</div>
                                             @endif
                                             @if ($loan->status == 2)
@@ -135,12 +135,12 @@
                                             data-bs-toggle="tooltip" title="View Full Details">
                                             <i class="fas fa-eye text-warning"></i>
                                         </button>
-                                        @if ($loan->is_in_tenure == 0)
+                                        @if ($loan->status == 0)
                                         <a href="{{ route('editmonthlyloan',['id' => $loan->id, 'branchID' => $branchID, 'viewType' => $viewType]) }}">
                                             <button class="btn btn-light" type="button" data-bs-toggle="tooltip" title="Edit Loan Details"><i class="fas fa-edit text-info"></i></button>
                                         </a>
                                         @endif
-                                        @if ($loan->is_in_tenure == 1)
+                                        @if ($loan->status == 1)
                                         
                                         @endif
                                 </div>
