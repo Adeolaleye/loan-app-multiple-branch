@@ -66,7 +66,7 @@
                             <td>{{ number_format($payout->loan_amount) }}</td>
                             <td>{{ $payout->purpose }}</td>
                             <td>{{ $payout->admin_who_disburse }}</td>
-                            <td>{{ date('d, M Y' h:i A, strtotime($payout->disbursement_date)) }}</td>
+                            <td>{{ date('d, M Y h:i A', strtotime($payout->disbursement_date)) }}</td>
                         </tr>
                         @endforeach
                       </tbody>

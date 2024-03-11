@@ -23,7 +23,7 @@ class CreateMonthlyPaymentTable extends Migration
             $table->string('bb_forward')->nullable();
             $table->string('expect_pay')->nullable();
             $table->string('payment_status')->nullable();
-            $table->string('amount_paid')->nullable();
+            $table->decimal('amount_paid')->nullable();
             $table->timestamp('date_paid')->nullable();
             $table->string('payback_perday')->nullable();
             $table->string('partial_pay')->default(0);

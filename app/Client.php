@@ -4,6 +4,7 @@ namespace App;
 
 use App\Loan;
 use App\Payment;
+use App\MonthlyLoan;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -32,6 +33,9 @@ class Client extends Model
     ];
     public function loan (){
         return $this->hasMany(Loan::class,'client_id');
+    }
+    public function monthlyloan (){
+        return $this->hasMany(MonthlyLoan::class,'client_id');
     }
     public function payment (){
         return $this->hasMany(Payment::class,'client_id');

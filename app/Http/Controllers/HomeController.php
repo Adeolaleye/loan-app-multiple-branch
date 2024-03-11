@@ -7,6 +7,7 @@ use App\Branch;
 use App\Client;
 use App\Payment;
 use Carbon\Carbon;
+use App\MonthlyPayment;
 use Illuminate\Http\Request;
 
 interface ViewTypes {
@@ -47,7 +48,6 @@ class HomeController extends Controller
         $yearlyprofit = Loan::whereYear('updated_at', date('Y'))->sum('yearly_profit');
         $allprofits = $profit->sum('actual_profit');
         $companyvalue = $outstanding->sum('outstanding_payment');
-     
         $monthlyreports = Payment::whereMonth('next_due_date', date('m'))->with('client','loan')->where('payment_status',0)->take(3)->Orderby('next_due_date','ASC')->get();
         $tenureextendeds = Loan::with('client','payment')->where('status','<>',2)->get();
         $viewType = ViewTypes::HeadQuarter;
@@ -78,7 +78,6 @@ class HomeController extends Controller
             'clienttenurextended_count',
             'tenureextendeds',
             'defaulters',
-            'viewType'
         ));
     }
 }

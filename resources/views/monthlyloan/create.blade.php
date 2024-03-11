@@ -23,7 +23,6 @@
       <div class="col-sm-12">
         <div class="card">
           <div class="card-header">
-            {{dump($branchID)}}
             <h5>Request Monthly Loan</h5>
           </div>
           <div class="card-body">

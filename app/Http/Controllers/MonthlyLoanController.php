@@ -168,9 +168,10 @@ class MonthlyLoanController extends Controller
         $now = Carbon::parse($disbursement_date);
         $startpaymentdate = $now->nextWeekday();
         $endpaymentdate = $startpaymentdate->copy()->addWeekdays(20);
-        $loan->pay_back_days = $startpaymentdate->format('d,M Y'). ' to ' .$endpaymentdate->format('d,M Y');
+        $loan->pay_back_days = $startpaymentdate->format('d, M Y'). ' to ' .$endpaymentdate->format('d, M Y');
         $loan->status= 1;
         $loan->client->status= 'in tenure';
+        $loan->disbursement_date = $disbursement_date;
         $loan->admin_who_disburse = Auth()->user()->name;
         $loan->save();
         $loan->client->save();
@@ -179,7 +180,7 @@ class MonthlyLoanController extends Controller
             'monthly_loan_id' => $loan->id,
             'branch_id' =>$branchID,
             'next_due_date' => $startpaymentdate,
-            'outstanding_payment' => $loan->amount_disburse,
+            'outstanding_payment' => $loan->loan_amount,
             'expect_pay' => $loan->daily_payback,
             'bb_forward' => 0.00,
             'payback_perday' => $loan->daily_payback,

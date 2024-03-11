@@ -52,25 +52,24 @@
             <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="#"><i data-feather="file-text"> </i><span>Payment History</span></a>
                     <ul class="sidebar-submenu">
                       <li>
-                        <a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('payout') ? 'active' : 'link-nav'}}" href="{{ route('payment') }}">Pay In</a>
+                        <a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('monthlypayin') ? 'active' : 'link-nav'}}" href="{{ route('monthlypayin',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}">Pay In</a>
                       </li>
                       <li>
-                        <a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('payout') ? 'active' : 'link-nav'}}" href="{{ route('payout') }}">Pay Out(Disbursed)</a>
+                        <a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('payout') ? 'active' : 'link-nav'}}" href="{{ route('monthlyclientpayout',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}">Pay Out(Disbursed)</a>
                       </li>
-                      <li><a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('forwardpay') ? 'active' : 'link-nav'}}" href="{{ route('forwardpay') }}" href="">Forward Payments</a></li>
-                      <li><a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('formpay') ? 'active' : 'link-nav'}}" href="{{ route('formpay') }}" href="">Form Payments</a></li>
+                      <li><a class="sidebar-link sidebar-title {{ Request::is('payment*') || Request::is('formpay') ? 'active' : 'link-nav'}}" href="{{ route('monthlyformpayment',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}" href="">Form Payments</a></li>
                     </ul>
             </li>
             <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="#"><i data-feather="file-text"> </i><span>Reports</span></a>
                     <ul class="sidebar-submenu">
                       <li>
-                        <a class="sidebar-link sidebar-title {{ Request::is('monthly') ? 'active' : 'link-nav'}}" href="{{ route('monthly') }}">Monthly Report</a>
+                        <a class="sidebar-link sidebar-title {{ Request::is('daily') ? 'active' : 'link-nav'}}" href="{{ route('daily',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}">Daily Report</a>
                       </li>
                       <li>
-                        <a class="sidebar-link sidebar-title {{ Request::is('defaulter') ? 'active' : 'link-nav'}}" href="{{ route('defaulter') }}">Defaulters</a>
+                        <a class="sidebar-link sidebar-title {{ Request::is('dailydefaulter') ? 'active' : 'link-nav'}}" href="{{ route('dailydefaulter',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}">Defaulters</a>
                       </li>
                       <li>
-                        <a class="sidebar-link sidebar-title {{ Request::is('tenureextended') ? 'active' : 'link-nav'}}" href="{{ route('tenureextended') }}">Tenure Extended</a>
+                        <a class="sidebar-link sidebar-title {{ Request::is('dailytenureextended') ? 'active' : 'link-nav'}}" href="{{ route('dailytenureextended',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}">Tenure Extended</a>
                       </li>
                     </ul>
             </li>

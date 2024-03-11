@@ -29,9 +29,15 @@
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <div class="btn-group pull-right" role="group" aria-label="Basic example">
-                            <a href="{{ route('payout') }}" data-bs-toggle="tooltip" title="Payout History">
-                                <button class="btn btn-secondary" type="button" title="View Full Details">View Payout</button>
-                            </a>
+                            @if ($viewType == 'BusinessOffice')
+                              <a href="{{ route('monthlyclientpayout',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}" data-bs-toggle="tooltip" title="Payout History">
+                                  <button class="btn btn-secondary" type="button" title="View Full Details">View Payout</button>
+                              </a>
+                            @else
+                              <a href="{{ route('payout') }}" data-bs-toggle="tooltip" title="Payout History">
+                                  <button class="btn btn-secondary" type="button" title="View Full Details">View Payout</button>
+                              </a>
+                            @endif
                             <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#savemoney" data-bs-toggle="tooltip">Save Money</button>
                         </div>
                     </div>
@@ -39,8 +45,10 @@
               </div>
               <div class="card-body">
                   @include('includes.alerts')
-                      <form class="f1" method="post" action="{{ route('filterpayment')}}">
+                      <form class="f1" method="post" action="{{ route('filterpayment',['branchID' => $branchID, 'viewType' => $viewType])}}">
                         @csrf
+                        <input type='hidden' name="branchID" value="{{$branchID}}">
+                        <input type='hidden' name="viewType" value="{{$viewType}}">
                         <div class="row m-b-20">
                           <div class="col-md-5">
                             <label class="form-label" for="year">Years</label>
@@ -67,7 +75,11 @@
                           </div>
                           <div class="col-md-1">
                             <label class="form-label">Reset</label>
-                            <a href="{{ route('payment') }}" class="btn btn-danger"><i class="fa fa-undo" ></i></a>
+                            @if ($viewType == 'BusinessOffice')
+                              <a href="{{ route('monthlypayin',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}" class="btn btn-danger"><i class="fa fa-undo" ></i></a>
+                            @else
+                              <a href="{{ route('payment') }}" class="btn btn-danger"><i class="fa fa-undo" ></i></a>
+                            @endif
                           </div>
                         </div>
                       </form>
@@ -78,7 +90,11 @@
                              <!-- @if(Auth::user()->status == 1 )<th>l-id</th><th>p-id</th>@endif -->
                           <th>#</th>
                           <th>Made By</th>
+                          @if ($viewType == 'BusinessOffice')
+                          <th>Payment for Day</th>
+                          @else
                           <th>Payment for Month</th>
+                          @endif
                           <th>Amount</th>
                           <th>Profit</th>
                           <th>Purpose</th>
@@ -95,17 +111,34 @@
                             <!-- @if(Auth::user()->status == 1 )<td>{{ $payment->loan_id }}</td><td>{{ $payment->id }}</td>@endif -->
                             <td>{{ $i++ }}</td>
                             <td>
-                                @if($payment->payment_purpose =='loan payback')
-                                    {{ !is_null($payment->client->name) ? $payment->client->name : 'Not Available' }}
-                                @endif
-                                @if($payment->payment_purpose =='savings')
-                                    By Admin in charge
+                                @if ($viewType == 'BusinessOffice')
+                                  @if($payment->monthlyloan->purpose =='Monthly loan payback')
+                                      {{ !is_null($payment->client->name) ? $payment->client->name : 'Not Available' }}
+                                  @endif
+                                  @if($payment->payment_purpose =='savings')
+                                      By Admin in charge
+                                  @endif
+                                @else
+                                  @if($payment->payment_purpose =='loan payback')
+                                      {{ !is_null($payment->client->name) ? $payment->client->name : 'Not Available' }}
+                                  @endif
+                                  @if($payment->payment_purpose =='savings')
+                                      By Admin in charge
+                                  @endif
                                 @endif
                             </td>
-                            <td>{{ date('F', strtotime($payment->next_due_date)) }}</td>
+                            @if ($viewType == 'BusinessOffice')
+                              <td>{{ date('jS F', strtotime($payment->next_due_date)) }}</td>
+                            @else
+                              <td>{{ date('M', strtotime($payment->next_due_date)) }}</td>
+                            @endif
                             <td>{{ number_format($payment->amount_paid) }}</td>
                             <td>{{ number_format($payment->profit) }}</td>
+                            @if ($viewType == 'BusinessOffice')
+                            <td>{{ $payment->monthlyloan->purpose }}</td>
+                            @else
                             <td>{{ $payment->payment_purpose }}</td>
+                            @endif
                             <td>{{ $payment->admin_incharge }}</td>
                             <td>{{ date('d, M Y h:i A', strtotime($payment->date_paid)) }}</td>
                         </tr>

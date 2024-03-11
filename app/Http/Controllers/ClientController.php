@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Loan;
 use App\Branch;
 use App\Client;
+use App\MonthlyLoan;
 use App\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -111,7 +112,7 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        $client = Client::with('loan')->where('id', $id)->first();
+        $client = Client::with('monthlyloan','loan')->where('id', $id)->first();
         $branchID = Branch::where('id', $client->branch_id)->value('id');
         app()->register(AppServiceProvider::class, ['branchID' => $branchID]);
         $viewType = !is_null($branchID) ? 'BusinessOffice' : 'HeadQuarter';

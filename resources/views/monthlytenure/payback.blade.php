@@ -175,15 +175,15 @@
                                 <div class="input-group input-group-air"><span class="input-group-text">&#x20A6;</span>
                                     <input class="form-control" type="number" name="amount_paid" value="{{ $unpaiddetails->expect_pay}}"{{ old('amount_paid') }} required="">
                                     <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
-                                    <input type="text" value="{{$branchID}}" name="branchID">
-                                    <input type="text" value="{{$viewType}}" name="viewType">
+                                    <input type="hidden" value="{{$branchID}}" name="branchID">
+                                    <input type="hidden" value="{{$viewType}}" name="viewType">
                                 </div>
                                 </div>
                                 <button class="btn btn-primary" type="submit">Make Payment</button>
                             </div>
                         </form>
 
-                        <form id="partialpay" class="f1" method="post" action="{{ route('partialpay', $loan->id) }}" style="display: none">
+                        <form id="partialpay" class="f1" method="post" action="{{ route('dailypartialpay', $loan->id) }}" style="display: none">
                             @csrf
                                 <div class="row g-3 mb-2 m-t-30">
                                     <div class="col-md-6 offset-md-3">
@@ -193,7 +193,7 @@
                                         <input class="form-control" type="hidden" name="client_id" value="{{ $loan->client->id }}">
                                     </div>
                                     </div>
-                                    <button class="btn btn-primary" type="submit">Pay Partial Payment for the month</button>
+                                    <button class="btn btn-primary" type="submit">Pay Partial Payment for the day</button>
                                 </div>
                         </form>
                     @endif

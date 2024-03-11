@@ -130,6 +130,7 @@
                                             @endif'
                                             data-disburse="{{ !is_null($loan->disbursement_date) ? date('d,M Y', strtotime($loan->disbursement_date)) : 'Not Disburse' }}"
                                             data-paybackdays="{{ !is_null($loan->pay_back_days) ? $loan->pay_back_days : 'Not set yet' }}"
+                                            data-sum_all_paybacks = "{{!is_null($loan->sum_allpayback) ? $loan->sum_allpayback : 'No payment yet'}}"
                                             data-loan="{{ json_encode($loan->toArray()) }}" 
                                             data-bs-target="#loandetails" 
                                             data-bs-toggle="tooltip" title="View Full Details">
@@ -168,6 +169,7 @@
             const payback = $(this).data('payback');
             const disburse = $(this).data('disburse');
             const paybackdays = $(this).data('paybackdays')
+            const sumpayback = $(this).data('sum_all_paybacks')
             const disabled = $(this).data('disabled');
             const profit = $(this).data('profit');
             //set each form field on the modal
@@ -183,6 +185,7 @@
             loanmodal.find('#paybackdays').text(paybackdays);
             loanmodal.find('#amountdisburse').text(loan.amount_disburse);
             loanmodal.find('#paybackdays').text(loan.pay_back_days);
+            loanmodal.find('#sumpayback').text(sumpayback);
             loanmodal.find('#name').text(name);
             loanmodal.find('#phone').text(phone);
             loanmodal.find('#client_no').text(clientno);

@@ -39,7 +39,8 @@
                     <span>Form Payment: <strong id="formpayment"></strong>(<span>Paid</span>)</span><br>
                     <span>Expected Payment Days: <strong id="paybackdays"></strong></span><br>
                     <span>Date Of Disbursement: <strong id="dd"></strong></span><br>
-                    <span>Disburse Amount : <strong id="amountdisburse">#</strong></span>
+                    <span>Disburse Amount : <strong id="amountdisburse">#</strong></span><br>
+                    <span>Total Amount Repaid: <strong id="sumpayback">#</strong></span>
                     <div class="bg-secondary-light m-10 p-t-10 p-b-10 text-center b-r-6">
                       <span class="" >Applied&nbsp;<span id="applieddate"></span></span>
                     </div>
@@ -47,9 +48,9 @@
                     <div class="col-md-12">
                         <label class="form-label" for="disbursement">Disbursement Date</label>
                           <input class="form-control" type="date" placeholder="" name="disbursement_date">
-                          <input type="text" name="branch_id" value="{{$branchID}}">
-                          <input type="text" name="viewType" value="{{$viewType}}">
-                          <input class="form-check-input" type="text" value="" name="loan_id">
+                          <input type="hidden" name="branch_id" value="{{$branchID}}">
+                          <input type="hidden" name="viewType" value="{{$viewType}}">
+                          <input type="hidden" value="" name="loan_id">
                     </div>
                     @endif
                 </div>

@@ -168,14 +168,69 @@
                         <tr>
                           <th>Loan Amount(#)</th>
                           <th>Date of Disbursement</th>
+                          @if ($viewType == 'BusinessOffice')
+                          <th>Duration in Days</th>
+                          @else
                           <th>Tenure</th>
-                          <th>Duration</th>
-                          <th>Intrest(#)</th>
+                          @endif
+                          <th>Duration of payment</th>
+                          <th>Interest(#)</th>
                           <th>Total Amount Paid(#)</th>
                           <th>Status</th>
                           <th>Action</th>
                         </tr>
                       </thead>
+                      @if ($viewType == 'BusinessOffice')
+                      <tbody>
+                        @foreach ( $client->monthlyloan->sortByDesc('updated_at') as $loan )
+                        <tr>
+                            <td>{{ number_format($loan->loan_amount) }}</td>
+                            <td>{{ !is_null($loan->disbursement_date) ? date('d,M Y', strtotime($loan->disbursement_date)) : 'N/A' }}</td>
+                            <td>{{ $loan->duration_in_days }}</td>
+                            <td>{{ $loan->pay_back_days }}</td>
+                            <td>{{ number_format($loan->interest) }}<br>
+                                <span class="font-success f-12">{{$loan->interest_percent}}%</span></td>
+                            <td>{{ number_format($loan->sum_of_allpayback) }}</td>
+                            <td>
+                                @if ($loan->status == 0)
+                                <div class="span badge rounded-pill pill-badge-warning">In Review
+                                </div>
+                                @endif
+                                @if ($loan->status == 1)
+                                <div class="span badge rounded-pill pill-badge-success">In Tenure</div>
+                                @endif
+                                @if ($loan->status == 2)
+                                <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div>
+                                @endif
+                                @if ($loan->status == 3)
+                                <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <a href="{{ route('monthlyclientpayhistory',['id' => $loan->id, 'branchID' => $branchID, 'viewType' => $viewType]) }}" data-bs-toggle="tooltip" title="View Payment History">
+                                        <span>View Pay History</span>
+                                    </a>
+                                    @if ($loan->status == 3 || $loan->status == 1)
+                                        <form action="{{ route('makemonthlypayment', $loan->id) }}">
+                                            <input type="hidden" name="branchID" value="{{$branchID}}">
+                                            <input type="hidden" name="viewType" value="{{$viewType}}">
+                                            <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
+                                        </form> 
+                                    @endif
+                                    @if ($loan->status == 0 || $loan->status == 2)
+                                        <form action="{{ route('makemonthlypayment', $loan->id) }}">
+                                            <input type="hidden" name="branchID" value="{{$branchID}}">
+                                            <input type="hidden" name="viewType" value="{{$viewType}}">
+                                            <button class="btn btn-light text-secondary" type="submit">View More</button>
+                                        </form> 
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                      @elseif (is_null($viewType))
                       <tbody>
                         @foreach ( $client->loan->sortByDesc('updated_at') as $loan )
                         <tr>
@@ -221,6 +276,7 @@
                         </tr>
                         @endforeach
                       </tbody>
+                      @endif
                     </table>
                 </div>
               </div>

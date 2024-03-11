@@ -6,6 +6,8 @@ use App\Loan;
 use App\Client;
 use App\Payment;
 use Carbon\Carbon;
+use App\MonthlyLoan;
+use App\MonthlyPayment;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -18,6 +20,32 @@ class PaymentController extends Controller
     public function index()
     {
        $payments = Payment::with('client','loan')->where('payment_status',1)->orderBy('updated_at', 'desc')->get();
+       $allData = $this->getFilterData($payments);
+    //    $loans = Loan::where('fp_status','Paid')->get();
+    //    $payment_counter = $payments->count();
+    //    $loans_counter = $loans->count();
+    //    $counter = $payment_counter + $loans_counter;
+    //    $months = $this->getMonths();
+    //    $years = array_combine(range( date('Y'), date('2020')), range(date('Y'), date('2020')));
+        return view('payment.index', [
+            'payments' => $allData['payments'],
+            'loans' => $allData['loans'],
+            'counter' => $allData['counter'],
+            'months' => $allData['months'],
+            'years'=> $allData['years'],
+            ]);
+    }
+
+    public function monthlyPayInHistory()
+    {
+        $branchID = request()->query('id');
+        $payments = MonthlyPayment::with('client', 'monthlyloan')
+        ->where('payment_status', 1)
+        ->whereHas('monthlyloan', function ($query) use ($branchID) {
+            $query->where('branch_id', $branchID);
+        })
+        ->orderBy('updated_at', 'desc')
+        ->get();
        $allData = $this->getFilterData($payments);
     //    $loans = Loan::where('fp_status','Paid')->get();
     //    $payment_counter = $payments->count();
@@ -49,6 +77,17 @@ class PaymentController extends Controller
          ]);
 
     }
+    public function monthlyPayout()
+    {
+        $branchID = request()->query('id');
+        $payouts = MonthlyLoan::with('client')->where('status', '<>' ,0)->where('branch_id', $branchID)->orderBy('disbursement_date', 'desc')->get();
+        $counter = $payouts->count();
+        return view('payment.payout', [
+         'payouts' => $payouts,
+         'counter' => $counter,
+         ]);
+
+    }
     public function forwardPayment()
     {
         $forwardPayRecords = Loan::with('client','payment')->where('fp_status','Paid')->orderBy('disbursement_date', 'desc')->get();
@@ -69,11 +108,26 @@ class PaymentController extends Controller
          ]);
 
     }
+    public function monthlyFormPayment()
+    {
+        $branchID = request()->query('id');
+        $formPayRecords = MonthlyLoan::with('client','monthlypayment')->whereNotNull('form_payment')->where('branch_id', $branchID)->orderBy('created_at', 'desc')->get();
+        $counter = $formPayRecords->count();
+        return view('payment.formpayment', [
+         'formPayRecords' => $formPayRecords,
+         'counter' => $counter,
+         ]);
+
+    }
     public function filter(Request $request)
     {
 
-        $payments = Payment::whereYear('date_paid', $request->year)->whereMonth('date_paid', $request->month)->get();
         
+        if(!is_null($request->branchID)){
+        $payments = MonthlyPayment::whereYear('date_paid', $request->year)->whereMonth('date_paid', $request->month)->get();
+        }else{
+        $payments = Payment::whereYear('date_paid', $request->year)->whereMonth('date_paid', $request->month)->get();
+        }
         $allData = $this->getFilterData($payments);
         // dd($allData['payments']);
         // $loans = Loan::where('fp_status','Paid')->get();
@@ -91,6 +145,8 @@ class PaymentController extends Controller
             'years'=> $allData['years'],
             'selected_month'=> $request->month,
             'selected_year'=> $request->year,
+            'branchID' => $request->branchID,
+            'viewType' => $request->viewType,
             ]);
     }
 
@@ -156,7 +212,7 @@ class PaymentController extends Controller
     public function show($id)
     {
         //$payhistorys = Payment::with('loan','client')->where('loan_id', $id)->where('payment_status',1)->Orderby('updated_at','asc')->get();
-        $payhistorys = Payment::with('loan', 'client')
+        $payhistorys = Payment::with('loan','client')
             ->where('loan_id', $id)
             ->where(function ($query) {
                 $query->where('payment_status', 1)
@@ -164,11 +220,28 @@ class PaymentController extends Controller
             }) 
             ->orderBy('updated_at', 'asc')
             ->get();
+        $monthlypayhistorys = 
         $loanhistory = Loan::with('client','payment')->where('id', $id)->first();
         $counter = $payhistorys->count();
         return view('payment.payhistory',compact('payhistorys','loanhistory','counter'));
     }
 
+    public function showMonthlyPayment($id)
+    {
+        $branchID = request()->query('branchID');
+        $viewType = request()->query('viewType');
+        $payhistorys = MonthlyPayment::with('monthlyloan','client')
+            ->where('monthly_loan_id', $id)
+            ->where(function ($query) {
+                $query->where('payment_status', 1)
+                    ->orWhere('partial_pay', '!=', 0); 
+            }) 
+            ->orderBy('updated_at', 'asc')
+            ->get();
+        $loanhistory = MonthlyLoan::with('client','monthlypayment')->where('id', $id)->first();
+        $counter = $payhistorys->count();
+        return view('payment.payhistory',compact('payhistorys','loanhistory','counter','branchID','viewType'));
+    }
     /**
      * Show the form for editing the specified resource.
      *

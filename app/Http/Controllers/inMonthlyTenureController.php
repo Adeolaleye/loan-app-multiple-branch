@@ -14,6 +14,7 @@ class inMonthlyTenureController extends Controller
         $branchID  = $request->id;
         $monthlyloans = MonthlyLoan::with('client', 'monthlypayment')
             ->where('branch_id', $branchID)
+            ->whereIn('status',['1','3'])
             ->whereHas('client', function ($query) {
                 $query->whereIn('status', ['in tenure', 'tenure extended']);
             })
@@ -30,9 +31,7 @@ class inMonthlyTenureController extends Controller
 
     public function makepayment(Request $request, $id)
     {
-        //dd($id,$request->branch_id,$request->view_type);
         $loan = MonthlyLoan::with('client','monthlypayment')->where('id', $id)->first();
-        // $payment = $monthlyloan->payment->payment_status->first();
         $branchID = $request->branchID;
         $viewType = $request->viewType;
         $paymentimes = MonthlyPayment::where('monthly_loan_id',$id)->where('payment_status',1)->count();
@@ -51,14 +50,14 @@ class inMonthlyTenureController extends Controller
     public function paynow(Request $request, $id)
     {
         $request->validate([
-            'amount_paid' => 'required|int|min:0',
+            'amount_paid' => 'required|numeric|min:0',
         ]);
         $paymentdetails = MonthlyPayment::with('client','monthlyloan')->where('monthly_loan_id',$request->id)->where('payment_status','0');
         $paymentdetail = MonthlyPayment::with('client','monthlyloan')->where('monthly_loan_id',$request->id);
         $payment = $paymentdetails->first();
         $payments = $paymentdetails->get();
         $paymentcount = $paymentdetail->count();    
-        //dd($payment);  
+
         $bb_forward = $payment->expect_pay - $request->amount_paid;
         // Start of condition for paying too much
         if(($paymentdetail->sum('amount_paid') + $request->amount_paid) > $payment->monthlyloan->loan_amount){
@@ -83,46 +82,46 @@ class inMonthlyTenureController extends Controller
                 $payment->save();
                 $payment->monthlyloan->save();
                 $payment->client->save();
-
+            $outstanding = $payment->outstanding_payment - $request->amount_paid;
             MonthlyPayment::create([
                 'client_id' => $request->client_id,
                 'monthly_loan_id' =>$request->id,
                 'branch_id' => $request->branchID,
                 'next_due_date' => $nextduedate,
-                'outstanding_payment' => $payment->outstanding_payment - $request->amount_paid,
-                'expect_pay' => $bb_forward + $payment->monthlyloan->daily_payback,
+                'outstanding_payment' => $outstanding,
+                'expect_pay' => $outstanding,
                 'bb_forward' => $bb_forward,
                 'payback_perday' => $payment->monthlyloan->daily_payback,
                 'payment_status' => 0,
             ]);
 
-            $paymentimes = MonthlyPayment::where('loan_id',$id)->where('payment_status',1)->count();
-            $data = [
-                'client_no'=> $payment->client->client_no,
-                'name'=> $payment->client->name,
-                'phone'=> $payment->client->phone,
-                'total_payback'=> $payment->loan->total_payback,
-                'tenure'=> $payment->loan->tenure,
-                'loan_amount' => $payment->loan->loan_amount,
-                'loan_duration' => $payment->loan->loan_duration,
-                'intrest' => $payment->loan->intrest, 
-                'disbursement_date' => $payment->loan->disbursement_date, 
-                'total_amountpaid' => $payment->loan->sum_of_allpayback,
-                'actual_profit' => $payment->loan->actual_profit,
-                'amount_paid' => $request->amount_paid,
-                'next_pay' => $payment->expect_pay,
-                'monthly_payback' => $payment->payback_permonth,
-                'no_of_time_paid' => $paymentimes,
-                'outstanding' => $payment->outstanding_payment,
-                'bb_forward' => $payment->bb_forward,
-                'next_due_date' => $nextduedate,
-                'subject'=> 'New Payment made, but Tenure Extended',
-                'type'=> 'payment extended',
-                'date_paid' => $payment->date_paid,
-                'admin_incharge'=> Auth()->user()->name,
-                'date'=> Carbon::now(),
+            $paymentimes = MonthlyPayment::where('monthly_loan_id',$id)->where('payment_status',1)->count();
+            // $data = [
+            //     'client_no'=> $payment->client->client_no,
+            //     'name'=> $payment->client->name,
+            //     'phone'=> $payment->client->phone,
+            //     'total_payback'=> $payment->loan->total_payback,
+            //     'tenure'=> $payment->loan->tenure,
+            //     'loan_amount' => $payment->loan->loan_amount,
+            //     'loan_duration' => $payment->loan->loan_duration,
+            //     'intrest' => $payment->loan->intrest, 
+            //     'disbursement_date' => $payment->loan->disbursement_date, 
+            //     'total_amountpaid' => $payment->loan->sum_of_allpayback,
+            //     'actual_profit' => $payment->loan->actual_profit,
+            //     'amount_paid' => $request->amount_paid,
+            //     'next_pay' => $payment->expect_pay,
+            //     'monthly_payback' => $payment->payback_permonth,
+            //     'no_of_time_paid' => $paymentimes,
+            //     'outstanding' => $payment->outstanding_payment,
+            //     'bb_forward' => $payment->bb_forward,
+            //     'next_due_date' => $nextduedate,
+            //     'subject'=> 'New Payment made, but Tenure Extended',
+            //     'type'=> 'payment extended',
+            //     'date_paid' => $payment->date_paid,
+            //     'admin_incharge'=> Auth()->user()->name,
+            //     'date'=> Carbon::now(),
 
-            ];
+            // ];
             //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
             //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
             return back()->with('message', 'Payment Made Successfully, But Payback not completed, Tenure Extended!');
@@ -155,29 +154,29 @@ class inMonthlyTenureController extends Controller
             ]);
             $paymentimes = MonthlyPayment::where('monthly_loan_id',$id)->where('payment_status',1)->count();
             $data = [
-                'client_no'=> $payment->client->client_no,
-                'name'=> $payment->client->name,
-                'phone'=> $payment->client->phone,
-                'total_payback'=> $payment->loan->total_payback,
-                'tenure'=> $payment->loan->tenure,
-                'loan_amount' => $payment->loan->loan_amount,
-                'loan_duration' => $payment->loan->loan_duration,
-                'intrest' => $payment->loan->intrest, 
-                'disbursement_date' => $payment->loan->disbursement_date, 
-                'total_amountpaid' => $payment->loan->sum_of_allpayback,
-                'actual_profit' => $payment->loan->actual_profit,
-                'amount_paid' => $request->amount_paid,
-                'next_pay' => $payment->expect_pay,
-                'monthly_payback' => $payment->payback_permonth,
-                'no_of_time_paid' => $paymentimes,
-                'outstanding' => $payment->outstanding_payment,
-                'bb_forward' => $payment->bb_forward,
-                'next_due_date' => $nextduedate,
-                'subject'=> 'New Payment made',
-                'type'=> 'payment',
-                'date_paid' => $payment->date_paid,
-                'admin_incharge'=> Auth()->user()->name,
-                'date'=> Carbon::now(),
+                // 'client_no'=> $payment->client->client_no,
+                // 'name'=> $payment->client->name,
+                // 'phone'=> $payment->client->phone,
+                // 'total_payback'=> $payment->loan->total_payback,
+                // 'tenure'=> $payment->loan->tenure,
+                // 'loan_amount' => $payment->loan->loan_amount,
+                // 'loan_duration' => $payment->loan->loan_duration,
+                // 'intrest' => $payment->loan->intrest, 
+                // 'disbursement_date' => $payment->loan->disbursement_date, 
+                // 'total_amountpaid' => $payment->loan->sum_of_allpayback,
+                // 'actual_profit' => $payment->loan->actual_profit,
+                // 'amount_paid' => $request->amount_paid,
+                // 'next_pay' => $payment->expect_pay,
+                // 'monthly_payback' => $payment->payback_permonth,
+                // 'no_of_time_paid' => $paymentimes,
+                // 'outstanding' => $payment->outstanding_payment,
+                // 'bb_forward' => $payment->bb_forward,
+                // 'next_due_date' => $nextduedate,
+                // 'subject'=> 'New Payment made',
+                // 'type'=> 'payment',
+                // 'date_paid' => $payment->date_paid,
+                // 'admin_incharge'=> Auth()->user()->name,
+                // 'date'=> Carbon::now(),
 
             ];
             //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
@@ -237,7 +236,52 @@ class inMonthlyTenureController extends Controller
         // End of condition for completing payback, Out of Tenure
         
     }
-    public function monthlyLoan(Request $request){
-        
+    public function partialpay(Request $request, $id)
+    {
+        $request->validate([
+            'amount_paid' => 'required|int|min:0',
+        ]);
+        $payment = MonthlyPayment::with('client','monthlyloan')->where('monthly_loan_id',$id)->where('payment_status',0)->first();
+        if(($request->amount_paid) > $payment->expect_pay){
+            return back()->with('warning', 'Client cannot pay greater than expected pay as partial pay');
+        }
+        if(($request->amount_paid) == $payment->expect_pay){
+            return back()->with('error', 'Use direct make payment option instead to complete payment for the month');
+        }
+        $payment->amount_paid= $payment->amount_paid + $request->amount_paid;
+        $payment->partial_pay= $payment->partial_pay + $request->amount_paid;
+        $payment->date_paid = Carbon::now();
+        $payment->monthlyloan->purpose = 'partial payment';
+        $payment->outstanding_payment = $payment->outstanding_payment - $request->amount_paid;
+        $payment->expect_pay = $payment->expect_pay - $request->amount_paid;
+        if($payment->monthlyloan->updated_at->format('m,Y') <> date('m,Y')){
+        $payment->monthlyloan->monthly_profit = 0;
+        }
+        $payment->monthlyloan->sum_of_allpayback = $payment->monthlyloan->sum_of_allpayback + $request->amount_paid;
+        $payment->save();
+        $payment->monthlyloan->save();
+
+        $data = [
+            'client_no'=> $payment->client->client_no,
+            'name'=> $payment->client->name,
+            'phone'=> $payment->client->phone,
+            'loan_amount' => $payment->monthlyloan->loan_amount,
+            'amount_paid' => $request->amount_paid,
+            'next_pay' => $payment->expect_pay,
+            'partial_pay' => $payment->partial_pay,
+            'total_amountpaid' => $payment->monthlyloan->sum_of_allpayback,
+            'daily_payback' => $payment->monthlyloan->daily_payback,
+            'outstanding' => $payment->outstanding_payment,
+            'next_due_date' => $payment->next_due_date,
+            'subject'=> 'Partial Payment Made for Daily Payback',
+            'type'=> 'partial payment',
+            'date_paid' => $payment->date_paid,
+            'admin_incharge'=> Auth()->user()->name,
+            'date'=> Carbon::now(),
+
+        ];
+        //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
+        //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+        return back()->with('message', 'Partial Payment Made Successfully!');
     }
 }
