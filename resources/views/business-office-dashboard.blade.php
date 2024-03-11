@@ -15,7 +15,7 @@
     <div class="page-title">
         <div class="row">
             <div class="col-6">
-                <h3>Overview</h3>
+                <h3>Overview {{$branchName}}</h3>
             </div>
             <div class="col-6">
                 <ol class="breadcrumb">
@@ -245,6 +245,7 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    @if(!$tenureextendeds->isEmpty())
                     <div class="user-status table-responsive">
                         <table class="table table-bordernone">
                             <thead>
@@ -287,6 +288,9 @@
                             </tbody>
                         </table>
                     </div>
+                    @else
+                        <h6 class="text-center">No record found</h6>
+                    @endif
                 </div>
             </div>
         </div>

@@ -1,7 +1,6 @@
 @php
     $viewType = request()->query('viewType');
 @endphp
-{{dump($viewType)}}
 @if ($viewType == 'BusinessOffice')
 <div class="page-header">
   <div class="header-wrapper row m-0">

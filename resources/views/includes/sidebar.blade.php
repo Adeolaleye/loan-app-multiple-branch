@@ -39,7 +39,6 @@
             <li class="sidebar-list">
                 <a class="sidebar-link sidebar-title {{ Request::is('clients') || Request::is('addclient') ? 'active' : 'link-nav'}}" href="{{ route('clients',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}">
                 <i data-feather="users"> </i><span>All Clients</span></a>
-                {{dump($branchID)}}
             </li>
             <li class="sidebar-list">
                 <a class="sidebar-link sidebar-title {{ Request::is('viewmonthlytenureclient') ? 'active' : 'link-nav'}}" href="{{ route('viewmonthlytenureclient',['id' => $branchID ?? null,'viewType' => 'BusinessOffice']) }}">
