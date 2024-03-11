@@ -60,7 +60,7 @@ class DailyController extends Controller
                     } 
             });
         $tenureextended_count = $tenureextendeds->count();
-        return view('daily.show', compact(
+        return view('daily.tenureextend', compact(
             'tenureextendeds',
             'tenureextended_count'
         ));
