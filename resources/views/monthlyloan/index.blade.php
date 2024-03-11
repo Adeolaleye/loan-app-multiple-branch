@@ -64,11 +64,13 @@
                             <td>{{ $loan->client->name }}</td>
                             <td>{{ number_format($loan->loan_amount) }}</td>
                             <td>
-                                {{-- @foreach ($loan->payment as $payment)
-                                @if ($payment->payment_status == 0 )
-                                {{ number_format($payment->outstanding_payment) }}
-                                @endif
-                                @endforeach --}}
+                            @if(isset($loan->monthlypayment))
+                                @foreach ($loan->monthlypayment as $payment)
+                                    @if ($payment && $payment->payment_status == 0)
+                                        {{ number_format($payment->outstanding_payment) }}
+                                    @endif
+                                @endforeach
+                            @endif
                             </td>
                             <td>{{ $loan->duration_in_days }}</td>
                             <td>{{ $loan->created_at->format('M ,d Y') }}</td>
@@ -127,6 +129,8 @@
                                                 <img width="40px" src="/profile_pictures/avater.png" class="pull-right"> 
                                             @endif'
                                             data-disburse="{{ !is_null($loan->disbursement_date) ? date('d,M Y', strtotime($loan->disbursement_date)) : 'Not Disburse' }}"
+                                            data-paybackdays="{{ !is_null($loan->pay_back_days) ? $loan->pay_back_days : 'Not set yet' }}"
+                                            data-sum_all_paybacks = "{{!is_null($loan->sum_allpayback) ? $loan->sum_allpayback : 'No payment yet'}}"
                                             data-loan="{{ json_encode($loan->toArray()) }}" 
                                             data-bs-target="#loandetails" 
                                             data-bs-toggle="tooltip" title="View Full Details">
@@ -164,23 +168,24 @@
             const status = $(this).data('status');
             const payback = $(this).data('payback');
             const disburse = $(this).data('disburse');
+            const paybackdays = $(this).data('paybackdays')
+            const sumpayback = $(this).data('sum_all_paybacks')
             const disabled = $(this).data('disabled');
             const profit = $(this).data('profit');
             //set each form field on the modal
             const loanmodal = $("#loandetails");
             loanmodal.find('[name="loan_id"]').val(loan.id);
             loanmodal.find('#amount').text(loan.loan_amount);
-            loanmodal.find('#intrest').text(loan.intrest);
-            loanmodal.find('#intrestper').text(loan.intrest_percent);
-            loanmodal.find('#formpayment').text(loan.formpayment);
-            loanmodal.find('#payback').text(loan.total_payback);
-            loanmodal.find('#fpamount').text(loan.fp_amount);
-            loanmodal.find('#fpstatus').text(loan.fp_status);
-            loanmodal.find('#duration').text(loan.duration);
+            loanmodal.find('#interest').text(loan.interest);
+            loanmodal.find('#intrestper').text(loan.interest_percent);
+            loanmodal.find('#formpayment').text(loan.form_payment);
+            loanmodal.find('#payback').text(loan.daily_payback);
+            loanmodal.find('#durationindays').text(loan.duration_in_days);
             loanmodal.find('#dd').text(disburse);
-            loanmodal.find('#expected_pay').text(payback);
-            loanmodal.find('#expected_profit').text(profit);
-            loanmodal.find('#tenure').text(loan.tenure);
+            loanmodal.find('#paybackdays').text(paybackdays);
+            loanmodal.find('#amountdisburse').text(loan.amount_disburse);
+            loanmodal.find('#paybackdays').text(loan.pay_back_days);
+            loanmodal.find('#sumpayback').text(sumpayback);
             loanmodal.find('#name').text(name);
             loanmodal.find('#phone').text(phone);
             loanmodal.find('#client_no').text(clientno);
@@ -195,5 +200,5 @@
             $('#disburse_button').append(disabled) 
         });  
 </script>
-@include('loan.popup')
+@include('monthlyloan.popup-monthly')
 @endsection

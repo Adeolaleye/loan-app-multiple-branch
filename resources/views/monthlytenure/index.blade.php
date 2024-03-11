@@ -1,18 +1,18 @@
 @extends('layouts.main') 
-@section('title','Loan History') 
+@section('title','All Debtors') 
 @section('content')
 <div class="container-fluid">
     <div class="page-title">
         <div class="row">
             <div class="col-6">
-                <h3>Monthly Loan History <br> <span class="f-14 font-bold text-warning"> {{ $counter }} total Loans</span></h3>
+                <h3>All Clients in Tenure <br> <span class="f-14 font-bold text-warning"> {{ $counter }} total clients in tenure</span></h3>
             </div>
             <div class="col-6">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="{{ route('home')  }}"> <i data-feather="home"></i></a>
+                        <a href="{{ route('home') }}"> <i data-feather="home"></i></a>
                     </li>
-                    <li class="breadcrumb-item">Monthly Loan</li>
+                    <li class="breadcrumb-item">All Debitors</li>
                 </ol>
             </div>
         </div>
@@ -25,12 +25,11 @@
               <div class="card-header">
                 <div class="row">
                     <div class="col-md-8 col-sm-12">
-                        <span>Here is the begining of monthly loan request for {{$branchName}}, for all loan input, </span><br><span>forward payment must have been made else, it's made on disbursement</span>
-                    </div>
-                    <div class="col-md-4 col-sm-12">
-                        <a href="{{ route('requestmonthlyloan',['id' => $branchID ?? null,'viewType' => $viewType]) }}">
-                            <button class="btn btn-primary pull-right" type="button" data-bs-toggle="tooltip" title="Add new debitor">Request Monthly Loan</button>
-                        </a>
+                        <span>Here is the details of all clients that are in tenure,</span>
+                        <br>
+                        <span>Note that clients in tenure cannot be given loan until the end of a tenure.</span>
+                        <br>
+                        <span>By default you have those oweing for a longtime, to have the recent debtors, filter with <b>#</b> arrow.</span>
                     </div>
                 </div>
               </div>
@@ -40,106 +39,66 @@
                     <table class="display" id="advance-1">
                       <thead>
                         <tr>
-                          <th>#</th>
-                          <th>Client ID</th>
-                          <th>Name</th>
-                          <th>Loan Amount</th>
-                          <th>Outstanding</th>
-                          <th>Duration (days)</th>
-                          <th>Date Applied</th>
-                          <th>Daily Payback</th>
-                          <th>Amount Disbursed</th>
-                          <th>Status</th>
-                          <th>Action</th>
+                           <th>#</th>
+                            <th>Client ID</th>
+                            <th>Client Name</th>
+                            <th>Loan Amount (&#x20A6;)</th>
+                            <th>Daily Pay</th>
+                            <th>Duration</th>
+                            <th>Next Due Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
                       @php 
                         $i = 1;
                         @endphp
-                       @foreach ($monthlyLoans as $loan )
+                        @foreach ($monthlyloans as $loan )
                         <tr>
                             <td>{{ $i++ }}</td>
                             <td>{{ $loan->client->client_no }}</td>
                             <td>{{ $loan->client->name }}</td>
                             <td>{{ number_format($loan->loan_amount) }}</td>
+                            <td>{{ number_format($loan->daily_payback) }}</td>
                             <td>
-                                {{-- @foreach ($loan->payment as $payment)
+                                {{ $loan->pay_back_days }}
+                                
+                            </td>
+                            <td>
+                                @foreach ($loan->monthlypayment as $payment)
                                 @if ($payment->payment_status == 0 )
-                                {{ number_format($payment->outstanding_payment) }}
+                                {{ date('d,M Y', strtotime($payment->next_due_date)) }}
                                 @endif
-                                @endforeach --}}
+                                @endforeach 
                             </td>
-                            <td>{{ $loan->duration_in_days }}</td>
-                            <td>{{ $loan->created_at->format('M ,d Y') }}</td>
                             <td>
-                                {{ number_format($loan->daily_payback) }}
-                            </td>
-                            <td>{{ number_format($loan->amount_disburse) }}</td>
-                            <td>
+                                @if ($loan->status == 3)
+                                    <div class="span badge rounded-pill pill-badge-info pull-right">Tenure Extended</div>
+                                @endif
                                 @if ($loan->status == 0)
-                                <div class="span badge rounded-pill pill-badge-warning">In Review
-                                </div>
+                                    <div class="span badge rounded-pill pill-badge-secondary pull-right">Payment Completed</div>
                                 @endif
                                 @if ($loan->status == 1)
-                                <div class="span badge rounded-pill pill-badge-secondary">Disbursed</div>
-                                @endif
-                                @if ($loan->status == 2)
-                                <div class="span badge rounded-pill pill-badge-success">Payment Completed</div>
-                                @endif
-                                @if ($loan->status == 3)
-                                <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
+                                    <div class="span badge rounded-pill pill-badge-success pull-right">In Tenure</div>
                                 @endif
                             </td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                        <button class="btn btn-light view-loan" type="button" 
-                                            data-bs-toggle="modal" 
-                                            data-loanid="{{ $loan->id }}"
-                                            data-payback="{{ !is_null( number_format($loan->monthly_payback)) ? '#'.number_format($loan->monthly_payback) : 'Not Available' }}"
-                                            data-profit=" {{ !is_null(number_format($loan->expected_profit)) ? '#'.number_format($loan->expected_profit) : 'Not Available' }}"
-                                            
-                                            data-clientno="{{ $loan->client->client_no }}"
-                                            data-name="{{ $loan->client->name }}" 
-                                            data-phone="{{ $loan->client->phone }}"
-                                            data-disabled ='
-                                            @if ($loan->status == 0)
-                                            <button class="btn btn-primary" type="submit">Disburse</button>
-                                            @endif'
-                                            data-date="{{ $loan->created_at->format('d, M Y') }}"
-                                            data-status= '
-                                            @if ($loan->status == 0)
-                                            <div class="span badge rounded-pill pill-badge-warning">In Review
-                                            </div>
-                                            @elseif ($loan->status == 1)
-                                            <div class="span badge rounded-pill pill-badge-secondary">Disbursed</div>
-                                            @endif
-                                            @if ($loan->status == 2)
-                                            <div class="span badge rounded-pill pill-badge-success">Payment Completed</div>
-                                            @endif
-                                            @if ($loan->status == 3)
-                                            <div class="span badge rounded-pill pill-badge-info">Tenure Extended</div>
-                                            @endif'
-                                            data-picture = 
-                                            '@if($loan->client->profile_picture)
-                                                <img width="40px" src="{{ "/".$loan->client->profile_picture }}" class="b-r-half pull-right">
-                                            @else 
-                                                <img width="40px" src="/profile_pictures/avater.png" class="pull-right"> 
-                                            @endif'
-                                            data-disburse="{{ !is_null($loan->disbursement_date) ? date('d,M Y', strtotime($loan->disbursement_date)) : 'Not Disburse' }}"
-                                            data-loan="{{ json_encode($loan->toArray()) }}" 
-                                            data-bs-target="#loandetails" 
-                                            data-bs-toggle="tooltip" title="View Full Details">
+                                    <form action="{{ route('makemonthlypayment', $loan->id) }}">
+                                        <input type="hidden" name="branchID" value="{{$branchID}}">
+                                        <input type="hidden" name="viewType" value="{{$viewType}}">
+                                        <button class="btn btn-light text-warning" type="submit" data-bs-toggle="tooltip" title="View Full Details"> 
                                             <i class="fas fa-eye text-warning"></i>
                                         </button>
-                                        @if ($loan->status == 0)
-                                        <a href="{{ route('editmonthlyloan',['id' => $loan->id, 'branchID' => $branchID, 'viewType' => $viewType]) }}">
-                                            <button class="btn btn-light" type="button" data-bs-toggle="tooltip" title="Edit Loan Details"><i class="fas fa-edit text-info"></i></button>
-                                        </a>
-                                        @endif
-                                        @if ($loan->status == 1)
-                                        
-                                        @endif
+                                    </form> 
+                                    @if (!is_null($loan->payment) && $loan->payment->sum('amount_paid') < $loan->total_payback)
+                                        @if(Auth::user()->role=='Branch Manager' || Auth::user()->role=='Super Admin' )
+                                            <form action="{{ route('makepayment', $loan->id) }}">
+                                                <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
+                                            </form>
+                                        @endif 
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -152,48 +111,4 @@
         </div>
     </div>
   </div>
-<script>
-    $(document).on('click', 'button.view-loan', function(){
-            const loanid = $(this).data('loanid');
-            const loan = $(this).data('loan');
-            const clientno = $(this).data('clientno');
-            const name = $(this).data('name');
-            const phone = $(this).data('phone');
-            const picture = $(this).data('picture');
-            const date = $(this).data('date');
-            const status = $(this).data('status');
-            const payback = $(this).data('payback');
-            const disburse = $(this).data('disburse');
-            const disabled = $(this).data('disabled');
-            const profit = $(this).data('profit');
-            //set each form field on the modal
-            const loanmodal = $("#loandetails");
-            loanmodal.find('[name="loan_id"]').val(loan.id);
-            loanmodal.find('#amount').text(loan.loan_amount);
-            loanmodal.find('#intrest').text(loan.intrest);
-            loanmodal.find('#intrestper').text(loan.intrest_percent);
-            loanmodal.find('#formpayment').text(loan.formpayment);
-            loanmodal.find('#payback').text(loan.total_payback);
-            loanmodal.find('#fpamount').text(loan.fp_amount);
-            loanmodal.find('#fpstatus').text(loan.fp_status);
-            loanmodal.find('#duration').text(loan.duration);
-            loanmodal.find('#dd').text(disburse);
-            loanmodal.find('#expected_pay').text(payback);
-            loanmodal.find('#expected_profit').text(profit);
-            loanmodal.find('#tenure').text(loan.tenure);
-            loanmodal.find('#name').text(name);
-            loanmodal.find('#phone').text(phone);
-            loanmodal.find('#client_no').text(clientno);
-            loanmodal.find('#applieddate').text(date);
-            $('#profile_picture ').empty()
-            $('#profile_picture').append(picture)
-
-            $('#client_status *').empty()
-            $('#client_status').append(status) 
-
-            $('#disburse_button ').empty()
-            $('#disburse_button').append(disabled) 
-        });  
-</script>
-@include('loan.popup')
 @endsection

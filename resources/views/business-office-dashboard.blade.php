@@ -127,7 +127,7 @@
         <div class="col-xl-6 xl-100 box-col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Monthly Report</h5>
+                    <h5>Daily Report</h5>
                     <div class="card-header-right">
                     </div>
                 </div>
@@ -144,22 +144,22 @@
                                   <th>Action</th>
                               </tr>
                             </thead>
-                            {{-- <tbody>
-                                @foreach ($monthlyreports as $monthlyreport)
+                            <tbody>
+                                @foreach ($dailyreports as $dailyreport)
                                 <tr>
-                                    <td>{{ $monthlyreport->client->client_no }}</td>
-                                    <td>{{ $monthlyreport->client->name }}</td>
-                                    <td>{{ number_format($monthlyreport->outstanding_payment) }}</td>
-                                    <td>{{ number_format($monthlyreport->expect_pay) }}</td>
-                                    <td>{{ date('d,M Y', strtotime($monthlyreport->next_due_date)) }}</td>
+                                    <td>{{ $dailyreport->client->client_no }}</td>
+                                    <td>{{ $dailyreport->client->name }}</td>
+                                    <td>{{ number_format($dailyreport->outstanding_payment) }}</td>
+                                    <td>{{ number_format($dailyreport->expect_pay) }}</td>
+                                    <td>{{ date('d,M Y', strtotime($dailyreport->next_due_date)) }}</td>
                                     <td>
-                                        <form action="{{ route('makepayment', $monthlyreport->loan_id) }}">
+                                        <form action="{{ route('makepayment', $dailyreport->loan_id) }}">
                                             <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
                                         </form>
                                     </td>
                                 </tr>
                                 @endforeach
-                            </tbody>--}}
+                            </tbody>
                         </table>
                     </div>
                     <hr>
@@ -199,7 +199,7 @@
         <div class="col-xl-6 xl-100 box-col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Defaulters in past months</h5>
+                    <h5>Defaulters in past days</h5>
                     <div class="card-header-right">
                     </div>
                 </div>

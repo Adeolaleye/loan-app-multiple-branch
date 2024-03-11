@@ -79,7 +79,7 @@ class MonthlyController extends Controller
         $defaulters = Loan::with(['client', 'payment'])
             ->whereHas('payment', function ($query) {
                 $query->whereRaw('MONTH(next_due_date) > MONTH(CURRENT_DATE())')
-                    ->where('payment_status', 0)->Orderby('next_due_date','ASC');
+                    ->where('payment_status', '0')->Orderby('next_due_date','ASC');
             })
             ->whereHas('client', function ($query) {
                 $query->where('status', 'in tenure');

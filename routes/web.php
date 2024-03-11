@@ -52,14 +52,20 @@ Route::get('makepayment/{id}', 'InTenureController@makepayment')->name('makepaym
 Route::post('paynow/{id}', 'InTenureController@paynow')->name('paynow');
 Route::post('partialpay/{id}', 'InTenureController@partialpay')->name('partialpay');
 
-// Business tenure client
-Route::get('viewmonthlytenureclient', 'inMonthlyTenureController@index')->name('viewmonthlytenureclient');
+// Business loan
 Route::get('viewmonthlyloan', 'MonthlyLoanController@index')->name('viewmonthlyloan');
 Route::get('requestmonthlyloan', 'MonthlyLoanController@create')->name('requestmonthlyloan');
 Route::post('createmonthlyloan', 'MonthlyLoanController@store')->name('createmonthlyloan');
 Route::get('editmonthlyloan/{id}', 'MonthlyLoanController@edit')->name('editmonthlyloan');
 Route::post('updatemonthlyloan/{id}', 'MonthlyLoanController@update')->name('updatemonthlyloan');
+Route::post('disbursemonthlyloan', 'MonthlyLoanController@disburse')->name('disbursemonthlyloan');
 
+
+// Business intenure
+Route::get('viewmonthlytenureclient', 'inMonthlyTenureController@index')->name('viewmonthlytenureclient');
+Route::get('makemonthlypayment/{id}', 'inMonthlyTenureController@makepayment')->name('makemonthlypayment');
+Route::post('monthlypaynow/{id}', 'inMonthlyTenureController@paynow')->name('monthlypaynow');
+Route::post('dailypartialpay/{id}', 'inMonthlyTenureController@partialpay')->name('dailypartialpay');
 
 // loan
 Route::get('/loan', 'LoanController@index')->name('loan');
@@ -78,11 +84,21 @@ Route::get('viewclientintenure', 'InTenureController@show')->name('viewclientint
 Route::post('savemoney', 'PaymentController@store')->name('savemoney');
 Route::get('clientpayhistory/{id}', 'PaymentController@show')->name('clientpayhistory');
 Route::post('filterpayment', 'PaymentController@filter')->name('filterpayment');
+Route::get('monthlyclientpayhistory/{id}', 'PaymentController@showMonthlyPayment')->name('monthlyclientpayhistory');
+Route::get('/monthlypayin', 'PaymentController@monthlyPayInHistory')->name('monthlypayin');
+Route::get('/monthlyclientpayout', 'PaymentController@monthlyPayout')->name('monthlyclientpayout');
+Route::get('/formpayment', 'PaymentController@formPayment')->name('formpay');
+Route::get('/monthlyformpayment', 'PaymentController@monthlyFormPayment')->name('monthlyformpayment');
 
 // monthly
 Route::get('/monthly', 'MonthlyController@index')->name('monthly');
 Route::get('/tenureextended', 'MonthlyController@show')->name('tenureextended');
 Route::get('/defaulter', 'MonthlyController@defaulter')->name('defaulter');
+
+// Daily
+Route::get('/daily', 'DailyController@index')->name('daily');
+Route::get('/dailytenureextended', 'DailyController@show')->name('dailytenureextended');
+Route::get('/dailydefaulter', 'DailyController@dailyDefaulter')->name('dailydefaulter');
 
 //business office
 Route::get('/business-office-dashboard{id?}', 'BusinessOfficeController@index')->name('business-office-dashboard');
