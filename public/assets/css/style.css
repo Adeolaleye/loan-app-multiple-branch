@@ -14288,6 +14288,7 @@ p.data-attributes svg {
 .earning-card.card .card-body .media .media-left {
     width: 42px;
     height: 42px;
+    padding: 12px ;
     border-radius: 50%;
     background-color: var(--theme-deafult);
     margin-right: 15px;

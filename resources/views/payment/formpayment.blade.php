@@ -53,7 +53,11 @@
                             <td>{{ $i++ }}</td>
                             <td>{{ $formPayRecord->client->name }}</td>
                             <td>{{ date('F', strtotime($formPayRecord->disbursement_date)) }}</td>
+                            @if ($viewType == 'BusinessOffice')
+                            <td>{{ number_format($formPayRecord->form_payment) }}</td>
+                            @else
                             <td>{{ number_format($formPayRecord->formpayment) }}</td>
+                            @endif
                             <td>{{ $formPayRecord->admin_incharge }}</td>
                             <td>{{ date('d, M Y', strtotime($formPayRecord->created_at)) }}</td>
                         </tr>

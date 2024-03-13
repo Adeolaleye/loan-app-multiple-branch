@@ -80,7 +80,7 @@
                         <div class="row m-0 p-tb">
                             <div class="col-xl-8 col-md-8 col-sm-8 col-12 p-0">
                                 <div class="inner-top-left">
-                                    <h5>Daily Reports</h5>
+                                    <h5>Daily Reports Today <span class="font-primary">{{ \Carbon\Carbon::parse($currentDate)->format('F d, Y') }}</span></h5>
                                 </div>
                             </div>
                             <div class="col-xl-4 col-md-4 col-sm-4 col-12 p-0 justify-content-end">

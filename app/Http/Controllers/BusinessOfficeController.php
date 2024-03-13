@@ -32,10 +32,10 @@ class BusinessOfficeController extends Controller
         $monthlyprofit = MonthlyLoan::whereYear('updated_at',date('Y'))->whereMonth('updated_at', date('m'))->sum('monthly_profit');
         $yearlyprofit = MonthlyLoan::whereYear('updated_at', date('Y'))->sum('yearly_profit');
         
-        $tenureextendeds = MonthlyLoan::with('client','monthlypayment')->where('status','<>',2)->where('branch_id', $branchID)->take(3)->get();
+        $tenureextendeds = MonthlyLoan::with('client','monthlypayment')->where('status','=',2)->where('branch_id', $branchID)->take(3)->get();
         $tenureextendeds = $tenureextendeds->filter(
             function($items){
-                    if( Carbon::parse($items->disbursement_date)->addMonth($items->tenure)  <  Carbon::now() or $items->status == 3){
+                    if( Carbon::parse($items->disbursement_date)->addDay($items->duration_in_days)  <  Carbon::now() or $items->status == 3){
                         return $items; 
                     } 
             });
@@ -49,10 +49,9 @@ class BusinessOfficeController extends Controller
             })->take(3)
             ->orderBy('next_due_date', 'ASC')
             ->get();
-        $currentDate = Carbon::now()->toDateString();
         $defaulters = MonthlyLoan::with(['client', 'monthlypayment'])
             ->whereHas('monthlypayment', function ($query) use ($currentDate) {
-                $query->whereDate('next_due_date', $currentDate)
+                $query->whereDate('next_due_date', '<',$currentDate)
                     ->where('payment_status', '0')
                     ->orderBy('next_due_date', 'ASC');
             })
@@ -75,6 +74,7 @@ class BusinessOfficeController extends Controller
             'dailyreports',
             'viewType',
             'branchID',
+            'currentDate',
         ));
     }
 }
