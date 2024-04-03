@@ -10,7 +10,10 @@
       <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
       <div id="sidebar-menu">
       @php
-          $viewType = request()->query('viewType');
+          $viewType = isset($type) ? $type : request()->query('viewType');
+          $id = isset($id) ? $id : null;
+          $branchName = isset($branchN) ? $branchN : $branchName;
+          $branchID = !isset($branchID) ? $id : $branchID;
       @endphp
         @if ($viewType == 'BusinessOffice')
         <ul class="sidebar-links" id="simple-bar">
@@ -29,7 +32,7 @@
                   <span class="">Your Profile</span>
               </a>
             </li>
-            @if(Auth::user()->role=='Super Admin')
+            {{--@if(Auth::user()->role=='Super Admin')--}}
             <li class="sidebar-list">
               <a class="sidebar-link sidebar-title {{ Request::is('business-office-dashboard*') ? 'active' : 'link-nav'}}" href="{{route('business-office-dashboard',['id' => $branchID ?? null,'viewType' => 'BusinessOffice'])}}">
                   <i data-feather="home" ></i>
@@ -72,11 +75,7 @@
                       </li>
                     </ul>
             </li>
-            <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title {{ Request::is('adminuser') ? 'active' : 'link-nav'}}" href="{{ route('adminuser') }}">
-              <i data-feather="layers"> </i><span>Admin Role</span></a>
-            </li>
-            @endif
+            {{--@endif--}}
             @if(Auth::user()->role=='Branch Manager' || Auth::user()->role=='Officer' )
             <li class="sidebar-list">
               <a class="sidebar-link sidebar-title {{ Request::is('home*') ? 'active' : 'link-nav'}}" href="{{ route('home') }}">

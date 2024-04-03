@@ -91,10 +91,58 @@ class MonthlyLoanController extends Controller
             'admin_incharge'=> Auth()->user()->name,
             'date'=> Carbon::now(),
         ];
+
+        // if request has disburse
+        if(!is_null($request->disburse_now) && $request->has('route_type')){
+            $disbursement_date = Carbon::now();
+            $loan = MonthlyLoan::with('client')->where('client_id', $request->client_id)->first();
+            $now = Carbon::parse($disbursement_date);
+            $startpaymentdate = $now->nextWeekday();
+            $endpaymentdate = $startpaymentdate->copy()->addWeekdays(20);
+            $loan->pay_back_days = $startpaymentdate->format('d, M Y'). ' to ' .$endpaymentdate->format('d, M Y');
+            $loan->status= 1;
+            $loan->client->status= 'in tenure';
+            $loan->disbursement_date = $disbursement_date;
+            $loan->admin_who_disburse = Auth()->user()->name;
+            $loan->save();
+            $loan->client->save();
+            MonthlyPayment::create([
+                'client_id' => $loan->client_id,
+                'monthly_loan_id' => $loan->id,
+                'branch_id' =>$branchID,
+                'next_due_date' => $startpaymentdate,
+                'outstanding_payment' => $loan->loan_amount,
+                'expect_pay' => $loan->daily_payback,
+                'bb_forward' => 0.00,
+                'payback_perday' => $loan->daily_payback,
+                'payment_status' => 0,
+            ]);
+            
+            $payment =  MonthlyPayment::with('client','monthlyloan')->where('monthly_loan_id',$loan->id)->where('branch_id',$branchID)->where('payment_status',0)->first();
+            $data = [
+                'client_no'=> $loan->client->client_no,
+                'name'=> $loan->client->name,
+                'phone'=> $loan->client->phone,
+                'loan_amount' => $loan->loan_amount,
+                'daily_payback' => $loan->daily_payback,
+                'interest'=> $loan->interest,
+                'outstanding'=> $payment->outstanding_payment,
+                'next_due_date'=> $startpaymentdate,
+                'subject'=> 'Loan Disbursed',
+                'type'=> 'loan disbursement',
+                'disbursement_date' => $disbursement_date,
+                'admin_incharge'=> Auth()->user()->name,
+                'date'=> Carbon::now(),
+            ];
+            return redirect(route('clients', ['viewType' => $viewType,'id' => $branchID]))->with('message', 'Client Loan created and disbursed');
+        }
         //Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
         //Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
-        return redirect(route('viewmonthlyloan', ['viewType' => $viewType,'id' => $branchID]))->with('message', 'Monthly Loan Request Sent');
-        
+        if($request->has('route_type')){
+        return redirect(route('clients', ['viewType' => $viewType,'id' => $branchID]))->with('message', 'Monthly Loan Request Sent');
+        }else{
+            return redirect(route('viewmonthlyloan', ['viewType' => $viewType,'id' => $branchID]))->with('message', 'Monthly Loan Request Sent');
+        }
         }
     }
 
@@ -154,6 +202,12 @@ class MonthlyLoanController extends Controller
 
     public function disburse(Request $request)
     {
+        if($request->has('client_id')){
+            $LoanRequest = MonthlyLoan::where('client_id',$request->client_id)->first(); 
+            $loanID = $LoanRequest->id;
+        }else{
+            $loanID = $request->loan_id;
+        }
         $branchID = $request->branch_id;
         $viewType = $request->viewType;
         if(is_null($request->disbursement_date)){
@@ -164,7 +218,7 @@ class MonthlyLoanController extends Controller
         if(date('d,M Y', strtotime($disbursement_date)) > date('d,M Y')){
             return back()->with('error', 'Disbursement Date cannot be greater than present Date');
         }
-        $loan = MonthlyLoan::with('client')->whereId($request->loan_id)->first();
+        $loan = MonthlyLoan::with('client')->whereId($loanID)->first();
         $now = Carbon::parse($disbursement_date);
         $startpaymentdate = $now->nextWeekday();
         $endpaymentdate = $startpaymentdate->copy()->addWeekdays(20);
@@ -187,7 +241,7 @@ class MonthlyLoanController extends Controller
             'payment_status' => 0,
         ]);
         
-        $payment =  MonthlyPayment::with('client','monthlyloan')->where('monthly_loan_id',$request->loan_id)->where('branch_id',$branchID)->where('payment_status',0)->first();
+        $payment =  MonthlyPayment::with('client','monthlyloan')->where('monthly_loan_id',$loanID)->where('branch_id',$branchID)->where('payment_status',0)->first();
         $data = [
             'client_no'=> $loan->client->client_no,
             'name'=> $loan->client->name,
@@ -205,6 +259,10 @@ class MonthlyLoanController extends Controller
         ];
        // Mail::to('info@agapeglobal.com.ng')->send(new AgapeEmail($data));
        // Mail::to('theconsode@gmail.com')->send(new AgapeEmail($data));
+       if($request->has('route_type')){
+        return redirect(route('clients', ['viewType' => $viewType,'id' => $branchID ?? null]))->with('message', 'Monthly Loan Disbursed');
+        }else{
         return redirect(route('viewmonthlyloan', ['id' => $branchID,'viewType' => $viewType]))->with('message', 'Monthly Loan Disbursed');
+        }
     }
 }

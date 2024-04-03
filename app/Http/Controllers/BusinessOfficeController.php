@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\MonthlyLoan;
 use App\MonthlyPayment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 interface ViewTypes {
 	const BusinessOffice = "BusinessOffice";

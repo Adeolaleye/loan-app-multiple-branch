@@ -80,7 +80,7 @@
                         <div class="row m-0 p-tb">
                             <div class="col-xl-8 col-md-8 col-sm-8 col-12 p-0">
                                 <div class="inner-top-left">
-                                    <h5>Daily Reports Today <span class="font-primary">{{ \Carbon\Carbon::parse($currentDate)->format('F d, Y') }}</span></h5>
+                                   {{-- <h5>Daily Reports Today <span class="font-primary">{{ \Carbon\Carbon::parse($currentDate)->format('F d, Y') }}</span></h5> --}}
                                 </div>
                             </div>
                             <div class="col-xl-4 col-md-4 col-sm-4 col-12 p-0 justify-content-end">
@@ -125,10 +125,12 @@
                                             <td>{{ number_format($dailyreport->expect_pay) }}</td>
                                             <td>{{ date('d,M Y', strtotime($dailyreport->next_due_date)) }}</td>
                                             <td>
-                                                <form action="{{ route('makemonthlypayment', $dailyreport->monthly_loan_id) }}">
-                                                    <input type="hidden" name="branchID" value="{{$branchID}}">
-                                                    <input type="hidden" name="viewType" value="{{$viewType}}">
-                                                    <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
+                                                <form class="f1" method="post" action="{{ route('monthlypaynow',$dailyreport->client->id) }}">
+                                                    @csrf
+                                                        <input type="hidden" value="{{$branchID}}" name="branchID">
+                                                        <input type="hidden" value="{{$viewType}}" name="viewType">
+                                                        <input type="hidden" value="client" name="route_type">
+                                                        <button class="btn btn-primary" type="submit">Pay Now</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -297,4 +299,5 @@
     </div>
 </div>
 <!-- Container-fluid Ends-->
+@include('includes.toastr')
 @endsection

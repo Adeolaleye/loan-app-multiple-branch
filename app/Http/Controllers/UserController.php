@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Branch;
 use App\Mail\AgapeEmail;
 use Illuminate\Mail\Mailer;
 use Illuminate\Http\Request;
@@ -21,11 +22,12 @@ class UserController extends Controller
     {
         if(Auth::user()->role=='Super Admin'){
         
-        $users = User::where('status', '<>', 1)->get();
+        $users = User::with('branch')->where('status', '<>', 1)->get();
         $counter = $users->count();
-        //$viewType = "HeadQuarter";
+        $branches = Branch::all();
         return view('adminuser.index', [
             'users' => $users,
+            'branches' =>  $branches,
             'counter' => $counter
         ]);  
         
@@ -78,6 +80,7 @@ class UserController extends Controller
             'password' => bcrypt($request['password']),
             'phone'=>$request->phone,
             'role'=>$request->role,
+            'branch_id' => $request->branch,
             'profile_picture' => isset($imgName) ? 'profile_pictures/'.$imgName: NULL,
         ]);
         $data = [
@@ -129,6 +132,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {   
+        dd($request->all());
         $user= User::find($id);
         $data = $this->validate($request, [
             'profile_picture' => 'nullable|max:250|mimes:jpg,jpeg,png',

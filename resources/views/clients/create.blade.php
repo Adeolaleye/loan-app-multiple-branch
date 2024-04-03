@@ -146,8 +146,6 @@
                     <div class="col-md-6">
                         <label class="form-label" for="qualification">Relationship <span class="text-danger">*</span></label>
                         <input class="form-control" name="g_relationship" id="relationship" type="text" value="{{ old('g_relationship') }}" required="">
-                        <input type="text" name="branch_id" value="{{$branchID}}">
-                        <input type="text" name="viewType" value="{{$viewType}}">
                     </div>
                 </div>
                 <div class="f1-buttons">

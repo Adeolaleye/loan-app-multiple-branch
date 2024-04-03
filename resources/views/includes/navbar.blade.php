@@ -1,7 +1,10 @@
 @php
-    $viewType = request()->query('viewType');
+    $viewType = isset($type) ? $type : request()->query('viewType');
+    $id = isset($id) ? $id : null;
+    $branchName = isset($branchN) ? $branchN : $branchName;
+    $branchID = !isset($branchID) ? $id : $branchID;
 @endphp
-@if ($viewType == 'BusinessOffice')
+@if ($viewType == 'BusinessOffice' || isset($branchID))
 <div class="page-header">
   <div class="header-wrapper row m-0">
     <div class="header-logo-wrapper col-auto p-0">
@@ -16,6 +19,7 @@
           <a href="">
             <button class="btn btn-primary pull-right" type="button">This is Business Office {{ $branchName ?? null }}</button>
           </a>
+          @if (Auth::user()->role !== 'Business Branch Manager')
           <ul class="profile-dropdown onhover-show-div">
             @foreach ($branches as $branch)
               <li><a href="{{route('business-office-dashboard',['id' => $branch->id,'viewType' => 'BusinessOffice'])}}">{{$branch->name}}</a></li>
@@ -24,6 +28,7 @@
                 <li><a href="{{route('home',['viewType' => 'HeadQuarter'])}}">Headquarters</a></li>
             @endif              
           </ul>
+          @endif
         </li>
       </ul>
     </div>

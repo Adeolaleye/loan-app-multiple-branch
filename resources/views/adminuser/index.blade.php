@@ -66,7 +66,12 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>
-                            <td>{{ $user->role }}</td>
+                            <td>{{ $user->role }}
+                                @if($user->branch)
+                                   <b>({{ $user->branch->name }})</b>
+                                @endif
+                            </td>
+                            
                             <td>{{ $user->created_at->format('M ,d Y') }}</td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">

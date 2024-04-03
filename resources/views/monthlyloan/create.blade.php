@@ -24,6 +24,10 @@
         <div class="card">
           <div class="card-header">
             <h5>Request Monthly Loan</h5>
+            @php
+              $clientID = request()->query('client_id');
+              $route_type = request()->query('route_type');
+            @endphp
           </div>
           <div class="card-body">
             @include('includes.alerts')
@@ -33,10 +37,12 @@
                     <div class="col-md-6">
                       <label class="form-label" for="fullname">Fullname</label>
                       <select class="form-control" name="client_id">
-                            <option value="">--Choose Name--</option>
-                            @foreach ($clients as $client )
-                            <option value="{{ $client->id }}"{{ old('client_id') == $client->id ? 'selected' : '' }}>{{ $client->name }}</option>
-                            @endforeach
+                          <option value="">--Choose Name--</option>
+                          @foreach ($clients as $client)
+                              <option value="{{ $client->id }}"{{ $clientID == $client->id ? 'selected' : '' }}>
+                                  {{ $client->name }}
+                              </option>
+                          @endforeach
                       </select>
                     </div>
                     <div class="col-md-6">
@@ -49,6 +55,7 @@
                         <label class="form-label" for="Duration">Loan Duration (days)</label>
                         <input type="text" class="form-control" placeholder="" name="duration_in_days" value="20" min="1">
                     </div>
+                    <input type="hidden" name="route_type" value="{{$route_type}}">
                     <div class="col-md-6">
                       <label class="form-label" for="Duration">Interest Rate</label>
                       <select class="form-control" id="duration" name="interest_percent" required>
@@ -63,6 +70,11 @@
                       <label class="form-label" for="Duration">Form Amount (&#8358;)</label>
                       <input type="text" class="form-control" placeholder="" name="form_payment" value="1000" min="1">
                     </div>
+                    
+                      <div class="form-check checkbox checkbox-primary mb-0">
+                          <input class="form-check-input" id="checkbox-primary-1" type="checkbox" name="disburse_now" value="1">
+                          <label class="form-check-label" for="checkbox-primary-1">Disburse Now?</label>
+                      </div>
                     <button class="btn btn-primary" type="submit">Submit</button>
                   </div>
             </form>

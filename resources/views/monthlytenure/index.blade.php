@@ -40,8 +40,7 @@
                       <thead>
                         <tr>
                            <th>#</th>
-                            <th>Client ID</th>
-                            <th>Client Name</th>
+                            <th>Client</th>
                             <th>Loan Amount (&#x20A6;)</th>
                             <th>Daily Pay</th>
                             <th>Duration</th>
@@ -57,8 +56,10 @@
                         @foreach ($monthlyloans as $loan )
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ $loan->client->client_no }}</td>
-                            <td>{{ $loan->client->name }}</td>
+                            <td>
+                                {{ $loan->client->name }}<br>
+                                <span class="text-success">#{{ $loan->client->client_no }}</span>
+                            </td>
                             <td>{{ number_format($loan->loan_amount) }}</td>
                             <td>{{ number_format($loan->daily_payback) }}</td>
                             <td>
@@ -68,7 +69,8 @@
                             <td>
                                 @foreach ($loan->monthlypayment as $payment)
                                 @if ($payment->payment_status == 0 )
-                                {{ date('d,M Y', strtotime($payment->next_due_date)) }}
+                                {{ date('d,M Y', strtotime($payment->next_due_date)) }}<br>
+                                <span class="text-danger">Expected next pay is <b>{{$payment->expect_pay}}</b></span>
                                 @endif
                                 @endforeach 
                             </td>
@@ -98,6 +100,15 @@
                                                 <button class="btn btn-light text-secondary" type="submit">Pay Now</button>
                                             </form>
                                         @endif 
+                                    @endif
+                                    @if ($viewType == 'BusinessOffice' && ($loan->client->status == 'in tenure' || $loan->client->status == 'tenure extended'))
+                                            <form class="f1" method="post" action="{{ route('monthlypaynow',$loan->client->id) }}">
+                                            @csrf
+                                                <input type="hidden" value="{{$branchID}}" name="branchID">
+                                                <input type="hidden" value="{{$viewType}}" name="viewType">
+                                                <input type="hidden" value="client" name="route_type">
+                                                <button class="btn btn-primary" type="submit">Pay Now</button>
+                                            </form> 
                                     @endif
                                 </div>
                             </td>

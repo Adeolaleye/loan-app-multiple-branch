@@ -32,37 +32,49 @@
           <div class="card hovercard text-center">
             <div class="cardheader"></div>
             <div class="user-image">
-              <div class="avatar">
-                @if($client->profile_picture)
-                    <img src="{{ "/".$client->profile_picture }}" class="b-r-half">
-                @else 
-                    <img src="/profile_pictures/avater.png"> 
-                @endif
-              </div>
-              <div class="icon-wrapper" data-bs-toggle="tooltip" title="Edit Client">
-                <a href="{{ route('editclient', ['id' => $client->id, 'branchID' => $branchID, 'viewType' => $viewType]) }}"><i class="fas fa-edit text-mute"></i></a>  
+                <div class="avatar">
+                    @if($client->profile_picture)
+                        <img src="{{ "/".$client->profile_picture }}" class="b-r-half">
+                    @else 
+                        <img src="/profile_pictures/avater.png"> 
+                    @endif
                 </div>
+                @if ($viewType == 'BusinessOffice')
+                    <div class="icon-wrapper" data-bs-toggle="tooltip" title="Edit Client">
+                        <a href="{{ route('edit-daily-client', ['id' => $client->id, 'branchID' => $branchID, 'viewType' => $viewType]) }}"><i class="fas fa-edit text-mute"></i></a>  
+                    </div>
+                @else
+                    <div class="icon-wrapper" data-bs-toggle="tooltip" title="Edit Client">
+                        <a href="{{ route('editclient',$client->id) }}"><i class="fas fa-edit text-mute"></i></a>  
+                    </div>
+                @endif
             </div>
             <div class="info">
                 <div class="row">
                     <div class="col-sm-6 col-lg-4 order-sm-1 order-xl-0">
                     <div class="row">
+                        @if ($viewType != 'BusinessOffice')
                         <div class="col-md-6">
-                        <div class="ttl-info text-start text-center">
-                            <h6>DOB</h6><span>{{ $client->dob }}</span>
-                        </div>
+                            <div class="ttl-info text-start text-center">
+                                <h6>DOB</h6><span>{{ $client->dob }}</span>
+                            </div>
                         </div>
                         <div class="col-md-6">
-                        <div class="ttl-info text-start text-center">
-                            <h6>Marital Status</h6><span>{{ $client->marital_status }}</span>
+                            <div class="ttl-info text-start text-center">
+                                <h6>Marital Status</h6><span>{{ $client->marital_status }}</span>
+                            </div>
                         </div>
-                        </div>
+                        @endif
                     </div>
                     </div>
                     <div class="col-sm-12 col-lg-4 order-sm-0 order-xl-1">
                     <div class="user-designation">
                         <div class="title"><a target="_blank" href="#">{{ $client->name }}</a></div>
-                        <div class="desc">{{ $client->phone }}</div>
+                        <div class="desc">{{ $client->phone }}</div><br>
+                        @if ($viewType == 'BusinessOffice')
+                            <h6> Occupation</h6><span>{{ $client->occupation }}</span>
+                        @endif
+                        <br>
                         <a href="#loanhistory" data-bs-toggle="tooltip" title="Click to view loan history">
                                     @if ($client->status == 'in review')
                                     <div class="span badge rounded-pill pill-badge-warning">In Review
@@ -81,21 +93,24 @@
                         {{-- <div class="span badge rounded-pill pill-badge-secondary">Out Of Tenure</div> --}}
                     </div>
                     </div>
+                    @if ($viewType != 'BusinessOffice')
                     <div class="col-sm-6 col-lg-4 order-sm-2 order-xl-2">
-                    <div class="row">
-                        <div class="col-md-6">
-                        <div class="ttl-info text-start text-center">
-                            <h6> Gender</h6><span>{{ $client->gender }}</span>
-                        </div>
-                        </div>
-                        <div class="col-md-6">
-                        <div class="ttl-info text-start text-center">
-                            <h6> Occupation</h6><span>{{ $client->occupation }}</span>
-                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <div class="ttl-info text-start text-center">
+                                <h6> Gender</h6><span>{{ $client->gender }}</span>
+                            </div>
+                            </div>
+                            <div class="col-md-6">
+                            <div class="ttl-info text-start text-center">
+                                <h6> Occupation</h6><span>{{ $client->occupation }}</span>
+                            </div>
+                            </div>
                         </div>
                     </div>
-                    </div>
+                    @endif
                 </div>
+                @if ($viewType != 'BusinessOffice')
                 <hr>
                 <div class="row">
                     <div class="col-6 col-lg-3 order-sm-1 order-xl-2">
@@ -119,6 +134,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 <hr>
                     <h4>Guarantor Details</h4>
                 <div class="row">
@@ -127,14 +143,15 @@
                             <h6>Name</h6><span>{{ $client->g_name }}</span>
                         </div>
                     </div>
-                    <div class="col-6 col-lg-3 order-sm-1 order-xl-1">
-                        <div class="ttl-info text-start text-center">
-                            <h6>Residential Address</h6><span>{{ $client->g_address }}</span>
-                        </div>
-                    </div>
                     <div class="col-6 col-lg-3 order-sm-2 order-xl-2">
                         <div class="ttl-info text-start text-center">
                             <h6>Mobile No</h6><span>{{ $client->g_phone }}</span>
+                        </div>
+                    </div>
+                    @if ($viewType != 'BusinessOffice')
+                    <div class="col-6 col-lg-3 order-sm-1 order-xl-1">
+                        <div class="ttl-info text-start text-center">
+                            <h6>Residential Address</h6><span>{{ $client->g_address }}</span>
                         </div>
                     </div>
                     <div class="col-6 col-lg-3 order-sm-3 order-xl-3">
@@ -142,6 +159,7 @@
                             <h6>Relationship</h6><span>{{ $client->g_relationship }}</span>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
           </div>

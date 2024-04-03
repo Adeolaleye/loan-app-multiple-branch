@@ -30,7 +30,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3" id='role'>
                             <label class="col-form-label" for="Role">Role <span class="text-danger">*</span></label>
                             <select class="form-control" name="role" required>
                                 <option value=""{{ old('role') ? '' : ' selected' }} disabled>Select Role</option>
@@ -38,6 +38,16 @@
                                 <option value="Supervisor"{{ old('role') }} >Supervisor</option>
                                 <option value="Branch Manager"{{ old('role') }}>Branch Manager</option>
                                 <option value="Officer"{{ old('role') }}>Officer</option>
+                                <option value="Business Branch Manager"{{ old('role') }}>Business Branch Manager</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="branch">
+                            <label class="col-form-label" for="Role">Branch <span class="text-danger">*</span></label>
+                            <select class="form-control" name="branch">
+                                <option value=""{{ old('role') ? '' : ' selected' }} disabled>Select Branch</option>
+                                @foreach ($branches as $branch)
+                                    <option value="{{$branch->id}}"{{ old('branch') }}>{{$branch->name}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="mb-3">
@@ -129,3 +139,29 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var roleSelect = document.querySelector('select[name="role"]');
+        var branchSelect = document.querySelector('select[name="branch"]');
+        var branchDiv = document.getElementById('branch');
+
+        // Hide the branch select initially
+        branchDiv.style.display = 'none';
+
+        // Add change event listener to the role select
+        roleSelect.addEventListener('change', function () {
+            var selectedRole = roleSelect.value;
+
+            // Show branch select only if Business Branch Manager is selected
+            if (selectedRole === 'Business Branch Manager') {
+                branchDiv.style.display = 'block';
+                branchSelect.setAttribute('required', 'required'); // Set 'required' attribute
+            } else {
+                branchDiv.style.display = 'none';
+                branchSelect.removeAttribute('required'); // Remove 'required' attribute
+                // Reset the branch select value when other roles are selected
+                branchSelect.value = '';
+            }
+        });
+    });
+</script>

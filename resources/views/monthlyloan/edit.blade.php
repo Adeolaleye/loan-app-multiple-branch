@@ -60,8 +60,8 @@
                         <option value="9" {{ old('interest_percent') == '9' ? 'selected' : '' }}>9%</option>
                         <option value="10" {{ old('interest_percent') == '10' ? 'selected' : '' }}>10%</option>
                       </select>
-                        <input type="text" name="branch_id" value="{{$branchID}}">
-                        <input type="text" name="viewType" value="{{$viewType}}">
+                        <input type="hidden" name="branch_id" value="{{$branchID}}">
+                        <input type="hidden" name="viewType" value="{{$viewType}}">
                     </div>
                     <button class="btn btn-primary" type="submit">Submit</button>
                 </div>

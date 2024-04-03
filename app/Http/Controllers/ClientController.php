@@ -5,6 +5,7 @@ use App\Loan;
 use App\Branch;
 use App\Client;
 use App\MonthlyLoan;
+use App\MonthlyPayment;
 use App\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,8 +23,13 @@ class ClientController extends Controller
     public function index(Request $request)
     {
         $branchID  = $request->query('id');
-        $clients = Client::with('loan','payment')->where('branch_id', $branchID)->Orderby('created_at','desc')->get();
+        if($branchID){
+        $clients = Client::with('monthlyloan','monthlypayment')->where('branch_id', $branchID)->Orderby('created_at','desc')->get();
+        }else{
+            $clients = Client::with('loan','payment')->where('branch_id', $branchID)->Orderby('created_at','desc')->get();
+        }
         $counter = Client::where('branch_id', $branchID)->count();
+        //dd($clients);
         return view('clients.index', [
             'clients' => $clients,
             'counter' => $counter,
@@ -39,6 +45,11 @@ class ClientController extends Controller
     public function create()
     {
         return view('clients.create');
+    }
+
+    public function createDailyClient()
+    {
+        return view('clients.branchclient');
     }
 
     /**
@@ -104,6 +115,38 @@ class ClientController extends Controller
     }
     }
 
+    public function storeDailyClient(Request $request)
+    {
+
+        $request->validate([
+            'client_no' => 'required|string|max:20|min:0',
+            'name' => 'required|string|max:100',
+            'phone' => 'required|string|min:5',
+            'occupation' => 'required|string|max:100',
+            'g_name' => 'required|string|max:100',
+            'g_phone' => 'required|string|max:20',
+        ]);
+        $check=Client::where('name',$request->name)->orderby('id','desc')->first();
+        if($check){
+            return back()->with('error', 'Client name exist, Seems it is desame user !');
+        }else{
+        $clientno = 50000000 + $request->client_no;
+        $branchID = $request->branch_id;
+        $viewType = $request->viewType;
+        $clients = Client::create([
+            'client_no' => $clientno,
+            'name' => $request->name,
+            'phone'=>$request->phone,
+            'occupation'=>$request->occupation,
+            'g_name'=>$request->g_name,
+            'g_phone'=>$request->g_phone,
+            'admin_incharge' => Auth()->user()->name,
+            'branch_id' => $branchID,
+
+        ]);
+        return redirect(route('add-daily-client', ['viewType' => $viewType,'id' => $branchID]))->with('message', 'Client Added Successfully');
+    }
+    }
     /**
      * Display the specified resource.
      *
@@ -141,10 +184,19 @@ class ClientController extends Controller
     public function edit($id)
     {
         
+        $client = Client::where('id', $id)->first();
+        return view('clients.edit', [
+            'client' => $client
+        ]); 
+    }
+
+    public function editDailyClient($id)
+    {
+        
         $branchID = request()->query('branchID');
         $viewType = request()->query('viewType');
         $client = Client::where('id', $id)->first();
-        return view('clients.edit', [
+        return view('clients.editdailyclient', [
             'client' => $client,
             'branchID' => $branchID,
             'viewType' => $viewType
@@ -163,6 +215,7 @@ class ClientController extends Controller
         
         $branchID = $request->branch_id;
         $viewType = $request->viewType;
+        if($viewType != 'BusinessOffice'){
         $data =$this->validate($request, [
             'name' => 'required|string|max:100',
             'phone' => 'required|string|min:5',
@@ -180,7 +233,15 @@ class ClientController extends Controller
             'g_relationship' => 'required|string|max:50',
             'profile_picture' => 'nullable|max:250',
         ]);
-        
+        }else{
+            $data = $this->validate($request,[
+            'name' => 'required|string|max:100',
+            'phone' => 'required|string|min:5',
+            'occupation' => 'required|string|max:100',
+            'g_name' => 'required|string|max:100',
+            'g_phone' => 'required|string|max:20',
+            ]);
+        }
         $client= Client::find($id);
         if(request()->has('profile_picture')){
             //delete old one
